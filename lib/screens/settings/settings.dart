@@ -1,5 +1,8 @@
-import 'package:dva232_project/widgets/bot_nav_bar.dart';
+
+import 'package:dva232_project/widgets/nav_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../routes.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -12,11 +15,9 @@ class Settings extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
+            NavButton("Back home", Routes.home),
           ],
         ),
-      ),
-      bottomNavigationBar: BotNavBar(),
-    );
+      ),);
   }
 }

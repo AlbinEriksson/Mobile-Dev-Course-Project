@@ -11,10 +11,7 @@ class BackNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return IconButton(
-     // icon: Icon(Icons.home),
-     // onPressed: () => _onPressed(context),
-    //);
+
     return RaisedButton(
       child: Text(text),
       onPressed: () => _onPressed(context),
