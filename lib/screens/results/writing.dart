@@ -1,5 +1,6 @@
 
-import 'package:dva232_project/widgets/nav_button.dart';
+import 'package:dva232_project/widgets/back_icon_button.dart';
+import 'package:dva232_project/widgets/back_nav_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../routes.dart';
@@ -10,12 +11,18 @@ class WritingResults extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Results"),
+        actions: [
+          BackIconButton(
+            routeTo: Routes.home,
+            icon: Icons.home,
+          )
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            NavButton("Back home", Routes.home),
+            BackNavButton("Back home", Routes.home),
           ],
         ),
       ),

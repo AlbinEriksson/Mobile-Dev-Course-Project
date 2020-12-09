@@ -1,4 +1,5 @@
 
+import 'package:dva232_project/widgets/back_icon_button.dart';
 import 'package:dva232_project/widgets/nav_button.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,12 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
+        actions: [
+          BackIconButton(
+            routeTo: Routes.home,
+            icon: Icons.home,
+          )
+        ],
       ),
       body: Center(
         child: Column(
