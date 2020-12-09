@@ -1,5 +1,5 @@
 import 'package:dva232_project/routes.dart';
-import 'package:dva232_project/widgets/back_nav_button.dart';
+import 'package:dva232_project/widgets/bot_nav_bar.dart';
 import 'package:dva232_project/widgets/nav_button.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +14,11 @@ class ReadingTest extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BackNavButton("Back to home", Routes.home),
             NavButton("Submit answers", Routes.readingResults),
           ],
         ),
       ),
+      bottomNavigationBar: BotNavBar(),
     );
   }
 }
