@@ -69,7 +69,7 @@ class _IntroState extends State<Intro> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
-                          fontSize: 20.0,
+                          fontSize: 21.0,
                         )
                     ),
                     onPressed: () => Navigator.pushNamed(context, Routes.login, arguments: null),
