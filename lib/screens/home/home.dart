@@ -15,7 +15,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
         appBar: _appBar(context),
         bottomNavigationBar: _bottomBar(context),
         body: Center(
@@ -25,7 +26,10 @@ class _HomeState extends State<Home> {
             AccountView(),
             SettingsView(),
           ].elementAt(_bottomBarIndex),
-        ));
+        ),
+      ),
+      onWillPop: () => _logOut(context),
+    );
   }
 
   void _bottomBarItemSelected(int index) {
@@ -35,18 +39,18 @@ class _HomeState extends State<Home> {
   }
 
   BottomNavigationBar _bottomBar(BuildContext context) => BottomNavigationBar(
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.settings), label: "Settings"),
-    ],
-    currentIndex: _bottomBarIndex,
-    selectedItemColor: Colors.purple,
-    unselectedItemColor: Colors.black,
-    onTap: _bottomBarItemSelected,
-  );
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: "Settings"),
+        ],
+        currentIndex: _bottomBarIndex,
+        selectedItemColor: Colors.purple,
+        unselectedItemColor: Colors.black,
+        onTap: _bottomBarItemSelected,
+      );
 
   Widget _appBar(BuildContext context) => PreferredSize(
       child: SafeArea(
@@ -76,22 +80,22 @@ class _HomeState extends State<Home> {
 
   Future<bool> _logOut(BuildContext context) {
     return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Log out"),
-        content: Text("Do you want to log out from your account?"),
-        actions: [
-          new TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("NO"),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Log out"),
+            content: Text("Do you want to log out from your account?"),
+            actions: [
+              new TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("NO"),
+              ),
+              new TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text("YES"),
+              ),
+            ],
           ),
-          new TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("YES"),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
