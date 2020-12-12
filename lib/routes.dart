@@ -8,7 +8,8 @@ import 'package:dva232_project/screens/results/speaking.dart';
 import 'package:dva232_project/screens/results/vocabulary.dart';
 import 'package:dva232_project/screens/results/writing.dart';
 import 'package:dva232_project/screens/settings/settings.dart';
-import 'package:dva232_project/screens/tests/listening.dart';
+import 'package:dva232_project/screens/tests/listening/listening_intro.dart';
+import 'package:dva232_project/screens/tests/listening/listening_questions.dart';
 import 'package:dva232_project/screens/tests/reading.dart';
 import 'package:dva232_project/screens/tests/speaking.dart';
 import 'package:dva232_project/screens/tests/vocabulary.dart';
@@ -21,8 +22,9 @@ class Routes {
   static const String login = "/login";
   static const String home = "/home";
   static const String settings = "/settings";
-  static const String listeningTest = "/listening";
-  static const String listeningResults = listeningTest + "/results";
+  static const String listeningTestIntro = "/listening";
+  static const String listeningTestQuestions="/listening_questions";
+  static const String listeningResults = listeningTestIntro + "/results";
   static const String readingTest = "/reading";
   static const String readingResults = readingTest + "/results";
   static const String speakingTest = "/speaking";
@@ -30,7 +32,7 @@ class Routes {
   static const String vocabularyTest = "/vocabulary";
   static const String vocabularyResults = vocabularyTest + "/results";
   static const String writingTest = "/writing";
-  static const String writingResults = listeningTest + "/results";
+  static const String writingResults = listeningTestIntro + "/results";
 
   static RouteFactory factory() {
     return (settings) {
@@ -58,8 +60,12 @@ class Routes {
           screen = Settings();
           break;
 
-        case Routes.listeningTest:
-          screen = ListeningTest();
+        case Routes.listeningTestIntro:
+          screen = ListeningTestIntro();
+          break;
+
+        case Routes.listeningTestQuestions:
+          screen = ListeningTestQuestions();
           break;
 
         case Routes.listeningResults:

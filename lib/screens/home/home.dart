@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
             NavButton("Speaking test", Routes.speakingTest),
             NavButton("Vocabulary test", Routes.vocabularyTest),
             NavButton("Writing test", Routes.writingTest),
-            NavButton("Listening test", Routes.listeningTest),
+            NavButton("Listening test", Routes.listeningTestIntro),
             NavButton("Reading test", Routes.readingTest),
           ],
         ),
