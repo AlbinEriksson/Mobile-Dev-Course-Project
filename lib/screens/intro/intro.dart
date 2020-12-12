@@ -11,35 +11,7 @@ class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          child: SafeArea(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(
-                          Icons.dashboard_rounded,
-                          color: Colors.black,
-                      ),
-                      iconSize: 40.0,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.settings,
-                        color: Colors.black,
-                      ),
-                      iconSize: 40.0,
-                    )
-                  ],
-                ),
-              ),
-            ),
-      ), preferredSize: Size.fromHeight(100)),
       body: Center(
-        //color: Colors.blue,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
