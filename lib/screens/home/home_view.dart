@@ -20,7 +20,7 @@ class HomeView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _takeTestButton(Routes.listeningTest, Colors.green[100],
+                _takeTestButton(Routes.listeningTestIntro, Colors.green[100],
                     Icons.hearing_outlined, "Listening"),
                 _takeTestButton(Routes.writingTest, Colors.orange[100],
                     Icons.create_outlined, "Writing"),

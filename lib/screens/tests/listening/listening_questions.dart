@@ -14,13 +14,11 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   List questionBank = [
     Question.name(
         "The 'talented tenth' was a label given to those African Americans who had good social positions and were", true),
-    Question.name("The supreme law of the land is the Constitution", true),
+    Question.name(".<br><br>She left school and began her singing career at the well-known", true),
     Question.name(
-        "The two rights in the Declaration of Independence are:"
-            " \n Life "
-            " \n Pursuit of hapiness",
+        ".<br><br>Her mother was keen that Lena's singing career would bring about the collapse of",
         true),
-    Question.name("The (U.S.) Constitution has 26 Amendments", false),
+    Question.name(".<br><br>Lena refused to sing for audiences of service men and prisoners which were", false),
     Question.name("Freedom of religion means:\nYou can practice any religion, "
         "or not practice a religtion.",
         true),
