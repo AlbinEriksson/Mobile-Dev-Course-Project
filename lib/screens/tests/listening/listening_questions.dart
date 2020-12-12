@@ -19,19 +19,10 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
         ".<br><br>Her mother was keen that Lena's singing career would bring about the collapse of",
         true),
     Question.name(".<br><br>Lena refused to sing for audiences of service men and prisoners which were", false),
-    Question.name("Freedom of religion means:\nYou can practice any religion, "
-        "or not practice a religtion.",
+    Question.name(".<br><br>When Lena entered Hollywood, black actors were generally only hired to act in the roles of",
         true),
-    Question.name("Journalist is one branch or part of the government.", false),
-    Question.name("The Congress does not make federal laws.", false),
-    Question.name("There are 100 U.S. Senators", true),
-    Question.name("We elect a U.S. Senator for 4 years", false),
-    Question.name("We elect a U.S. Representatice for 2 years", true),
-    Question.name("A U.S. Senator represents all people of the United States", false),
-    Question.name("We vote for president in January", false),
-    Question.name("Who vetoes bills is the President", true),
-    Question.name("The Constitution was written in 1787", true),
-    Question.name('George Bush is the \ " Father of Our Country"\.', false)
+    Question.name(".<br><br>While she was working for Hollywood,Lena found that, during the", false),
+    Question.name(",much of her spoken work was removed from the film.<br><br>Lena spent a lot of the 1950s working in", false),
   ];
 
   @override
