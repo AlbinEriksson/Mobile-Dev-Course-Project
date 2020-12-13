@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dva232_project/screens/tests/listening/question.dart';
+import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../routes.dart';
+import '../shared.dart';
 
 class ListeningTestQuestions extends StatefulWidget {
   @override
@@ -40,20 +40,23 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: AutoSizeText(
-          'Cambridge English: CAE Listening2',
-          style: TextStyle(fontSize: 20),
-          maxLines: 1,
-        ),
-      ),
+      appBar: LanGuideNavBar(
+          onBackIconPressed: () => backIconPressed(context, true)),
       body: Container(
         alignment: Alignment.topCenter,
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
         child: ListView(
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.all(20.5),
           children: [
+            Center(
+              child: Text(
+                "Question ${_currentQuestionIndex + 1}",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             Container(
               width: MediaQuery.of(context).size.width * 0.5,
               height: MediaQuery.of(context).size.height * 0.3,
@@ -62,92 +65,142 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                    "${questionBank[_currentQuestionIndex].questionText} _________",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    )),
-              )),
-            ),
-            Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Fill in the blank:",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  width: 150,
-                  child: TextField(
-                    onChanged: (value) {
-                      //Do something with the user input.
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Type here',
+              child: Column(
+                children: [
+                  Expanded(child:Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AutoSizeText(
+                        "${questionBank[_currentQuestionIndex].questionText} _________",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Fill in the blank: ",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          height: 40,
+                          child: TextFormField(
+                            style: TextStyle(fontSize: 20.0),
+                            onChanged: (value) {
+                              //Do something with the user input.
+                            },
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.purple, width: 1.0),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.purple, width: 3.0),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              RaisedButton(
-                color: Colors.purple,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text("Previous",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    )),
-                onPressed: () => _previousQuestion(),
-              ),
-              RaisedButton(
-                color: Colors.purple,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text("Next Question",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    )),
-                onPressed: () => _nextQuestion(),
-              ),
-            ]),
+
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RaisedButton(
                   color: Colors.purple,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
-                  child: Text("Back home",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 21.0,
-                      )),
-                  onPressed: () => Navigator.popUntil(
-                      context, ModalRoute.withName(Routes.home)),
+                  child: Text(
+                    "Previous",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 21.0,
+                    ),
+                  ),
+                  onPressed: () => _previousQuestion(),
+                ),
+
+                //Functionality:
+                // Next Question button changes to 'Submit Answer' On the last question from the list
+                //Submit Answer question is commented out down below
+                RaisedButton(
+                  color: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Next Question",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 21.0,
+                    ),
+                  ),
+                  onPressed: () => _nextQuestion(),
                 ),
               ],
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 32.0),
+              child: RawMaterialButton(
+                onPressed: _playMusic(),
+                elevation: 5.0,
+                fillColor: Colors.purple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.play_arrow,
+                      size: 100,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+                shape: CircleBorder(),
+              ),
+            ),
+            //Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //  children: [
+            //   RaisedButton(
+            //      color: Colors.purple,
+            //     shape: RoundedRectangleBorder(
+            //        borderRadius: BorderRadius.circular(5)),
+            //   child: Text("Submit Answers", style: TextStyle(
+            //    fontWeight: FontWeight.bold,
+            //   color: Colors.white,
+            //  fontSize: 21.0,
+            //)),
+            //onPressed: () => Navigator.pushNamed(
+            //   context, Routes.listeningResults,
+            //  arguments: null)),
+            //]
+            //)
           ],
         ),
       ),
     );
   }
 
-  _checkAnswer(bool userChoice, BuildContext context) {
-
-  }
+  _checkAnswer(bool userChoice, BuildContext context) {}
 
   _nextQuestion() {
     setState(() {
@@ -160,4 +213,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       _currentQuestionIndex = (_currentQuestionIndex - 1) % questionBank.length;
     });
   }
+
+  _playMusic() {}
 }
