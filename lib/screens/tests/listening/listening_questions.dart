@@ -48,6 +48,45 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.all(20.5),
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom:16.0),
+              child: Column(
+                children: [
+                  Text("Play Sound",style:TextStyle(
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.bold,
+                  )),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: RawMaterialButton(
+                onPressed: _playMusic(),
+                elevation: 5.0,
+                fillColor: Colors.purple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.play_arrow,
+                      size: 100,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+                shape: CircleBorder(),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom:16.0),
+                child: Text("00:00 / 00:32",style:TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                )),
+              ),
+            ),
             Center(
               child: Text(
                 "Question ${_currentQuestionIndex + 1}",
@@ -157,25 +196,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   onPressed: () => _nextQuestion(),
                 ),
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 32.0),
-              child: RawMaterialButton(
-                onPressed: _playMusic(),
-                elevation: 5.0,
-                fillColor: Colors.purple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.play_arrow,
-                      size: 100,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-                shape: CircleBorder(),
-              ),
             ),
             //Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
