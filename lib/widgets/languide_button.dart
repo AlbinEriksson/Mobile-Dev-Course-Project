@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class LanGuideButton extends StatelessWidget {
   final String text;
   final Function() onPressed;
+  final bool enabled;
 
-  LanGuideButton({Key key, this.text, this.onPressed}) : super(key: key);
+  LanGuideButton({Key key, this.text, this.onPressed, this.enabled: true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class LanGuideButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(100.0),
       ),
       color: Colors.purple,
-      onPressed: onPressed,
+      onPressed: enabled ? onPressed : null,
     );
   }
 }
