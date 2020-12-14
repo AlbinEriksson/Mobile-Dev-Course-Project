@@ -31,6 +31,8 @@ class _VocabularyTestState extends State<VocabularyTest> {
 
   int currentWordIndex = -1;
 
+  bool anythingChanged = false;
+
   final FocusNode _inputFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   TextEditingController _textController = TextEditingController();
@@ -55,10 +57,10 @@ class _VocabularyTestState extends State<VocabularyTest> {
     _textController.text = currentEdit;
 
     return WillPopScope(
-      onWillPop: () => backPressed(context, true),
+      onWillPop: () => _backPressed(context),
       child: Scaffold(
         appBar: LanGuideNavBar(
-            onBackIconPressed: () => backIconPressed(context, true)),
+            onBackIconPressed: () => backIconPressed(context, anythingChanged)),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -156,9 +158,11 @@ class _VocabularyTestState extends State<VocabularyTest> {
                     focusNode: _inputFocusNode,
                     controller: _textController,
                     enabled: currentWordIndex != -1,
+                    enableSuggestions: false,
                   ),
                   LanGuideButton(
                     text: "Submit answers",
+                    enabled: currentWordIndex == -1 && anythingChanged,
                     onPressed: () => submitPressed(context, Routes.vocabularyResults, {
                       "checkedWords": editedWords
                     }),
@@ -172,11 +176,25 @@ class _VocabularyTestState extends State<VocabularyTest> {
     );
   }
 
+  Future<bool> _backPressed(BuildContext context) {
+    if(_inputFocusNode.hasFocus) {
+      setState(() {
+        _inputFocusNode.unfocus();
+        currentWordIndex = -1;
+        currentEdit = "";
+      });
+      return Future.value(false);
+    }
+
+    return backPressed(context, anythingChanged);
+  }
+
   void _onEditComplete() {
     setState(() {
       editedWords[currentWordIndex] = currentEdit;
       currentWordIndex = -1;
       currentEdit = "";
+      anythingChanged = true;
     });
   }
 
