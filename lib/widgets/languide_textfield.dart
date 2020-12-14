@@ -9,6 +9,7 @@ class LanGuideTextField extends StatelessWidget {
   final FocusNode focusNode;
   final TextEditingController controller;
   final bool enabled;
+  final bool enableSuggestions;
 
   LanGuideTextField(
       {Key key,
@@ -19,7 +20,8 @@ class LanGuideTextField extends StatelessWidget {
       this.obscureText: false,
       this.focusNode,
       this.controller,
-      this.enabled: true})
+      this.enabled: true,
+      this.enableSuggestions: true})
       : super(key: key);
 
   @override
@@ -58,6 +60,9 @@ class LanGuideTextField extends StatelessWidget {
       onChanged: onChanged,
       onEditingComplete: onEditingComplete,
       enabled: enabled,
+      enableSuggestions: enableSuggestions,
+      autocorrect: enableSuggestions,
+      keyboardType: enableSuggestions ? TextInputType.text : TextInputType.visiblePassword,
     );
   }
 }
