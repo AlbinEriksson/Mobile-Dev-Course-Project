@@ -61,6 +61,8 @@ class Routes {
           break;
 
         case Routes.listeningTestIntro:
+          // "Easy", "Medium" or "Hard"
+          String difficulty = arguments["difficulty"];
           screen = ListeningTestIntro();
           break;
 
@@ -73,6 +75,7 @@ class Routes {
           break;
 
         case Routes.readingTest:
+          String difficulty = arguments["difficulty"];
           screen = ReadingTest();
           break;
 
@@ -81,6 +84,7 @@ class Routes {
           break;
 
         case Routes.speakingTest:
+          String difficulty = arguments["difficulty"];
           screen = SpeakingTest();
           break;
 
@@ -89,6 +93,7 @@ class Routes {
           break;
 
         case Routes.vocabularyTest:
+          String difficulty = arguments["difficulty"];
           screen = VocabularyTest();
           break;
 
@@ -97,6 +102,7 @@ class Routes {
           break;
 
         case Routes.writingTest:
+          String difficulty = arguments["difficulty"];
           screen = WritingTest();
           break;
 

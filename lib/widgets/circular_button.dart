@@ -8,12 +8,13 @@ class CircularButton extends StatelessWidget {
   final double size;
 
   CircularButton({
+    Key key,
     @required this.onPressed,
     this.color: Colors.grey,
     this.icon,
     this.text,
     this.size,
-  });
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class CircularButton extends StatelessWidget {
         shape: CircleBorder(),
       ),
       size: Size.square(size),
+      key: Key(""),
     );
   }
 }
