@@ -2,6 +2,7 @@ import 'package:dva232_project/screens/home/account_view.dart';
 import 'package:dva232_project/screens/home/home_view.dart';
 import 'package:dva232_project/screens/home/settings_view.dart';
 import 'package:dva232_project/screens/home/stats_view.dart';
+import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,31 +53,11 @@ class _HomeState extends State<Home> {
         onTap: _bottomBarItemSelected,
       );
 
-  Widget _appBar(BuildContext context) => PreferredSize(
-      child: SafeArea(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  iconSize: 40.0,
-                  onPressed: () => _backIconPressed(context),
-                ),
-                IconButton(
-                  icon: Image.asset("icons/flags/png/gb.png",
-                      package: "country_icons"),
-                  iconSize: 60.0,
-                ),
-              ],
-            ),
-          ),
-          // color: Colors.black12,
-        ),
-      ),
-      preferredSize: Size.fromHeight(100));
+  Widget _appBar(BuildContext context) => LanGuideNavBar(
+    onBackIconPressed: () => _backIconPressed(context),
+    showBackIcon: true,
+    showFlag: true,
+  );
 
   Future<bool> _logOut(BuildContext context) {
     return showDialog(

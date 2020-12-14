@@ -8,12 +8,12 @@ Future<bool> backPressed(BuildContext context, bool hasProgress) {
         title: Text("Are you sure?"),
         content: Text("You will lose your progress if you go back!"),
         actions: [
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, false),
+          new TextButton(
+            onPressed: () => Navigator.pop(context, false),
             child: Text("NO"),
           ),
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, true),
+          new TextButton(
+            onPressed: () => Navigator.pop(context, true),
             child: Text("YES"),
           ),
         ],
