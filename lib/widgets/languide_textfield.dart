@@ -4,14 +4,22 @@ class LanGuideTextField extends StatelessWidget {
   final IconData icon;
   final String hintText;
   final Function(String) onChanged;
+  final Function() onEditingComplete;
   final bool obscureText;
+  final FocusNode focusNode;
+  final TextEditingController controller;
+  final bool enabled;
 
   LanGuideTextField(
       {Key key,
       this.icon,
       this.hintText,
       this.onChanged,
-      this.obscureText: false})
+      this.onEditingComplete,
+      this.obscureText: false,
+      this.focusNode,
+      this.controller,
+      this.enabled: true})
       : super(key: key);
 
   @override
@@ -22,6 +30,8 @@ class LanGuideTextField extends StatelessWidget {
     }
 
     return TextField(
+      controller: controller,
+      focusNode: focusNode,
       obscureText: obscureText,
       style: TextStyle(
         fontSize: 17.0,
@@ -46,6 +56,8 @@ class LanGuideTextField extends StatelessWidget {
         ),
       ),
       onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
+      enabled: enabled,
     );
   }
 }
