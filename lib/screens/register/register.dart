@@ -48,11 +48,11 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
-                      color: Colors.purple,
+                      //color: Colors.purple,
                     ),
-                    labelText: 'Name (Last name is optional)',
-                    labelStyle: TextStyle(
-                      color: Colors.purple,
+                    hintText: 'Name (Last name is optional)',
+                    hintStyle: TextStyle(
+                      //color: Colors.purple,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
@@ -60,12 +60,12 @@ class _RegisterState extends State<Register> {
                         color: Colors.purple,
                       ),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    /*focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
                         color: Colors.purple,
                       ),
-                    ),
+                    ),*/
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
@@ -89,19 +89,13 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.email,
-                      color: Colors.purple,
+                      //color: Colors.purple,
                     ),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(
-                      color: Colors.purple,
+                    hintText: 'Email',
+                    hintStyle: TextStyle(
+                      //color: Colors.purple,
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
                         color: Colors.purple,
@@ -113,7 +107,7 @@ class _RegisterState extends State<Register> {
                   ),
                   onChanged: (value) {
                     setState(() {
-                      name = value;
+                      email = value;
                     });
                   },
                 ),
@@ -128,19 +122,13 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
-                      color: Colors.purple,
+                      //color: Colors.purple,
                     ),
-                    labelText: 'Password',
-                    labelStyle: TextStyle(
-                      color: Colors.purple,
+                    hintText: 'Password',
+                    hintStyle: TextStyle(
+                      //color: Colors.purple,
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
                         color: Colors.purple,
@@ -170,19 +158,13 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
-                      color: Colors.purple,
+                      //color: Colors.purple,
                     ),
-                    labelText: 'Confirm Password',
-                    labelStyle: TextStyle(
-                      color: Colors.purple,
+                    hintText: 'Confirm Password',
+                    hintStyle: TextStyle(
+                      //color: Colors.purple,
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
                         color: Colors.purple,
