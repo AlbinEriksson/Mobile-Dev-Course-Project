@@ -15,6 +15,7 @@ class NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RaisedButton(
       child: Text(text),
+      color: Colors.purple,
       onPressed: () => _onPressed(context),
     );
   }
