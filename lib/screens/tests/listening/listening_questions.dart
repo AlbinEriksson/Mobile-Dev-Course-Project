@@ -1,9 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dva232_project/screens/tests/listening/question.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
+import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../shared.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class ListeningTestQuestions extends StatefulWidget {
   @override
@@ -11,34 +12,66 @@ class ListeningTestQuestions extends StatefulWidget {
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
-  int _currentQuestionIndex = 0;
+  Future<String> getJson() {
+    return rootBundle.loadString('lib/jsonFiles/listening.json');
+  }
 
-  List questionBank = [
-    Question.name(
-        "The 'talented tenth' was a label given to those African Americans who had good social positions and were",
-        true),
-    Question.name(
-        ".<br><br>She left school and began her singing career at the well-known",
-        true),
-    Question.name(
-        ".<br><br>Her mother was keen that Lena's singing career would bring about the collapse of",
-        true),
-    Question.name(
-        ".<br><br>Lena refused to sing for audiences of service men and prisoners which were",
-        false),
-    Question.name(
-        ".<br><br>When Lena entered Hollywood, black actors were generally only hired to act in the roles of",
-        true),
-    Question.name(
-        ".<br><br>While she was working for Hollywood,Lena found that, during the",
-        false),
-    Question.name(
-        ",much of her spoken work was removed from the film.<br><br>Lena spent a lot of the 1950s working in",
-        false),
+  Future _showData() async {
+    my_data = json.decode(await getJson());
+    setState(() {
+      userData = my_data["items"];
+
+      debugPrint(userData[0]["gap"]);
+    });
+  }
+
+  final List<String> wordsToCheck = [
+    "______",
+    "______",
+    "______",
+    "______",
+    "______",
+    "______",
+    "______"
   ];
+
+  Map my_data;
+  List userData;
+
+  List<String> filledWords;
+  String currentEdit = "";
+  int currentWordIndex = -1;
+  bool anythingChanged = false;
+
+  final FocusNode _inputFocusNode = FocusNode();
+  TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  _ListeningTestQuestionsState() {
+    filledWords = List.from(wordsToCheck);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _showData();
+  }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // This will execute after the "build" method is finished
+      _inputFocusNode.requestFocus();
+    });
+
+    String currentWord = "";
+
+    if (currentWordIndex >= 0) {
+      currentWord = wordsToCheck[currentWordIndex];
+    }
+
+    _textController.text = "";
+
     return Scaffold(
       appBar: LanGuideNavBar(
           onBackIconPressed: () => backIconPressed(context, true)),
@@ -46,23 +79,125 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
         alignment: Alignment.topCenter,
         child: ListView(
           scrollDirection: Axis.vertical,
-          padding: EdgeInsets.all(20.5),
+          padding: EdgeInsets.only(
+              right: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.05,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.05),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom:16.0),
+            Container(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.53,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.purple.shade400, width: 3.0),
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: Column(
                 children: [
-                  Text("Play Sound",style:TextStyle(
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                  )),
+                  Expanded(
+                    child: Scrollbar(
+                      isAlwaysShown: true,
+                      controller: _scrollController,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: userData == null ? 0 : userData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Wrap(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () =>
+                                        setState(() {
+                                          currentWordIndex = index;
+                                          currentEdit = filledWords[index];
+                                        }),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: "\nQuestion ${index + 1} ",
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "${userData[index]["text"]} ",
+                                            style: TextStyle(
+                                              fontSize: 19.0,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          _changedWord(index),
+                                          _spellCheckField(index),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, bottom: 10.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.83,
+                          height: 60,
+                          child: LanGuideTextField(
+                            hintText: "Tap a question to fill the missing word",
+                            onChanged: (value) => currentEdit = value,
+                            onEditingComplete: _onEditComplete,
+                            focusNode: _inputFocusNode,
+                            controller: _textController,
+                            enabled: currentWordIndex != -1,
+                            enableSuggestions: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+              child: Column(
+                children: [
+                  Text("Play Sound",
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: RawMaterialButton(
-                onPressed: _playMusic(),
+                onPressed: _playSound(),
                 elevation: 5.0,
                 fillColor: Colors.purple,
                 child: Column(
@@ -80,159 +215,54 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom:16.0),
-                child: Text("00:00 / 00:32",style:TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.bold,
-                )),
-              ),
-            ),
-            Center(
-              child: Text(
-                "Question ${_currentQuestionIndex + 1}",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height * 0.3,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.purple.shade400, width: 3.0),
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Column(
-                children: [
-                  Expanded(child:Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AutoSizeText(
-                        "${questionBank[_currentQuestionIndex].questionText} _________",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Fill in the blank: ",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 150,
-                          height: 40,
-                          child: TextFormField(
-                            style: TextStyle(fontSize: 20.0),
-                            onChanged: (value) {
-                              //Do something with the user input.
-                            },
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.purple, width: 1.0),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.purple, width: 3.0),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RaisedButton(
-                  color: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    "Previous",
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text("00:00 / 00:32",
                     style: TextStyle(
+                      fontSize: 32.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    ),
-                  ),
-                  onPressed: () => _previousQuestion(),
-                ),
-
-                //Functionality:
-                // Next Question button changes to 'Submit Answer' On the last question from the list
-                //Submit Answer question is commented out down below
-                RaisedButton(
-                  color: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    "Next Question",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    ),
-                  ),
-                  onPressed: () => _nextQuestion(),
-                ),
-              ],
+                    )),
+              ),
             ),
-            //Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //  children: [
-            //   RaisedButton(
-            //      color: Colors.purple,
-            //     shape: RoundedRectangleBorder(
-            //        borderRadius: BorderRadius.circular(5)),
-            //   child: Text("Submit Answers", style: TextStyle(
-            //    fontWeight: FontWeight.bold,
-            //   color: Colors.white,
-            //  fontSize: 21.0,
-            //)),
-            //onPressed: () => Navigator.pushNamed(
-            //   context, Routes.listeningResults,
-            //  arguments: null)),
-            //]
-            //)
           ],
         ),
       ),
     );
   }
 
-  _checkAnswer(bool userChoice, BuildContext context) {}
-
-  _nextQuestion() {
+  void _onEditComplete() {
     setState(() {
-      _currentQuestionIndex = (_currentQuestionIndex + 1) % questionBank.length;
+      filledWords[currentWordIndex] = currentEdit;
+      currentWordIndex = -1;
+      currentEdit = "";
+      anythingChanged = true;
     });
   }
 
-  _previousQuestion() {
-    setState(() {
-      _currentQuestionIndex = (_currentQuestionIndex - 1) % questionBank.length;
-    });
+  TextSpan _changedWord(int index) {
+    String editedWord = filledWords[index];
+    String original = wordsToCheck[index];
+
+    if (original != editedWord) {
+      return TextSpan(
+        children: [
+          TextSpan(text: ""),
+        ],
+      );
+    }
+
+    return TextSpan();
   }
 
-  _playMusic() {}
+  TextSpan _spellCheckField(int index) {
+    return TextSpan(
+      text: filledWords[index],
+      style: TextStyle(fontSize: 20.0,
+          decoration: TextDecoration.underline,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400,
+      ),
+    );
+  }
+
+  _playSound() {}
 }

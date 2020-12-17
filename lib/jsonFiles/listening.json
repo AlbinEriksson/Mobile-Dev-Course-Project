@@ -1,0 +1,35 @@
+{
+  "title" : "Cambridge English : CAE Listening 2",
+  "instructions" : "You will hear a radio programme about the life of the singer, Lena Horne.For questions 1-8,complete the sentences.",
+  "audio":"cae_listening2.mp3",
+  "items":[
+    {
+      "text" : "The 'talented tenth' was a label given to those African Americans who had good social positions and were",
+      "gap" : "educated"
+    },
+    {
+      "text" : ".<br><br>She left school and began her singing career at the well-known",
+      "gap": "CottonClub"
+    },
+    {
+      "text" : ".<br><br>Her mother was keen that Lena's singing career would bring about the collapse of",
+      "gap" : "racial barriers"
+    },
+    {
+      "text" : ".<br><br>Lena refused to sing for audiences of service men and prisoners which were",
+      "gap" : "segregated"
+    },
+    {
+      "text" : ".<br><br>When Lena entered Hollywood, black actors were generally only hired to act in the roles of",
+      "gap" : "maids and butlers"
+    },
+    {
+      "text" : ".<br><br>While she was working for Hollywood, Lena found that,during the",
+      "gap" : "editing process"
+    },
+    {
+      "text" : ",much of her spoken work was removed from the film.<br><br>Lena spent a lot of the 1950s working in",
+      "gap" : "night clubs"
+    }
+  ]
+}
