@@ -1,4 +1,5 @@
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/widgets/languide_navbar.dart';
 
 import 'package:flutter/material.dart';
 
@@ -18,14 +19,18 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: LanGuideNavBar(
+          onBackIconPressed: () => Navigator.popAndPushNamed(
+              context, Routes.intro,
+              arguments: null)),
+      body: Container(
+        alignment: Alignment.topCenter,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.all(0.0),
+                padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
                 child: Text(
                   'Account Info',
                   style: TextStyle(
@@ -52,8 +57,8 @@ class _RegisterState extends State<Register> {
                     ),
                     hintText: 'Name (Last name is optional)',
                     hintStyle: TextStyle(
-                      //color: Colors.purple,
-                    ),
+                        //color: Colors.purple,
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
@@ -93,8 +98,8 @@ class _RegisterState extends State<Register> {
                     ),
                     hintText: 'Email',
                     hintStyle: TextStyle(
-                      //color: Colors.purple,
-                    ),
+                        //color: Colors.purple,
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
@@ -126,8 +131,8 @@ class _RegisterState extends State<Register> {
                     ),
                     hintText: 'Password',
                     hintStyle: TextStyle(
-                      //color: Colors.purple,
-                    ),
+                        //color: Colors.purple,
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
@@ -162,8 +167,8 @@ class _RegisterState extends State<Register> {
                     ),
                     hintText: 'Confirm Password',
                     hintStyle: TextStyle(
-                      //color: Colors.purple,
-                    ),
+                        //color: Colors.purple,
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
                       borderSide: BorderSide(
@@ -199,38 +204,40 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    hint: Text(
-                      "Select Role",
-                      style: TextStyle(fontSize: 17.0
-                          //fontWeight: FontWeight.bold,
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      hint: Text(
+                        "Select Role",
+                        style: TextStyle(fontSize: 17.0
+                            //fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      value: role,
+                      items: <String>['Student', 'Teacher']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(fontSize: 17.0
+                                //fontWeight: FontWeight.bold,
+                                ),
                           ),
+                        );
+                      }).toList(),
+                      onChanged: (String value) {
+                        setState(() {
+                          role = value;
+                        });
+                      },
                     ),
-                    value: role,
-                    items: <String>['Student', 'Teacher']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(fontSize: 17.0
-                              //fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String value) {
-                      setState(() {
-                        role = value;
-                      });
-                    },
                   ),
                 ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                //margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                 width: 300,
                 height: 100,
                 child: RaisedButton(
