@@ -10,7 +10,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   String role;
-  var response;
+  Future<UserAPIResult> userApiResponse;
   final userNameController = new TextEditingController();
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
@@ -237,7 +237,8 @@ class _RegisterState extends State<Register> {
                   onPressed: () {
                     String dialogue = "";
                     bool register = false;
-                    RegExp userExp = new RegExp(r"^(?=.{8,20}$)(?![_. ])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
+                    RegExp userExp = new RegExp(
+                        r"^(?=.{8,20}$)(?![_. ])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
                     /*
                     * Username has to be 8-20 characters long.
                     * _ or . are not allowed in the beginning or the end, furthermore they're not allowed inside of the username in the form of: __    _.    ._    ..
@@ -246,7 +247,8 @@ class _RegisterState extends State<Register> {
                     * An invalid username would look like: big..Pop99, kab__00m, ooga._booga.
                     * //Rikard
                     * */
-                    RegExp emailExp = new RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+");
+                    RegExp emailExp = new RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+");
                     /*
                     *Checks if the structure of the email is correct (i.e test@example.com).
                     *Does not allow for double @ or double .
@@ -261,8 +263,10 @@ class _RegisterState extends State<Register> {
                     * and if they don't respond, more than likely their email is either incorrect or the user who created the account is not the real owner.
                     * //Rikard
                     * */
-                    RegExp strongPasswordRegex = new RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-                    RegExp mediumPasswordRegex = new RegExp(r"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+                    RegExp strongPasswordRegex = new RegExp(
+                        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+                    RegExp mediumPasswordRegex = new RegExp(
+                        r"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
                     /*
                     * The strong version of password regex has strict requirements:
                     *   - At least 1 lowercase alphabetical character
@@ -286,25 +290,29 @@ class _RegisterState extends State<Register> {
                     * //Rikard
                     * */
 
-                    if(userNameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty || confirmPasswordController.text.isEmpty || role.length == 0){
+                    if (userNameController.text.isEmpty ||
+                        emailController.text.isEmpty ||
+                        passwordController.text.isEmpty ||
+                        confirmPasswordController.text.isEmpty ||
+                        role.length == 0) {
                       dialogue = "One or more fields are empty.";
-                    }
-                    else if(!userExp.hasMatch(userNameController.text)){
+                    } else if (!userExp.hasMatch(userNameController.text)) {
                       dialogue = "Invalid username.";
-                    }
-                    else if(!emailExp.hasMatch(emailController.text)){
+                    } else if (!emailExp.hasMatch(emailController.text)) {
                       dialogue = "Invalid email.";
-                    }
-                    else if(!strongPasswordRegex.hasMatch(passwordController.text) && !mediumPasswordRegex.hasMatch(passwordController.text)){
+                    } else if (!strongPasswordRegex
+                            .hasMatch(passwordController.text) &&
+                        !mediumPasswordRegex
+                            .hasMatch(passwordController.text)) {
                       dialogue = "Password is too weak!";
-                    }
-                    else if(!(passwordController.text == confirmPasswordController.text)){
-                      dialogue = "Your password confirmation was not the same as the password.";
-                    }
-                    else{
+                    } else if (!(passwordController.text ==
+                        confirmPasswordController.text)) {
+                      dialogue =
+                          "Your password confirmation was not the same as the password.";
+                    } else {
                       register = true;
                     }
-                    if(!register){
+                    if (!register) {
                       return showDialog(
                         context: context,
                         builder: (context) {
@@ -314,65 +322,69 @@ class _RegisterState extends State<Register> {
                         },
                       );
                     } //If any of the above conditions were unmet, the user does not get to create an account
-                    else{
-                      response = UserAPIClient.register(emailController.text, passwordController.text, userNameController.text, "", role);
-                    }//If however the conditions were met, then they are free to access the rest of the app
+                    else {
+                      UserAPIClient.register(
+                              emailController.text,
+                              passwordController.text,
+                              userNameController.text,
+                              "",
+                              role.toLowerCase())
+                          .then((result) async {
+                        switch (result) {
+                          case UserAPIResult.success:
+                            await UserAPIClient.login(emailController.text, passwordController.text);
+                            Navigator.popAndPushNamed(context, Routes.home,
+                                arguments: null);
+                            break;
+                          case UserAPIResult.clientError:
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Text("Error with specification."),
+                                );
+                              },
+                            );
+                            break;
+                          case UserAPIResult.emailInUse:
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content:
+                                      Text("That email is already in use."),
+                                );
+                              },
+                            );
+                            break;
+                          case UserAPIResult.roleNotFound:
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Text("Invalid role."),
+                                );
+                              },
+                            );
+                            break;
+                          case UserAPIResult.serverError:
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Text("Failed to register the user."),
+                                );
+                              },
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                      });
+                    } //If however the conditions were met, then they are free to access the rest of the app
                   },
                 ),
               ), //Register button
-              FutureBuilder(
-                future: response,
-                builder: (context, data){
-                  if(data.hasData) {
-                    if (data.data["message"] == "user was registered") {
-                      Navigator.popAndPushNamed(
-                          context, Routes.home,
-                          arguments: null);
-                    }
-                    else if (data.data["message"] == "you must specify 'email', 'password', 'firstName' and 'role' in request body") {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text("Error with specification."),
-                          );
-                        },
-                      );
-                    }
-                    else if (data.data["message"] == "invalid role") {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text("Invalid role."),
-                          );
-                        },
-                      );
-                    }
-                    else if (data.data["message"] == "that email is already in use") {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text("That email is already in use."),
-                          );
-                        },
-                      );
-                    }
-                    else if (data.data["message"] == "failed to register user") {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text("Failed to register the user."),
-                          );
-                        },
-                      );
-                    }
-                  }
-                  return SizedBox.shrink();
-                }
-              )
             ],
           ),
         ),
