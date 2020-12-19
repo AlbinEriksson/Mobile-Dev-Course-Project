@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:localstorage/localstorage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -33,6 +34,18 @@ class UserAPIClient {
   static String _refreshToken;
   static String _userScope;
 
+  static final LocalStorage _storage = LocalStorage("user_api_client.json");
+  static const String _storageRefreshTokenKey = "refresh_token";
+
+  static void _setTokenData(
+      String accessToken, String refreshToken, String userScope) {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _userScope = userScope;
+
+    _storage.setItem(_storageRefreshTokenKey, _refreshToken);
+  }
+
   /// Logs in a user. The access token, refresh token and scope will be stored
   /// statically in the UserAPIClient class, and cached accordingly.
   /// Possible result types (see enum UserAPIResult):
@@ -60,9 +73,8 @@ class UserAPIClient {
           return UserAPIResult.invalidCredentials;
         case 200:
           var body = json.decode(response.body);
-          _accessToken = body["access_token"];
-          _refreshToken = body["refresh_token"];
-          _userScope = body["scope"];
+          _setTokenData(
+              body["access_token"], body["refresh_token"], body["scope"]);
           return UserAPIResult.success;
         default:
           log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
@@ -122,26 +134,28 @@ class UserAPIClient {
   /// in the UserAPIClient class, and cached accordingly.
   /// Possible result types (see enum UserAPIResult):
   /// - clientError
+  /// - noRefreshToken
   /// - refreshTokenExpired
   /// - success
   /// - unknown
   static Future<UserAPIResult> refresh() {
-    if(_refreshToken == null || _refreshToken.isEmpty) {
+    _refreshToken = _storage.getItem(_storageRefreshTokenKey);
+    if (_refreshToken == null || _refreshToken.isEmpty) {
       return Future.value(UserAPIResult.noRefreshToken);
     }
     return http
         .post("$_apiUrl/token.php",
-        headers: {"Content-Type": "application/json"},
-        body: json.encode({
-          "client_id": _clientLoginId,
-          "refresh_token": _refreshToken,
-          "grant_type": "refresh_token",
-        }))
+            headers: {"Content-Type": "application/json"},
+            body: json.encode({
+              "client_id": _clientLoginId,
+              "refresh_token": _refreshToken,
+              "grant_type": "refresh_token",
+            }))
         .then((response) {
       switch (response.statusCode) {
         case 400:
           var body = json.decode(response.body);
-          if(body["error"] == "invalid_grant") {
+          if (body["error"] == "invalid_grant") {
             return UserAPIResult.refreshTokenExpired;
           }
           log("[ERROR] User API Client failed to make a proper request to refresh the access token:");
@@ -149,9 +163,8 @@ class UserAPIClient {
           return UserAPIResult.clientError;
         case 200:
           var body = json.decode(response.body);
-          _accessToken = body["access_token"];
-          _refreshToken = body["refresh_token"];
-          _userScope = body["scope"];
+          _setTokenData(
+              body["access_token"], body["refresh_token"], body["scope"]);
           return UserAPIResult.success;
         default:
           log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");

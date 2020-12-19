@@ -32,6 +32,7 @@ dependencies:
   country_icons: ^1.1.1
   popup_menu: ^1.0.4
   http: ^0.12.2
+  localstorage: ^3.0.5+8
 
 dev_dependencies:
   flutter_test:
