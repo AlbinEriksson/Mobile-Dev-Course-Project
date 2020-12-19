@@ -10,7 +10,7 @@ class LanGuideButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: Text(
         text,
         style: TextStyle(
@@ -18,10 +18,11 @@ class LanGuideButton extends StatelessWidget {
           fontSize: 21,
         ),
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(100.0),
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
+        ),
       ),
-      color: Colors.purple,
       onPressed: enabled ? onPressed : null,
     );
   }
