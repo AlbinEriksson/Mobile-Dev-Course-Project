@@ -1,6 +1,8 @@
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/client/user_api_client.dart';
+import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -19,10 +21,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LanGuideNavBar(
-          onBackIconPressed: () => Navigator.popAndPushNamed(
-              context, Routes.intro,
-              arguments: null)),
+      appBar: LanGuideNavBar(onBackIconPressed: () => Navigator.pop(context)),
       body: Container(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
@@ -50,131 +49,40 @@ class _RegisterState extends State<Register> {
               ), //Delimiter
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                child: TextField(
+                child: LanGuideTextField(
+                  icon: Icons.person,
+                  hintText: 'Name (Last name is optional)',
                   controller: userNameController,
-                  style: TextStyle(
-                    fontSize: 17.0,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.person,
-                      //color: Colors.purple,
-                    ),
-                    hintText: 'Name (Last name is optional)',
-                    hintStyle: TextStyle(
-                        //color: Colors.purple,
-                        ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
                 ),
-              ), //Username
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                child: TextField(
+                child: LanGuideTextField(
+                  icon: Icons.email,
+                  hintText: 'Email',
                   controller: emailController,
-                  style: TextStyle(
-                    fontSize: 17.0,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
-                      //color: Colors.purple,
-                    ),
-                    hintText: 'Email',
-                    hintStyle: TextStyle(
-                        //color: Colors.purple,
-                        ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                  ),
                 ),
-              ), //Email
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                child: TextField(
+                child: LanGuideTextField(
+                  icon: Icons.lock,
+                  hintText: 'Password',
+                  obscureText: true,
                   controller: passwordController,
-                  obscureText: true,
-                  style: TextStyle(
-                    fontSize: 17.0,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      //color: Colors.purple,
-                    ),
-                    hintText: 'Password',
-                    hintStyle: TextStyle(
-                        //color: Colors.purple,
-                        ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
                 ),
-              ), //Password
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                child: TextField(
-                  controller: confirmPasswordController,
+                child: LanGuideTextField(
+                  icon: Icons.lock,
+                  hintText: 'Confirm Password',
                   obscureText: true,
-                  style: TextStyle(
-                    fontSize: 17.0,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      //color: Colors.purple,
-                    ),
-                    hintText: 'Confirm Password',
-                    hintStyle: TextStyle(
-                        //color: Colors.purple,
-                        ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
+                  controller: confirmPasswordController,
                 ),
-              ), //Password confirmation
+              ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                width: 335,
+                margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                 height: 60,
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
@@ -220,20 +128,10 @@ class _RegisterState extends State<Register> {
               ), //Role selection
               Container(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                width: 300,
-                height: 100,
-                child: RaisedButton(
-                  child: Text(
-                    'Register',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 21,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.0),
-                  ),
-                  color: Colors.purple,
+                width: double.infinity,
+                height: 80,
+                child: LanGuideButton(
+                  text: 'Register',
                   onPressed: () {
                     String dialogue = "";
                     bool register = false;
@@ -332,7 +230,8 @@ class _RegisterState extends State<Register> {
                           .then((result) async {
                         switch (result) {
                           case UserAPIResult.success:
-                            await UserAPIClient.login(emailController.text, passwordController.text);
+                            await UserAPIClient.login(
+                                emailController.text, passwordController.text);
                             Navigator.popAndPushNamed(context, Routes.home,
                                 arguments: null);
                             break;
@@ -381,7 +280,7 @@ class _RegisterState extends State<Register> {
                             break;
                         }
                       });
-                    } //If however the conditions were met, then they are free to access the rest of the app
+                    }
                   },
                 ),
               ), //Register button
