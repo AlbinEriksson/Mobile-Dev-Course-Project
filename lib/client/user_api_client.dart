@@ -13,6 +13,7 @@ enum UserAPIResult {
   serverError,
   noRefreshToken,
   refreshTokenExpired,
+  accessTokenExpired,
   unknown,
 }
 
@@ -170,6 +171,81 @@ class UserAPIClient {
           log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
           return UserAPIResult.unknown;
       }
+    });
+  }
+
+  /// Submits a test result. Uses the internally stored access token, so there's
+  /// no need to provide it as an argument for this method.
+  /// Possible result types (see enum UserAPIResult):
+  /// - serverError
+  /// - clientError
+  /// - accessTokenExpired (it will try to refresh it <b>once</b> before
+  /// returning this result).
+  /// - noRefreshToken
+  /// - refreshTokenExpired
+  /// - success
+  /// - unknown
+  static Future<UserAPIResult> submitTestResults(
+      String testType, String difficulty, double accuracy) {
+    _tryMethod(() {
+      return http
+          .post("$_apiUrl/results.php",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer $_accessToken"
+              },
+              body: json.encode({
+                "difficulty": difficulty,
+                "type": testType,
+                "accuracy": accuracy
+              }))
+          .then((response) {
+        switch (response.statusCode) {
+          case 500:
+            return UserAPIResult.serverError;
+          case 400:
+          case 404:
+            log("[ERROR] User API Client failed to make a proper request to submit test results:");
+            log(response.body);
+            return UserAPIResult.clientError;
+          case 401:
+            var body = json.decode(response.body);
+            if(body["error_description"] == "The access token provided has expired") {
+              return UserAPIResult.accessTokenExpired;
+            }
+            return UserAPIResult.clientError;
+          case 200:
+            return UserAPIResult.success;
+          default:
+            return UserAPIResult.unknown;
+        }
+      });
+    });
+  }
+
+  /// Tries to execute a user API method that requires the use of an access
+  /// token. The reason for this method is to refresh the token, if possible.
+  /// the method MUST be able to return `UserAPIResult.accessTokenExpired`,
+  /// since that indicates to this method that we should refresh it and try
+  /// again.<br>
+  /// The procedure is as follows:
+  /// 1. Attempt to use the API method.
+  /// 2. If the API method returns `accessTokenExpired`, then: refresh the
+  /// access token.
+  /// 3. If the refresh fails, return its error and abort the entire procedure.
+  /// 4. The refresh succeeded, execute the API method again and return its
+  /// result.
+  static Future<UserAPIResult> _tryMethod(
+      Future<UserAPIResult> Function() apiMethod) {
+    return apiMethod().then((value) async {
+      if (value == UserAPIResult.accessTokenExpired) {
+        var refreshResult = await refresh();
+        if (refreshResult != UserAPIResult.success) {
+          return refreshResult;
+        }
+        return await apiMethod();
+      }
+      return value;
     });
   }
 }
