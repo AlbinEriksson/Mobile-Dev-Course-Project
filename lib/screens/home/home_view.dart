@@ -9,7 +9,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  static const double _buttonSize = 150;
+  static const double _buttonSize = 150, _buttonPadding = 24.0;
 
   String selectedTestRoute;
 
@@ -23,23 +23,47 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     PopupMenu.context = context;
 
+    List<Widget> buttons = [
+      _takeTestButton(context, Routes.readingTest, Colors.purple[100],
+          Icons.remove_red_eye_outlined, "Reading", _readingBtnKey),
+      _takeTestButton(context, Routes.speakingTest, Colors.cyan[100],
+          Icons.mic_outlined, "Speaking", _speakingBtnKey),
+      _takeTestButton(context, Routes.listeningTestIntro, Colors.green[100],
+          Icons.hearing_outlined, "Listening", _listeningBtnKey),
+      _takeTestButton(context, Routes.writingTest, Colors.orange[100],
+          Icons.create_outlined, "Writing", _writingBtnKey),
+      _takeTestButton(context, Routes.vocabularyTest, Colors.red[100],
+          Icons.spellcheck_outlined, "Vocabulary", _vocabularyBtnKey),
+    ];
+
     return ListView(
-      padding: EdgeInsets.all(32.0),
+      padding: EdgeInsets.all(_buttonPadding),
       children: [
-        _takeTestButton(context, Routes.readingTest, Colors.purple[100],
-            Icons.remove_red_eye_outlined, "Reading", _readingBtnKey),
-        SizedBox(height: 32.0),
-        _takeTestButton(context, Routes.speakingTest, Colors.cyan[100],
-            Icons.mic_outlined, "Speaking", _speakingBtnKey),
-        SizedBox(height: 32.0),
-        _takeTestButton(context, Routes.listeningTestIntro, Colors.green[100],
-            Icons.hearing_outlined, "Listening", _listeningBtnKey),
-        SizedBox(height: 32.0),
-        _takeTestButton(context, Routes.writingTest, Colors.orange[100],
-            Icons.create_outlined, "Writing", _writingBtnKey),
-        SizedBox(height: 32.0),
-        _takeTestButton(context, Routes.vocabularyTest, Colors.red[100],
-            Icons.spellcheck_outlined, "Vocabulary", _vocabularyBtnKey),
+        LayoutBuilder(builder: (context, size) {
+          int columns = ((size.maxWidth + _buttonPadding) /
+                  (_buttonSize + _buttonPadding))
+              .floor();
+          int buttonIndex = 0;
+
+          List<Widget> rows = [];
+
+          while (buttonIndex < buttons.length) {
+            List<Widget> children = [];
+            for (int i = buttonIndex; i < buttonIndex + columns; i++) {
+              if (i >= buttons.length) {
+                break;
+              }
+              children.add(buttons[i]);
+            }
+            rows.add(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: children));
+            rows.add(SizedBox(height: _buttonPadding));
+            buttonIndex += columns;
+          }
+
+          return Column(children: rows);
+        }),
       ],
     );
   }
@@ -67,9 +91,8 @@ class _HomeViewState extends State<HomeView> {
         MenuItem(title: "Hard", textStyle: TextStyle(color: Colors.black)),
       ],
       onClickMenu: (item) {
-        Navigator.pushNamed(context, routeTo, arguments: {
-          "difficulty": item.menuTitle
-        });
+        Navigator.pushNamed(context, routeTo,
+            arguments: {"difficulty": item.menuTitle});
       },
     );
 
