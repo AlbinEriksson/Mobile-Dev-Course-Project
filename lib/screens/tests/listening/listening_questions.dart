@@ -1,7 +1,9 @@
+import 'package:dva232_project/screens/tests/listening/question.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../routes.dart';
 import '../shared.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
@@ -17,12 +19,11 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   }
 
   Future _showData() async {
-    my_data = json.decode(await getJson());
-    setState(() {
-      userData = my_data["items"];
+    String jsonString = await getJson();
+    final jsonResponse = json.decode(jsonString);
+    Question question = new Question.fromJson(jsonResponse);
 
-      debugPrint(userData[0]["gap"]);
-    });
+    return question;
   }
 
   final List<String> wordsToCheck = [
@@ -34,9 +35,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     "______",
     "______"
   ];
-
-  Map my_data;
-  List userData;
 
   List<String> filledWords;
   String currentEdit = "";
@@ -64,12 +62,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       _inputFocusNode.requestFocus();
     });
 
-    String currentWord = "";
-
-    if (currentWordIndex >= 0) {
-      currentWord = wordsToCheck[currentWordIndex];
-    }
-
     _textController.text = "";
 
     return Scaffold(
@@ -80,20 +72,11 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
         child: ListView(
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(
-              right: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.05,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.05),
+              right: MediaQuery.of(context).size.width * 0.05,
+              left: MediaQuery.of(context).size.width * 0.05),
           children: [
             Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.53,
+              height: MediaQuery.of(context).size.height * 0.53,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.purple.shade400, width: 3.0),
                 color: Colors.grey.shade100,
@@ -108,47 +91,15 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: userData == null ? 0 : userData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Wrap(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () =>
-                                        setState(() {
-                                          currentWordIndex = index;
-                                          currentEdit = filledWords[index];
-                                        }),
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: "\nQuestion ${index + 1} ",
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: "${userData[index]["text"]} ",
-                                            style: TextStyle(
-                                              fontSize: 19.0,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                          _changedWord(index),
-                                          _spellCheckField(index),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
+                          child: FutureBuilder(
+                            future: _showData(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                return createListView(snapshot.data, context);
+                              } else {
+                                return CircularProgressIndicator();
+                              }
                             },
                           ),
                         ),
@@ -161,10 +112,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.83,
+                          width: MediaQuery.of(context).size.width * 0.83,
                           height: 60,
                           child: LanGuideTextField(
                             hintText: "Tap a question to fill the missing word",
@@ -183,7 +131,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+              padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
               child: Column(
                 children: [
                   Text("Play Sound",
@@ -195,7 +143,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
+              padding: const EdgeInsets.only(bottom: 8.0),
               child: RawMaterialButton(
                 onPressed: _playSound(),
                 elevation: 5.0,
@@ -205,7 +153,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   children: [
                     Icon(
                       Icons.play_arrow,
-                      size: 100,
+                      size: 70,
                       color: Colors.white,
                     )
                   ],
@@ -215,13 +163,28 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text("00:00 / 00:32",
                     style: TextStyle(
-                      fontSize: 32.0,
+                      fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                     )),
               ),
+            ),
+            Container(
+              height: 50.0,
+              child:                RaisedButton(
+                  color: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Text("Submit Answers", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 21.0,
+                  )),
+                  onPressed: () => Navigator.pushNamed(
+                      context, Routes.listeningResults,
+                      arguments: null)),
             ),
           ],
         ),
@@ -256,13 +219,61 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   TextSpan _spellCheckField(int index) {
     return TextSpan(
       text: filledWords[index],
-      style: TextStyle(fontSize: 20.0,
-          decoration: TextDecoration.underline,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w400,
+      style: TextStyle(
+        fontSize: 20.0,
+        decoration: TextDecoration.underline,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w400,
       ),
     );
   }
 
   _playSound() {}
+
+  Widget createListView(data, BuildContext context) {
+    return Container(
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: data.items == null ? 0 : data.items.length,
+        itemBuilder: (context, int index) {
+          return Wrap(
+            children: [
+              GestureDetector(
+                onTap: () => setState(() {
+                  currentWordIndex = index;
+                  currentEdit = filledWords[index];
+                }),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "\nQuestion ${index + 1} ",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "${data.items[index].text} ",
+                        style: TextStyle(
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      _changedWord(index),
+                      _spellCheckField(index),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

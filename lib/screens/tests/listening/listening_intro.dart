@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/screens/tests/listening/question.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import '../shared.dart';
 
 class ListeningTestIntro extends StatefulWidget {
@@ -10,6 +12,25 @@ class ListeningTestIntro extends StatefulWidget {
 }
 
 class _ListeningTestIntroState extends State<ListeningTestIntro> {
+
+  Future<String> getJson() {
+    return rootBundle.loadString('lib/jsonFiles/listening.json');
+  }
+
+  Future _showData() async {
+    String jsonString = await getJson();
+    final jsonResponse = json.decode(jsonString);
+    Question question = new Question.fromJson(jsonResponse);
+
+    return question;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _showData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +51,22 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
               ),
               child: Column(
                 children: [
-                  Text(
-                    'You will hear a radio programme about the life of the singer, Lena Horne.'
-                    ' For questions 1-8, complete the sentences.',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                    ),
+                  FutureBuilder(
+                    future: _showData(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                              '${snapshot.data.instructions}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ],
               ),
