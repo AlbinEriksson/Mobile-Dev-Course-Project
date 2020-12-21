@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dva232_project/screens/tests/listening/question.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
@@ -6,7 +7,10 @@ import 'package:flutter/material.dart';
 import '../../../routes.dart';
 import '../shared.dart';
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 
 class ListeningTestQuestions extends StatefulWidget {
   @override
@@ -14,6 +18,34 @@ class ListeningTestQuestions extends StatefulWidget {
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
+
+
+  List<String> wordsToCheck = [
+    "______",
+    "______",
+    "______",
+    "______",
+    "______",
+    "______",
+    "______"
+  ];
+
+  int _click=0;
+  List<String> filledWords;
+  String currentEdit = "";
+  int currentWordIndex = -1;
+  bool anythingChanged = false;
+  String questionText;
+  String mp3Uri='';
+
+  final FocusNode _inputFocusNode = FocusNode();
+  TextEditingController _textController = TextEditingController();
+  ScrollController _scrollController = null;
+
+  _ListeningTestQuestionsState() {
+    filledWords = List.from(wordsToCheck);
+  }
+
   Future<String> getJson() {
     return rootBundle.loadString('lib/jsonFiles/listening.json');
   }
@@ -26,33 +58,31 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     return question;
   }
 
-  final List<String> wordsToCheck = [
-    "______",
-    "______",
-    "______",
-    "______",
-    "______",
-    "______",
-    "______"
-  ];
+  void _loadSound() async{
+    final ByteData data = await rootBundle.load('assets/sneeze.mp3');
+    Directory tempDir =await getTemporaryDirectory();
+    File tempFile=File('${tempDir.path}/sneeze.mp3}');
+    await tempFile.writeAsBytes(data.buffer.asUint8List(), flush:true);
+    mp3Uri=tempFile.uri.toString();
+  }
 
-  List<String> filledWords;
-  String currentEdit = "";
-  int currentWordIndex = -1;
-  bool anythingChanged = false;
+  _playSound() {
+    AudioPlayer player = AudioPlayer();
+    if(_click==0) {
+      player.play(mp3Uri);
+      _click++;
+    }else{
+      player.stop();
+      _click=0;
+    }
 
-  final FocusNode _inputFocusNode = FocusNode();
-  TextEditingController _textController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-
-  _ListeningTestQuestionsState() {
-    filledWords = List.from(wordsToCheck);
   }
 
   @override
   void initState() {
     super.initState();
     _showData();
+    _loadSound();
   }
 
   @override
@@ -86,7 +116,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 children: [
                   Expanded(
                     child: Scrollbar(
-                      isAlwaysShown: true,
+                      isAlwaysShown: _scrollController!=null,
                       controller: _scrollController,
                       child: Center(
                         child: Padding(
@@ -96,6 +126,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
+                                _scrollController=new ScrollController();
                                 return createListView(snapshot.data, context);
                               } else {
                                 return CircularProgressIndicator();
@@ -145,7 +176,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: RawMaterialButton(
-                onPressed: _playSound(),
+                onPressed: ()=>_playSound(),
                 elevation: 5.0,
                 fillColor: Colors.purple,
                 child: Column(
@@ -228,8 +259,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     );
   }
 
-  _playSound() {}
-
   Widget createListView(data, BuildContext context) {
     return Container(
       child: ListView.builder(
@@ -251,14 +280,14 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                     ),
                     children: [
                       TextSpan(
-                        text: "\nQuestion ${index + 1} ",
+                        text: "\nQuestion ${index + 1}: ",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       TextSpan(
-                        text: "${data.items[index].text} ",
+                        text: "${_editString(data.items[index].text)} ",
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.normal,
@@ -276,4 +305,14 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       ),
     );
   }
+
+  String _editString(String text){
+    String newText;
+    newText=text.replaceAll(new RegExp(r'<br><br>'), '');
+    newText=newText.replaceFirst(new RegExp(r'\.'), '');
+    newText=newText.replaceFirst(new RegExp(r','), '');
+
+    return newText;
+  }
+
 }
