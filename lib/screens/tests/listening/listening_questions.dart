@@ -38,6 +38,10 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   String questionText;
   String mp3Uri='';
 
+  Icon _sound=Icon(Icons.play_arrow, size: 70.0, color:Colors.white);
+
+
+  AudioPlayer player = AudioPlayer();
   final FocusNode _inputFocusNode = FocusNode();
   TextEditingController _textController = TextEditingController();
   ScrollController _scrollController = null;
@@ -67,7 +71,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   }
 
   _playSound() {
-    AudioPlayer player = AudioPlayer();
+
     if(_click==0) {
       player.play(mp3Uri);
       _click++;
@@ -182,11 +186,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.play_arrow,
-                      size: 70,
-                      color: Colors.white,
-                    )
+                  _sound,
                   ],
                 ),
                 shape: CircleBorder(),
