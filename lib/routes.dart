@@ -13,7 +13,7 @@ import 'package:dva232_project/screens/tests/listening/listening_questions.dart'
 import 'package:dva232_project/screens/tests/reading.dart';
 import 'package:dva232_project/screens/tests/speaking.dart';
 import 'package:dva232_project/screens/tests/vocabulary.dart';
-import 'package:dva232_project/screens/tests/writing.dart';
+import 'package:dva232_project/screens/tests/writing/writing_test.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
