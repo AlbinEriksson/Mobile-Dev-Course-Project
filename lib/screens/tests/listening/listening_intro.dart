@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dva232_project/routes.dart';
-import 'package:dva232_project/screens/tests/listening/question.dart';
+import 'package:dva232_project/screens/tests/listening/question_data.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +20,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
   Future _showData() async {
     String jsonString = await getJson();
     final jsonResponse = json.decode(jsonString);
-    Question question = new Question.fromJson(jsonResponse);
+    QuestionData question = QuestionData.fromJson(jsonResponse);
 
     return question;
   }
