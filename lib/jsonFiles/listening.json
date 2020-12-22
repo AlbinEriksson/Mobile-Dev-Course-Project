@@ -1,6 +1,6 @@
 {
   "title" : "Cambridge English : CAE Listening 2",
-  "instructions" : "You will hear a radio programme about the life of the singer, Lena Horne.For questions 1-8,complete the sentences.",
+  "instructions" : "You will hear a radio programme about the life of the singer, Lena Horne. For questions 1-8, complete the sentences.",
   "audio":"cae_listening2.mp3",
   "items":[
     {
@@ -24,11 +24,11 @@
       "gap" : "maids and butlers"
     },
     {
-      "text" : ".<br><br>While she was working for Hollywood, Lena found that,during the",
+      "text" : ".<br><br>While she was working for Hollywood, Lena found that, during the",
       "gap" : "editing process"
     },
     {
-      "text" : ",much of her spoken work was removed from the film.<br><br>Lena spent a lot of the 1950s working in",
+      "text" : ",much of her spoken work was removed from the film.<br><br> Lena spent a lot of the 1950s working in",
       "gap" : "night clubs"
     }
   ]
