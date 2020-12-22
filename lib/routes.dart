@@ -80,7 +80,7 @@ class Routes {
           break;
 
         case Routes.readingResults:
-          screen = ReadingResults();
+          screen = ReadingResults(score: arguments["score"]);
           break;
 
         case Routes.speakingTest:

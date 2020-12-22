@@ -1,3 +1,4 @@
+import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -8,8 +9,8 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
-  @override
-  Widget build(BuildContext context) {
+
+  Widget _content(BuildContext context) {
     return Scaffold(
       body: Center(
           child: Column(
@@ -74,67 +75,27 @@ class _IntroState extends State<Intro> {
           ])),
     );
   }
-}
-
-//Work In Progress - animation for the logo
-class SineCurve extends Curve {
-  final double count;
-
-  SineCurve({this.count = 3});
-
+  /// - clientError
+  /// - noRefreshToken
+  /// - refreshTokenExpired
+  /// - success
+  /// - unknown
   @override
-  double transformInternal(double t) {
-    var val = sin(count * 2 * pi * t) * 0.5 + 0.5;
-
-    return val;
+  Widget build(BuildContext context){
+    return FutureBuilder(
+      future: UserAPIClient.refresh(),
+      builder: (context, data){
+        if(data.hasData){
+          if(data.data == UserAPIResult.success){
+            Navigator.pushNamed(context, Routes.login, arguments: null);
+          }
+          return _content(context);
+        }
+        else{
+          return Center(child: CircularProgressIndicator());
+        }
+      }
+    );
   }
 }
 
-class LogoStatefulWidget extends StatefulWidget {
-  LogoStatefulWidget({Key key}) : super(key: key);
-
-  @override
-  _LogoStatefulWidgetState createState() => _LogoStatefulWidgetState();
-}
-
-class _LogoStatefulWidgetState extends State<LogoStatefulWidget>
-    with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 4),
-      vsync: this,
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(
-        children: [
-          PositionedTransition(
-            rect: RelativeRectTween(
-              begin: RelativeRect.fromLTRB(0, 10, 0, 0),
-              end: RelativeRect.fromLTRB(0, -10, 0, 0),
-            ).animate(CurvedAnimation(
-              parent: _controller,
-              curve: SineCurve(),
-            )),
-            child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Image(image: AssetImage('images/logo.png'))), // Image
-          ),
-        ],
-      );
-    });
-  }
-}

@@ -7,8 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'shared.dart';
+import 'package:dva232_project/screens/results/reading.dart';
 
-class ReadingTest extends StatelessWidget {
+
+class ReadingTest extends StatefulWidget{
+  @override
+  _ReadingTestState createState() {
+    return _ReadingTestState();
+  }
+}
+
+class _ReadingTestState extends State<ReadingTest> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -97,11 +106,33 @@ class ReadingTest extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
+              MaterialButton(
+                  onPressed: () {
+                    _sendDataToResults(context);
+                  },
+                  minWidth: 160,
+                  color: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: const Text(
+                      "Submit answers",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 17.0,
+                      )
+                  ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+  void _sendDataToResults(BuildContext context){
+    int scoreToSend = 60;
+    Navigator.pushNamed(context, Routes.readingResults, arguments: {"score": scoreToSend});
   }
 }
