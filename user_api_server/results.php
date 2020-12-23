@@ -155,6 +155,9 @@ else if($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     $difficulty = $request->query('difficulty');
+    if($difficulty === '') {
+        $difficulty = null;
+    }
     if($difficulty !== null && !$storage->difficultyExists($difficulty)) {
         http_response_code(404);
         header('Content-Type: application/json');
