@@ -7,3 +7,6 @@ This directory is the root of the user API.
 3. Install an Apache web server (2.4.46+ recommended) with PHP version 7.4.x.
 4. Set the `DocumentRoot` in the Apache config file to this directory.
 5. Start the Apache web server.
+
+## Documentation
+All endpoints are documented in [https://aetias.gitbook.io/languide-user-api/]().
