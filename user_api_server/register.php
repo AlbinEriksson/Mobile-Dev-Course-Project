@@ -13,6 +13,7 @@ $json = json_decode($input, true);
 if(!isset($json['password']) || !isset($json['email']) || !isset($json['firstName']) || !isset($json['role']))
 {
     http_response_code(400);
+    header('Content-Type: application/json');
     echo json_encode(array(
         'error' => true,
         'message' => "you must specify 'email', 'password', 'firstName' and 'role' in request body"
@@ -33,6 +34,7 @@ if(isset($json['lastName']))
 if(!isset($roleToScope[$json['role']]))
 {
     http_response_code(400);
+    header('Content-Type: application/json');
     echo json_encode(array(
         'error' => true,
         'message' => 'invalid role'
@@ -45,6 +47,7 @@ $scope = $roleToScope[$json['role']];
 if($storage->getUser($email) !== false)
 {
     http_response_code(409);
+    header('Content-Type: application/json');
     echo json_encode(array(
         'error' => true,
         'message' => 'that email is already in use'
@@ -55,6 +58,7 @@ if($storage->getUser($email) !== false)
 if(!$storage->setUser($email, $password, $scope, $firstName, $lastName))
 {
     http_response_code(500);
+    header('Content-Type: application/json');
     echo json_encode(array(
         'error' => true,
         'message' => 'failed to register user'
@@ -63,6 +67,7 @@ if(!$storage->setUser($email, $password, $scope, $firstName, $lastName))
 }
 
 http_response_code(201);
+header('Content-Type: application/json');
 echo json_encode(array(
     'success' => true,
     'message' => 'user was registered'

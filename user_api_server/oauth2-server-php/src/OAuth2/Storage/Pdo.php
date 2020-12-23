@@ -700,6 +700,68 @@ class Pdo implements
     }
 
     /**
+     * Added for LanGuide User API.
+     * @param string $username
+     * @param string $test_type
+     * @param ?string $difficulty
+     * @param int $amount
+     */
+    public function getTestResultsByAmount($username, $test_type, $difficulty, $amount)
+    {
+        if($difficulty !== null) {
+            $stmt = $this->db->prepare(sprintf(
+                "SELECT timestamp,accuracy FROM test_results WHERE username=:username AND type=:test_type AND difficulty=:difficulty ORDER BY timestamp DESC LIMIT %d",
+                $amount
+            ));
+            $stmt->execute(compact('username', 'test_type', 'difficulty'));
+        } else {
+            $stmt = $this->db->prepare(sprintf(
+                "SELECT timestamp,accuracy,difficulty FROM test_results WHERE username=:username AND type=:test_type ORDER BY timestamp DESC LIMIT %d",
+                $amount
+            ));
+            $stmt->execute(compact('username', 'test_type'));
+        }
+
+        $result = array();
+        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $row['accuracy'] = floatval($row['accuracy']);
+            $result[] = $row;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Added for LanGuide User API.
+     * @param string $username
+     * @param string $test_type
+     * @param ?string $difficulty
+     * @param int $time
+     */
+    public function getTestResultsFromTime($username, $test_type, $difficulty, $time)
+    {
+        if($difficulty !== null) {
+            $stmt = $this->db->prepare(
+                "SELECT timestamp,accuracy FROM test_results WHERE username=:username AND type=:test_type AND difficulty=:difficulty AND UNIX_TIMESTAMP(timestamp)>:time ORDER BY timestamp DESC",
+            );
+            $stmt->execute(compact('username', 'test_type', 'difficulty', 'time'));
+        } else {
+            $stmt = $this->db->prepare(
+                "SELECT timestamp,accuracy,difficulty FROM test_results WHERE username=:username AND type=:test_type AND UNIX_TIMESTAMP(timestamp)>:time ORDER BY timestamp DESC",
+            );
+            $stmt->execute(compact('username', 'test_type', 'time'));
+        }
+
+        $result = array();
+        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $row['accuracy'] = floatval($row['accuracy']);
+            $result[] = $row;
+        }
+
+        return $result;
+    }
+
+    /**
      * DDL to create OAuth2 database and tables for PDO storage
      *
      * @see https://github.com/dsquier/oauth2-server-php-mysql
