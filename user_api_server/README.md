@@ -9,4 +9,4 @@ This directory is the root of the user API.
 5. Start the Apache web server.
 
 ## Documentation
-All endpoints are documented in [https://aetias.gitbook.io/languide-user-api/]().
+All endpoints are documented in https://aetias.gitbook.io/languide-user-api/.
