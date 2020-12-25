@@ -20,10 +20,17 @@ class LanGuideTheme {
           headline3: TextStyle(
             color: Colors.black,
           ),
+          bodyText2: TextStyle(
+            fontSize: 16.0,
+          ),
           button: TextStyle(
             color: Colors.white,
             fontSize: 21,
             fontWeight: FontWeight.normal,
+          ),
+          overline: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
         ),
         appBarTheme: AppBarTheme(
