@@ -1,8 +1,9 @@
 import 'dart:developer';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 enum UserAPIResult {
   success,
@@ -15,6 +16,22 @@ enum UserAPIResult {
   refreshTokenExpired,
   accessTokenExpired,
   unknown,
+}
+
+class TestResult {
+  final String testType;
+  final String difficulty;
+  final double accuracy;
+  final DateTime time;
+
+  TestResult(this.testType, this.difficulty, this.accuracy, this.time);
+}
+
+class TestResultsResponse {
+  final UserAPIResult apiResult;
+  final List<TestResult> testResults;
+
+  TestResultsResponse({@required this.apiResult, this.testResults});
 }
 
 class UserAPIClient {
@@ -210,7 +227,8 @@ class UserAPIClient {
             return UserAPIResult.clientError;
           case 401:
             var body = json.decode(response.body);
-            if(body["error_description"] == "The access token provided has expired") {
+            if (body["error_description"] ==
+                "The access token provided has expired") {
               return UserAPIResult.accessTokenExpired;
             }
             return UserAPIResult.clientError;
@@ -220,7 +238,71 @@ class UserAPIClient {
             return UserAPIResult.unknown;
         }
       });
-    });
+    }, (error) => error);
+  }
+
+  /// Gets multiple test results from the current user. Uses the internally
+  /// stored access token, so there's no need to provide it as an argument for
+  /// this method.<br>
+  /// The `unit` parameter can be "amount", "days", "weeks", "months" or
+  /// "years". For example, if `unit` is "weeks" and `amount` is 5, it will
+  /// return test results from the past 5 weeks. Using the "amount" unit will
+  /// instead return a specified amount of test results, starting from the most
+  /// recent one.<br>
+  /// All test results are returned in order of most recent first.<br>
+  /// Possible result types (see enum UserAPIResult):
+  /// - clientError
+  /// - accessTokenExpired (it will try to refresh it <b>once</b> before
+  /// returning this result).
+  /// - noRefreshToken
+  /// - refreshTokenExpired
+  /// - success
+  /// - unknown
+  static Future<TestResultsResponse> getTestResults(
+      String testType, String unit, int amount,
+      [String difficulty]) {
+    if (difficulty == null) {
+      difficulty = "";
+    }
+    return _tryMethod(() {
+      return http.get(
+        "$_apiUrl/results.php?type=$testType&unit=$unit&amount=$amount&difficulty=$difficulty",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $_accessToken"
+        },
+      ).then((response) {
+        switch (response.statusCode) {
+          case 400:
+          case 404:
+            log("[ERROR] User API Client failed to make a proper request to submit test results:");
+            log(response.body);
+            return TestResultsResponse(apiResult: UserAPIResult.clientError);
+          case 401:
+            var body = json.decode(response.body);
+            if (body["error_description"] ==
+                "The access token provided has expired") {
+              return TestResultsResponse(
+                  apiResult: UserAPIResult.accessTokenExpired);
+            }
+            return TestResultsResponse(apiResult: UserAPIResult.clientError);
+          case 200:
+            var body = json.decode(response.body);
+            List<TestResult> testResults = [];
+            for (var testResult in body["data"]) {
+              testResults.add(TestResult(
+                  testType,
+                  difficulty == "" ? testResult["difficulty"] : difficulty,
+                  testResult["accuracy"],
+                  DateTime.parse(testResult["timestamp"])));
+            }
+            return TestResultsResponse(
+                apiResult: UserAPIResult.success, testResults: testResults);
+          default:
+            return TestResultsResponse(apiResult: UserAPIResult.unknown);
+        }
+      });
+    }, (error) => TestResultsResponse(apiResult: error));
   }
 
   /// Tries to execute a user API method that requires the use of an access
@@ -235,13 +317,13 @@ class UserAPIClient {
   /// 3. If the refresh fails, return its error and abort the entire procedure.
   /// 4. The refresh succeeded, execute the API method again and return its
   /// result.
-  static Future<UserAPIResult> _tryMethod(
-      Future<UserAPIResult> Function() apiMethod) {
+  static Future<T> _tryMethod<T>(
+      Future<T> Function() apiMethod, T Function(UserAPIResult) refreshFailed) {
     return apiMethod().then((value) async {
       if (value == UserAPIResult.accessTokenExpired) {
         var refreshResult = await refresh();
         if (refreshResult != UserAPIResult.success) {
-          return refreshResult;
+          return refreshFailed(refreshResult);
         }
         return await apiMethod();
       }
