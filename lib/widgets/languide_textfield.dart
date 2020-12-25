@@ -1,3 +1,4 @@
+import 'package:dva232_project/theme.dart';
 import 'package:flutter/material.dart';
 
 class LanGuideTextField extends StatelessWidget {
@@ -35,9 +36,7 @@ class LanGuideTextField extends StatelessWidget {
       controller: controller,
       focusNode: focusNode,
       obscureText: obscureText,
-      style: TextStyle(
-        fontSize: 17.0,
-      ),
+      style: LanGuideTheme.inputFieldText(),
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         hintText: hintText,

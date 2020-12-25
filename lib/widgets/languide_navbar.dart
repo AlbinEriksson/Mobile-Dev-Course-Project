@@ -30,16 +30,17 @@ class LanGuideNavBar extends StatelessWidget with PreferredSizeWidget {
       ));
     }
 
-    return SafeArea(
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+    return AppBar(
+      automaticallyImplyLeading: false,
+      actions: [
+        Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: topWidgets,
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -52,5 +53,5 @@ class LanGuideNavBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(55.0);
 }
