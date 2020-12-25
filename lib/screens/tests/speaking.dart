@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
+import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -48,80 +49,61 @@ class _SpeakingTestState extends State<SpeakingTest> {
           padding: EdgeInsets.all(20.5),
           children: [
             Center(
-              child: Text(
-                "Speak this sentence",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30.0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "Speak this sentence",
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.purple.shade400, width: 3.0),
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+            BorderedContainer(
               child: AutoSizeText(
                 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _clickCount++;
-                  _tapToSpeakText = '';
-                  _affectTheIcon();
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Colors.purple.shade400, width: 3.0),
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _clickCount++;
+                    _tapToSpeakText = '';
+                    _affectTheIcon();
+                  });
+                },
+                child: BorderedContainer(
                   child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _mic,
-                          AutoSizeText(
-                            '$_tapToSpeakText',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        _mic,
+                        AutoSizeText(
+                          '$_tapToSpeakText',
+                          style: Theme.of(context).textTheme.overline,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-            Container(
-              child: RaisedButton(
-                color: Colors.purple,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text("Submit Answers",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton(
+                child: Text(
+                  "Submit Answers",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 21.0,
+                  ),
+                ),
                 onPressed: () {
                   _sendDataToResults(context);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
