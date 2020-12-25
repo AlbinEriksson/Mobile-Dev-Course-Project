@@ -7,45 +7,69 @@ import 'package:flutter/material.dart';
 import '../../../routes.dart';
 import '../shared.dart';
 
-
 class ListeningTestQuestions extends StatefulWidget {
   @override
   _ListeningTestQuestionsState createState() => _ListeningTestQuestionsState();
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
+  List<String> wordsToCheck = ["______"];
 
-
-  List<String> wordsToCheck=["______"];
-
-  int _click=0;
+  int _click = 0;
   List<String> filledWords;
   String currentEdit = "";
   int currentWordIndex = -1;
   bool anythingChanged = false;
   String questionText;
 
-  Icon _playIcon=Icon(Icons.play_arrow, size: 70.0, color:Colors.white);
+  Icon _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
 
-  QuestionData listeningData =QuestionData();
-  ListeningAudio player2=ListeningAudio();
+  Duration _duration = Duration();
+  Duration _position = Duration();
+  QuestionData listeningData = QuestionData();
+  ListeningAudio player2 = ListeningAudio();
   final FocusNode _inputFocusNode = FocusNode();
   TextEditingController _textController = TextEditingController();
   ScrollController _scrollController = null;
 
-
-
-   _ListeningTestQuestionsState() {
-     filledWords = List.from(wordsToCheck);
-   }
+  _ListeningTestQuestionsState() {
+    filledWords = List.from(wordsToCheck);
+  }
 
   @override
   void initState() {
     super.initState();
     listeningData.showData();
-    player2.loadSound();
+    player2.initPlayer();
+    setState(() {
+      getDuration();
+      getPosition();
+    });
+
     //initPlayer();
   }
+
+  Future getDuration() async {
+    player2.onDurationChanged.listen((Duration dur) async {
+      //print('Max duration: $d');
+      //setState(() => _duration = d);
+      setState(() {
+       return _duration = dur;
+      });
+    });
+
+  }
+  Future getPosition()async{
+    player2.onAudioPositionChanged.listen((Duration pos) async {
+      //print('Current position: $p');
+      // setState(() => _position = pos);
+      // });
+      setState(() {
+        return _position = pos;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -77,7 +101,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 children: [
                   Expanded(
                     child: Scrollbar(
-                      isAlwaysShown: _scrollController!=null,
+                      isAlwaysShown: _scrollController != null,
                       controller: _scrollController,
                       child: Center(
                         child: Padding(
@@ -87,7 +111,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
-                                _scrollController=new ScrollController();
+                                _scrollController = new ScrollController();
                                 return createListView(snapshot.data, context);
                               } else {
                                 return CircularProgressIndicator();
@@ -137,7 +161,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: RawMaterialButton(
-                onPressed: (){
+                onPressed: () {
                   _playSound();
                 },
                 elevation: 5.0,
@@ -145,7 +169,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  _playIcon,
+                    _playIcon,
                   ],
                 ),
                 shape: CircleBorder(),
@@ -154,7 +178,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text("00:00 / 00:32",
+                child: Text("${_reformat(_position)} / ${_reformat(_duration)}",
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
@@ -163,15 +187,16 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
             ),
             Container(
               height: 50.0,
-              child:                RaisedButton(
+              child: RaisedButton(
                   color: Colors.purple,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  child: Text("Submit Answers", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 21.0,
-                  )),
+                  child: Text("Submit Answers",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 21.0,
+                      )),
                   onPressed: () => Navigator.pushNamed(
                       context, Routes.listeningResults,
                       arguments: null)),
@@ -183,31 +208,37 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   }
 
   _playSound() {
-    if(_click==0) {
+    if (_click == 0) {
       player2.play(player2.mp3Uri);
       _click++;
-    }else if(_click==1){
+    } else if (_click == 1) {
       player2.pause();
-      _click=0;
+      _click = 0;
     }
     setState(() {
       _changePlayIcon();
     });
   }
 
-  _changePlayIcon(){
-    if(_click==1)
-      _playIcon=Icon(Icons.pause, size:70.0, color:Colors.white);
-    else
-      _playIcon = Icon(Icons.play_arrow, size: 70.0, color:Colors.white);
+  String _reformat(Duration _duration) {
+    String twoNum(int n) => n.toString().padLeft(2, "0");
+    String twoNumInMinutes = twoNum(_duration.inMinutes.remainder(60));
+    String twoNumInSeconds = twoNum(_duration.inSeconds.remainder(60));
+    return "$twoNumInMinutes:$twoNumInSeconds";
   }
 
-  String _editString(String text){
-    String newText;
-    newText=text.replaceFirst(RegExp(r'\.'), '');
-    newText=newText.replaceFirst(RegExp(r'\,'), '');
-    newText=newText.replaceAll(RegExp(r'<br><br>'), '');
+  _changePlayIcon() {
+    if (_click == 1)
+      _playIcon = Icon(Icons.pause, size: 70.0, color: Colors.white);
+    else
+      _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
+  }
 
+  String _editString(String text) {
+    String newText;
+    newText = text.replaceFirst(RegExp(r'\.'), '');
+    newText = newText.replaceFirst(RegExp(r'\,'), '');
+    newText = newText.replaceAll(RegExp(r'<br><br>'), '');
 
     return newText;
   }
@@ -222,9 +253,9 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   }
 
   TextSpan _changedWord(int index) {
-    if(index>0){
+    if (index > 0) {
       wordsToCheck.add("______");
-      if(filledWords.length<=index){
+      if (filledWords.length <= index) {
         filledWords.add(wordsToCheck[index]);
       }
     }
