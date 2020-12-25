@@ -59,4 +59,11 @@ class LanGuideTheme {
       );
 
   static TextStyle inputFieldText() => TextStyle(fontSize: 17.0);
+
+  static TextStyle writingTestOption() => TextStyle(
+      color: Colors.purple,
+      fontWeight: FontWeight.bold,
+      decoration: TextDecoration.underline,
+      decorationThickness: 2
+  );
 }

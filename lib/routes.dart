@@ -13,6 +13,7 @@ import 'package:dva232_project/screens/tests/listening/listening_questions.dart'
 import 'package:dva232_project/screens/tests/reading.dart';
 import 'package:dva232_project/screens/tests/speaking.dart';
 import 'package:dva232_project/screens/tests/vocabulary.dart';
+import 'package:dva232_project/screens/tests/writing/writing_questions.dart';
 import 'package:dva232_project/screens/tests/writing/writing_test.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class Routes {
   static const String home = "/home";
   static const String settings = "/settings";
   static const String listeningTestIntro = "/listening";
-  static const String listeningTestQuestions="/listening_questions";
+  static const String listeningTestQuestions = "/listening_questions";
   static const String listeningResults = listeningTestIntro + "/results";
   static const String readingTest = "/reading";
   static const String readingResults = readingTest + "/results";
@@ -32,6 +33,7 @@ class Routes {
   static const String vocabularyTest = "/vocabulary";
   static const String vocabularyResults = vocabularyTest + "/results";
   static const String writingTest = "/writing";
+  static const String writingQuestions = "/writing_questions";
   static const String writingResults = listeningTestIntro + "/results";
 
   static RouteFactory factory() {
@@ -104,6 +106,10 @@ class Routes {
         case Routes.writingTest:
           String difficulty = arguments["difficulty"];
           screen = WritingTest();
+          break;
+
+        case Routes.writingQuestions:
+          screen = WritingQuestion();
           break;
 
         case Routes.writingResults:
