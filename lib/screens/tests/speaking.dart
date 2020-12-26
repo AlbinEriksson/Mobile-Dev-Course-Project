@@ -108,8 +108,9 @@ class _SpeakingTestState extends State<SpeakingTest> {
 
   void _sendDataToResults(BuildContext context) {
     int scoreToSend = 30;
-    Navigator.pushNamed(context, Routes.speakingResults,
-        arguments: {"score": scoreToSend});
+    submitPressed(context, Routes.speakingResults, {
+      "score": scoreToSend,
+    });
   }
 }
 
