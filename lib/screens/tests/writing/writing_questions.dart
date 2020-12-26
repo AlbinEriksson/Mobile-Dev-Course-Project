@@ -1,5 +1,6 @@
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/theme.dart';
+import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
@@ -40,7 +41,7 @@ class _WritingQuestionState extends State<WritingQuestion> {
           child: Column(
             children: [
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: ListView(
                   children: [
                     Padding(
@@ -105,7 +106,7 @@ class _WritingQuestionState extends State<WritingQuestion> {
               ),
               Divider(),
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: ListView(
                   children: [
                     Padding(
@@ -117,9 +118,10 @@ class _WritingQuestionState extends State<WritingQuestion> {
                       ),
                     ),
                     _questions(),
-                    ElevatedButton(
-                      child: Text("Submit answers"),
+                    LanGuideButton(
+                      text: "Submit answers",
                       onPressed: () => submitPressed(context, Routes.writingResults, {}),
+                      enabled: anyOptionSelected,
                     )
                   ],
                 ),

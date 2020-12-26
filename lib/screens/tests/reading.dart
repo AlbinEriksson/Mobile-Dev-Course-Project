@@ -85,6 +85,7 @@ class _ReadingTestState extends State<ReadingTest> {
                     context, Routes.readingResults, {"score": scoreToSend});
               },
               text: "Submit answers",
+              enabled: anyAnswerSelected,
             ),
           ],
         ),

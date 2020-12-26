@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
 import 'package:dva232_project/widgets/bordered_container.dart';
+import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -92,18 +93,12 @@ class _SpeakingTestState extends State<SpeakingTest> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  child: Text(
-                    "Submit Answers",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 21.0,
-                    ),
-                  ),
+                child: LanGuideButton(
+                  text: "Submit Answers",
                   onPressed: () => Navigator.pushNamed(
                       context, Routes.speakingResults,
                       arguments: null),
+                  enabled: _clickCount > 0,
                 ),
               ),
             ],

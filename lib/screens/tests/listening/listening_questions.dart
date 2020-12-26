@@ -176,6 +176,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   text: "Submit Answers",
                   onPressed: () =>
                       submitPressed(context, Routes.listeningResults, {}),
+                  enabled: anythingChanged,
                 ),
               ),
             ],
