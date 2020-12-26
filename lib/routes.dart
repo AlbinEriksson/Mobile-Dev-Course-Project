@@ -91,7 +91,7 @@ class Routes {
           break;
 
         case Routes.speakingResults:
-          screen = SpeakingResults();
+          screen = SpeakingResults(score: arguments["score"]);
           break;
 
         case Routes.vocabularyTest:
@@ -100,7 +100,7 @@ class Routes {
           break;
 
         case Routes.vocabularyResults:
-          screen = VocabularyResults();
+          screen = VocabularyResults(score: arguments["score"]);
           break;
 
         case Routes.writingTest:

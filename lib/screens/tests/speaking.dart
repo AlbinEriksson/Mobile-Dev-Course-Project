@@ -95,9 +95,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: LanGuideButton(
                   text: "Submit Answers",
-                  onPressed: () => Navigator.pushNamed(
-                      context, Routes.speakingResults,
-                      arguments: null),
+                  onPressed: () => _sendDataToResults(context),
                   enabled: _clickCount > 0,
                 ),
               ),
@@ -106,6 +104,12 @@ class _SpeakingTestState extends State<SpeakingTest> {
         ),
       ),
     );
+  }
+
+  void _sendDataToResults(BuildContext context) {
+    int scoreToSend = 30;
+    Navigator.pushNamed(context, Routes.speakingResults,
+        arguments: {"score": scoreToSend});
   }
 }
 
