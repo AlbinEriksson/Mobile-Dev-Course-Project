@@ -1,16 +1,12 @@
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
-import 'package:dva232_project/widgets/back_icon_button.dart';
-import 'package:dva232_project/widgets/back_nav_button.dart';
-import 'package:dva232_project/widgets/nav_button.dart';
+import 'package:dva232_project/widgets/bordered_container.dart';
+import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:flutter/material.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'shared.dart';
-import 'package:dva232_project/screens/results/reading.dart';
 
-
-class ReadingTest extends StatefulWidget{
+class ReadingTest extends StatefulWidget {
   @override
   _ReadingTestState createState() {
     return _ReadingTestState();
@@ -18,121 +14,97 @@ class ReadingTest extends StatefulWidget{
 }
 
 class _ReadingTestState extends State<ReadingTest> {
+  int currentQuestionIndex = 0;
+  List<int> answers = [-1];
+  bool anyAnswerSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => backPressed(context, false),
+      onWillPop: () => backPressed(context, anyAnswerSelected),
       child: Scaffold(
         appBar: LanGuideNavBar(
-          onBackIconPressed: () => backIconPressed(context, true),
+          onBackIconPressed: () => backIconPressed(context, anyAnswerSelected),
         ),
-        body: Container(
-          alignment: Alignment.topCenter,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.all(20.0),
-            children: [
-              Container(
-                padding: EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.3,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.purple.shade400, width: 3.0),
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Center( child: AutoSizeText(
+        body: ListView(
+          scrollDirection: Axis.vertical,
+          padding: EdgeInsets.all(20.0),
+          children: [
+            BorderedContainer(
+              child: Center(
+                child: AutoSizeText(
                   'Your a good person',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-
-                )),
-              ),
-              Text("What is the grammatical error?", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
-                child: const Text("Your should be you're"),
               ),
-              RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "What is the grammatical error?",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ),
+            Column(
+              children: [
+                _option(0, "Your should be you're"),
+                _option(1, "A should be an"),
+                _option(2, "Person should be people"),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: LanGuideButton(
+                      onPressed: () {},
+                      text: "Previous",
+                      enabled: currentQuestionIndex > 0,
+                    ),
+                  ),
                 ),
-                child: const Text("A should be an."),
-              ),
-              RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: LanGuideButton(
+                      onPressed: () {},
+                      text: "Next",
+                    ),
+                  ),
                 ),
-                child: const Text("Person should be people."),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MaterialButton(
-                    onPressed: () {},
-                    minWidth: 160,
-                    color: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: const Text(
-                        "Previous question.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 17.0,
-                        ),
-                    ),
-                  ),
-                  MaterialButton(
-                    onPressed: () {},
-                    minWidth: 160,
-                    color: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: const Text(
-                        "Next question",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 17.0,
-                        ),
-                    ),
-                  ),
-                ],
-              ),
-              MaterialButton(
-                  onPressed: () {
-                    _sendDataToResults(context);
-                  },
-                  minWidth: 160,
-                  color: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: const Text(
-                      "Submit answers",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 17.0,
-                      )
-                  ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            SizedBox(height: 20),
+            LanGuideButton(
+              onPressed: () {
+                int scoreToSend = 60;
+                submitPressed(
+                    context, Routes.readingResults, {"score": scoreToSend});
+              },
+              text: "Submit answers",
+            ),
+          ],
         ),
       ),
     );
   }
-  void _sendDataToResults(BuildContext context){
-    int scoreToSend = 60;
-    Navigator.pushNamed(context, Routes.readingResults, arguments: {"score": scoreToSend});
+
+  Widget _option(int value, String text) {
+    return ListTile(
+      title: Text(text),
+      leading: Radio(
+        value: value,
+        groupValue: answers[currentQuestionIndex],
+        onChanged: (value) {
+          setState(() {
+            answers[currentQuestionIndex] = value;
+            anyAnswerSelected = true;
+          });
+        },
+      ),
+    );
   }
 }
