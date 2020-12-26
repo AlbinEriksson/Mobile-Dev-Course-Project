@@ -36,7 +36,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LanGuideNavBar(
-          onBackIconPressed: () => backIconPressed(context, true)),
+          onBackIconPressed: () => backIconPressed(context, false)),
       body: Container(
         alignment: Alignment.topCenter,
         child: ListView(
@@ -72,7 +72,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
                 child: Text(
                   "Start Test",
                 ),
-                onPressed: () => Navigator.pushNamed(
+                onPressed: () => Navigator.popAndPushNamed(
                     context, Routes.listeningTestQuestions,
                     arguments: null),
               ),

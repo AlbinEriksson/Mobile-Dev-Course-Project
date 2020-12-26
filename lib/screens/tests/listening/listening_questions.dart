@@ -54,12 +54,12 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       //print('Max duration: $d');
       //setState(() => _duration = d);
       setState(() {
-       return _duration = dur;
+        return _duration = dur;
       });
     });
-
   }
-  Future getPosition()async{
+
+  Future getPosition() async {
     player2.onAudioPositionChanged.listen((Duration pos) async {
       //print('Current position: $p');
       // setState(() => _position = pos);
@@ -79,129 +79,133 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
 
     _textController.text = "";
 
-    return Scaffold(
-      appBar: LanGuideNavBar(
-          onBackIconPressed: () => backIconPressed(context, true)),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width * 0.05,
-              left: MediaQuery.of(context).size.width * 0.05),
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.53,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.purple.shade400, width: 3.0),
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Scrollbar(
-                      isAlwaysShown: _scrollController != null,
-                      controller: _scrollController,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FutureBuilder(
-                            future: listeningData.showData(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.hasData) {
-                                _scrollController = new ScrollController();
-                                return createListView(snapshot.data, context);
-                              } else {
-                                return CircularProgressIndicator();
-                              }
-                            },
+    return WillPopScope(
+      onWillPop: () => backPressed(context, true),
+      child: Scaffold(
+        appBar: LanGuideNavBar(
+            onBackIconPressed: () => backIconPressed(context, true)),
+        body: Container(
+          alignment: Alignment.topCenter,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.05,
+                left: MediaQuery.of(context).size.width * 0.05),
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.53,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purple.shade400, width: 3.0),
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Scrollbar(
+                        isAlwaysShown: _scrollController != null,
+                        controller: _scrollController,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FutureBuilder(
+                              future: listeningData.showData(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasData) {
+                                  _scrollController = new ScrollController();
+                                  return createListView(snapshot.data, context);
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, right: 8.0, bottom: 10.0),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.83,
-                          height: 60,
-                          child: LanGuideTextField(
-                            hintText: "Tap a question to fill the missing word",
-                            onChanged: (value) => currentEdit = value,
-                            onEditingComplete: _onEditComplete,
-                            focusNode: _inputFocusNode,
-                            controller: _textController,
-                            enabled: currentWordIndex != -1,
-                            enableSuggestions: false,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, right: 8.0, bottom: 10.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.83,
+                            height: 60,
+                            child: LanGuideTextField(
+                              hintText:
+                                  "Tap a question to fill the missing word",
+                              onChanged: (value) => currentEdit = value,
+                              onEditingComplete: _onEditComplete,
+                              focusNode: _inputFocusNode,
+                              controller: _textController,
+                              enabled: currentWordIndex != -1,
+                              enableSuggestions: false,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
-              child: Column(
-                children: [
-                  Text("Play Sound",
-                      style: TextStyle(
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: RawMaterialButton(
-                onPressed: () {
-                  _playSound();
-                },
-                elevation: 5.0,
-                fillColor: Colors.purple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _playIcon,
                   ],
                 ),
-                shape: CircleBorder(),
               ),
-            ),
-            Center(
-              child: Padding(
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                child: Column(
+                  children: [
+                    Text("Play Sound",
+                        style: TextStyle(
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text("${_reformat(_position)} / ${_reformat(_duration)}",
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    )),
+                child: RawMaterialButton(
+                  onPressed: () {
+                    _playSound();
+                  },
+                  elevation: 5.0,
+                  fillColor: Colors.purple,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _playIcon,
+                    ],
+                  ),
+                  shape: CircleBorder(),
+                ),
               ),
-            ),
-            Container(
-              height: 50.0,
-              child: RaisedButton(
-                  color: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Text("Submit Answers",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 21.0,
-                      )),
-                  onPressed: () => Navigator.pushNamed(
-                      context, Routes.listeningResults,
-                      arguments: null)),
-            ),
-          ],
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child:
+                      Text("${_reformat(_position)} / ${_reformat(_duration)}",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                ),
+              ),
+              Container(
+                height: 50.0,
+                child: RaisedButton(
+                    color: Colors.purple,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Text("Submit Answers",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 21.0,
+                        )),
+                    onPressed: () =>
+                        submitPressed(context, Routes.listeningResults, {})),
+              ),
+            ],
+          ),
         ),
       ),
     );
