@@ -158,7 +158,7 @@ class _RegisterState extends State<Register> {
                   // Remove trailing, leading and consecutive spaces from username.
                   String username = userNameController.text.trim().replaceAllMapped(RegExp(r" {2,}"), (match) => " ");
 
-                  if (userNameController.text.isEmpty ||
+                  if (username.isEmpty ||
                       emailController.text.isEmpty ||
                       passwordController.text.isEmpty ||
                       confirmPasswordController.text.isEmpty ||
@@ -193,7 +193,7 @@ class _RegisterState extends State<Register> {
                     UserAPIClient.register(
                             emailController.text,
                             passwordController.text,
-                            userNameController.text,
+                        username,
                             "",
                             role.toLowerCase())
                         .then((result) async {
