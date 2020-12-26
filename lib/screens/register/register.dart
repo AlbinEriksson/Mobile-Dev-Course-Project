@@ -111,16 +111,7 @@ class _RegisterState extends State<Register> {
                 onPressed: () {
                   String dialogue = "";
                   bool register = false;
-                  RegExp userExp = new RegExp(
-                      r"^(?=.{1,80}$)(?![_. ])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
-                  /*
-                   * Username has to be 1-80 characters long. It used to be 8-20, but was changed because users are indexed by email address. Hence, the username does not matter significantly.
-                   * _ or . are not allowed in the beginning or the end, furthermore they're not allowed inside of the username in the form of: __    _.    ._    ..
-                   * a-z, A-Z and 0-9 are all allowed characters.
-                   * With this in mind, a valid username looks like: bigPop99, SkadoodleBadoodle56, diamond_pickaxe1337.
-                   * An invalid username would look like: big..Pop99, kab__00m, ooga._booga.
-                   * //Rikard
-                   */
+
                   RegExp emailExp = new RegExp(
                       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+");
                   /*
@@ -164,14 +155,17 @@ class _RegisterState extends State<Register> {
                    * //Rikard
                    */
 
+                  // Remove trailing, leading and consecutive spaces from username.
+                  String username = userNameController.text.trim().replaceAllMapped(RegExp(r" {2,}"), (match) => " ");
+
                   if (userNameController.text.isEmpty ||
                       emailController.text.isEmpty ||
                       passwordController.text.isEmpty ||
                       confirmPasswordController.text.isEmpty ||
                       role.length == 0) {
                     dialogue = "One or more fields are empty.";
-                  } else if (!userExp.hasMatch(userNameController.text)) {
-                    dialogue = "Invalid username.";
+                  } else if (username.length < 1 || username.length > 80) {
+                    dialogue = "Username must be between 1 and 80 characters.";
                   } else if (!emailExp.hasMatch(emailController.text)) {
                     dialogue = "Invalid email.";
                   } else if (!strongPasswordRegex
