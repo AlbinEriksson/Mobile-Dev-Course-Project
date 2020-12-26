@@ -14,7 +14,7 @@ class CircularButton extends StatelessWidget {
     this.icon,
     this.text,
     this.size,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +27,12 @@ class CircularButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon,
-            Text(
-              text,
-              textScaleFactor: 1.5,
-            ),
+            text != null
+                ? Text(
+                    text,
+                    textScaleFactor: 1.5,
+                  )
+                : SizedBox.shrink(),
           ],
         ),
         shape: CircleBorder(),

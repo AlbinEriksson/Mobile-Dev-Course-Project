@@ -20,6 +20,9 @@ class LanGuideTheme {
           headline3: TextStyle(
             color: Colors.black,
           ),
+          bodyText1: TextStyle(
+            fontSize: 16.0,
+          ),
           bodyText2: TextStyle(
             fontSize: 16.0,
           ),
@@ -65,8 +68,10 @@ class LanGuideTheme {
   static TextStyle inputFieldText() => TextStyle(fontSize: 17.0);
 
   static TextStyle writingTestOption() => TextStyle(
-      color: Colors.purple,
-      fontWeight: FontWeight.bold,
-      decoration: TextDecoration.underline,
-      decorationThickness: 2);
+        color: Colors.purple,
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.underline,
+        decorationThickness: 2,
+        fontSize: 20.0,
+      );
 }

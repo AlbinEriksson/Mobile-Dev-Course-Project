@@ -1,3 +1,8 @@
+import 'package:dva232_project/theme.dart';
+import 'package:dva232_project/widgets/bordered_container.dart';
+import 'package:dva232_project/widgets/circular_button.dart';
+import 'package:dva232_project/widgets/languide_button.dart';
+
 import 'listening_audio.dart';
 import 'question_data.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
@@ -80,34 +85,23 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     _textController.text = "";
 
     return WillPopScope(
-      onWillPop: () => backPressed(context, true),
+      onWillPop: () => backPressed(context, anythingChanged),
       child: Scaffold(
         appBar: LanGuideNavBar(
-            onBackIconPressed: () => backIconPressed(context, true)),
-        body: Container(
-          alignment: Alignment.topCenter,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.only(
-                right: MediaQuery.of(context).size.width * 0.05,
-                left: MediaQuery.of(context).size.width * 0.05),
+            onBackIconPressed: () => backIconPressed(context, anythingChanged)),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.53,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.purple.shade400, width: 3.0),
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Scrollbar(
-                        isAlwaysShown: _scrollController != null,
-                        controller: _scrollController,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+              Expanded(
+                child: BorderedContainer(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Scrollbar(
+                          isAlwaysShown: _scrollController != null,
+                          controller: _scrollController,
+                          child: Center(
                             child: FutureBuilder(
                               future: listeningData.showData(),
                               builder: (BuildContext context,
@@ -123,16 +117,12 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, right: 8.0, bottom: 10.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.83,
-                            height: 60,
-                            child: LanGuideTextField(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            LanGuideTextField(
                               hintText:
                                   "Tap a question to fill the missing word",
                               onChanged: (value) => currentEdit = value,
@@ -142,67 +132,51 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                               enabled: currentWordIndex != -1,
                               enableSuggestions: false,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                 child: Column(
                   children: [
-                    Text("Play Sound",
-                        style: TextStyle(
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    Text(
+                      "Play Sound",
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: RawMaterialButton(
+                child: CircularButton(
                   onPressed: () {
                     _playSound();
                   },
-                  elevation: 5.0,
-                  fillColor: Colors.purple,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _playIcon,
-                    ],
-                  ),
-                  shape: CircleBorder(),
+                  color: Colors.purple,
+                  icon: _playIcon,
+                  size: 70.0,
                 ),
               ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child:
-                      Text("${_reformat(_position)} / ${_reformat(_duration)}",
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
-                          )),
+                  child: Text(
+                    "${_reformat(_position)} / ${_reformat(_duration)}",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ),
               ),
               Container(
                 height: 50.0,
-                child: RaisedButton(
-                    color: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Text("Submit Answers",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 21.0,
-                        )),
-                    onPressed: () =>
-                        submitPressed(context, Routes.listeningResults, {})),
+                child: LanGuideButton(
+                  text: "Submit Answers",
+                  onPressed: () =>
+                      submitPressed(context, Routes.listeningResults, {}),
+                ),
               ),
             ],
           ),
@@ -280,59 +254,45 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   TextSpan _spellCheckField(int index) {
     return TextSpan(
       text: filledWords[index],
-      style: TextStyle(
-        fontSize: 20.0,
-        decoration: TextDecoration.underline,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.w400,
-      ),
+      style: LanGuideTheme.writingTestOption(),
     );
   }
 
   Widget createListView(data, BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: data.items == null ? 0 : data.items.length,
-        itemBuilder: (context, int index) {
-          return Wrap(
-            children: [
-              GestureDetector(
-                onTap: () => setState(() {
-                  currentWordIndex = index;
-                  currentEdit = filledWords[index];
-                }),
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "\nQuestion ${index + 1}: ",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "${_editString(data.items[index].text)} ",
-                        style: TextStyle(
-                          fontSize: 19.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      _changedWord(index),
-                      _spellCheckField(index),
-                    ],
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: data.items == null ? 0 : data.items.length,
+      itemBuilder: (context, int index) {
+        return Wrap(
+          children: [
+            GestureDetector(
+              onTap: () => setState(() {
+                currentWordIndex = index;
+                currentEdit = filledWords[index];
+              }),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
+                  children: [
+                    TextSpan(
+                      text: "\nQuestion ${index + 1}: ",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    TextSpan(
+                      text: "${_editString(data.items[index].text)} ",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    _changedWord(index),
+                    _spellCheckField(index),
+                  ],
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
