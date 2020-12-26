@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -15,6 +16,8 @@ enum UserAPIResult {
   noRefreshToken,
   refreshTokenExpired,
   accessTokenExpired,
+  noInternetConnection,
+  serverUnavailable,
   unknown,
 }
 
@@ -71,34 +74,42 @@ class UserAPIClient {
   /// - invalidCredentials
   /// - success
   /// - unknown
-  static Future<UserAPIResult> login(String email, String password) {
-    return http
-        .post("$_apiUrl/token.php",
-            headers: {"Content-Type": "application/json"},
-            body: json.encode({
-              "client_id": _clientLoginId,
-              "password": password,
-              "username": email,
-              "grant_type": "password",
-            }))
-        .then((response) {
-      switch (response.statusCode) {
-        case 400:
-          log("[ERROR] User API Client failed to make a proper request to login the user:");
-          log(response.body);
-          return UserAPIResult.clientError;
-        case 401:
-          return UserAPIResult.invalidCredentials;
-        case 200:
-          var body = json.decode(response.body);
-          _setTokenData(
-              body["access_token"], body["refresh_token"], body["scope"]);
-          return UserAPIResult.success;
-        default:
-          log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
-          return UserAPIResult.unknown;
-      }
-    });
+  /// - noInternetConnection
+  static Future<UserAPIResult> login(String email, String password) async {
+    try {
+      return await http
+          .post("$_apiUrl/token.php",
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "client_id": _clientLoginId,
+            "password": password,
+            "username": email,
+            "grant_type": "password",
+          }))
+          .then((response) {
+        switch (response.statusCode) {
+          case 400:
+            log(
+                "[ERROR] User API Client failed to make a proper request to login the user:");
+            log(response.body);
+            return UserAPIResult.clientError;
+          case 401:
+            return UserAPIResult.invalidCredentials;
+          case 200:
+            var body = json.decode(response.body);
+            _setTokenData(
+                body["access_token"], body["refresh_token"], body["scope"]);
+            return UserAPIResult.success;
+          default:
+            log(
+                "[WARNING] User API Client, unknown status code for login: ${response
+                    .statusCode}");
+            return UserAPIResult.unknown;
+        }
+      });
+    } on SocketException catch(e) {
+      return _handleSocketException(e);
+    }
   }
 
   /// Registers a user. Note that this procedure does not login the user
@@ -111,40 +122,48 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - serverError
+  /// - noInternetConnection
   static Future<UserAPIResult> register(String email, String password,
-      String firstName, String lastName, String role) {
+      String firstName, String lastName, String role) async {
     if (lastName != null && lastName.trim().isEmpty) {
       lastName = null;
     }
-    return http
-        .post("$_apiUrl/register.php",
-            headers: {"Content-Type": "application/json"},
-            body: json.encode({
-              "role": role,
-              "lastName": lastName,
-              "firstName": firstName,
-              "password": password,
-              "email": email,
-            }))
-        .then((response) {
-      switch (response.statusCode) {
-        case 400:
-          log("[ERROR] User API Client failed to make a proper request to register the user:");
-          log(response.body);
-          return UserAPIResult.clientError;
-        case 404:
-          return UserAPIResult.roleNotFound;
-        case 409:
-          return UserAPIResult.emailInUse;
-        case 500:
-          return UserAPIResult.serverError;
-        case 201:
-          return UserAPIResult.success;
-        default:
-          log("[WARNING] User API Client, unknown status code for registration: ${response.statusCode}");
-          return UserAPIResult.unknown;
-      }
-    });
+    try {
+      return await http
+          .post("$_apiUrl/register.php",
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "role": role,
+            "lastName": lastName,
+            "firstName": firstName,
+            "password": password,
+            "email": email,
+          }))
+          .then((response) {
+        switch (response.statusCode) {
+          case 400:
+            log(
+                "[ERROR] User API Client failed to make a proper request to register the user:");
+            log(response.body);
+            return UserAPIResult.clientError;
+          case 404:
+            return UserAPIResult.roleNotFound;
+          case 409:
+            return UserAPIResult.emailInUse;
+          case 500:
+            return UserAPIResult.serverError;
+          case 201:
+            return UserAPIResult.success;
+          default:
+            log(
+                "[WARNING] User API Client, unknown status code for registration: ${response
+                    .statusCode}");
+            return UserAPIResult.unknown;
+        }
+      });
+    } on SocketException catch(e) {
+      return _handleSocketException(e);
+    }
   }
 
   /// Refreshes the access token by providing a refresh token to the API.
@@ -156,39 +175,47 @@ class UserAPIClient {
   /// - refreshTokenExpired
   /// - success
   /// - unknown
-  static Future<UserAPIResult> refresh() {
+  /// - noInternetConnection
+  static Future<UserAPIResult> refresh() async {
     _refreshToken = _storage.getItem(_storageRefreshTokenKey);
     if (_refreshToken == null || _refreshToken.isEmpty) {
       return Future.value(UserAPIResult.noRefreshToken);
     }
-    return http
-        .post("$_apiUrl/token.php",
-            headers: {"Content-Type": "application/json"},
-            body: json.encode({
-              "client_id": _clientLoginId,
-              "refresh_token": _refreshToken,
-              "grant_type": "refresh_token",
-            }))
-        .then((response) {
-      switch (response.statusCode) {
-        case 400:
-          var body = json.decode(response.body);
-          if (body["error"] == "invalid_grant") {
-            return UserAPIResult.refreshTokenExpired;
-          }
-          log("[ERROR] User API Client failed to make a proper request to refresh the access token:");
-          log(response.body);
-          return UserAPIResult.clientError;
-        case 200:
-          var body = json.decode(response.body);
-          _setTokenData(
-              body["access_token"], body["refresh_token"], body["scope"]);
-          return UserAPIResult.success;
-        default:
-          log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
-          return UserAPIResult.unknown;
-      }
-    });
+    try {
+      return await http
+          .post("$_apiUrl/token.php",
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "client_id": _clientLoginId,
+            "refresh_token": _refreshToken,
+            "grant_type": "refresh_token",
+          }))
+          .then((response) {
+        switch (response.statusCode) {
+          case 400:
+            var body = json.decode(response.body);
+            if (body["error"] == "invalid_grant") {
+              return UserAPIResult.refreshTokenExpired;
+            }
+            log(
+                "[ERROR] User API Client failed to make a proper request to refresh the access token:");
+            log(response.body);
+            return UserAPIResult.clientError;
+          case 200:
+            var body = json.decode(response.body);
+            _setTokenData(
+                body["access_token"], body["refresh_token"], body["scope"]);
+            return UserAPIResult.success;
+          default:
+            log(
+                "[WARNING] User API Client, unknown status code for login: ${response
+                    .statusCode}");
+            return UserAPIResult.unknown;
+        }
+      });
+    } on SocketException catch(e) {
+      return _handleSocketException(e);
+    }
   }
 
   /// Submits a test result. Uses the internally stored access token, so there's
@@ -202,43 +229,49 @@ class UserAPIClient {
   /// - refreshTokenExpired
   /// - success
   /// - unknown
+  /// - noInternetConnection
   static Future<UserAPIResult> submitTestResults(
-      String testType, String difficulty, double accuracy) {
-    _tryMethod(() {
-      return http
-          .post("$_apiUrl/results.php",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer $_accessToken"
-              },
-              body: json.encode({
-                "difficulty": difficulty,
-                "type": testType,
-                "accuracy": accuracy
-              }))
-          .then((response) {
-        switch (response.statusCode) {
-          case 500:
-            return UserAPIResult.serverError;
-          case 400:
-          case 404:
-            log("[ERROR] User API Client failed to make a proper request to submit test results:");
-            log(response.body);
-            return UserAPIResult.clientError;
-          case 401:
-            var body = json.decode(response.body);
-            if (body["error_description"] ==
-                "The access token provided has expired") {
-              return UserAPIResult.accessTokenExpired;
-            }
-            return UserAPIResult.clientError;
-          case 200:
-            return UserAPIResult.success;
-          default:
-            return UserAPIResult.unknown;
-        }
-      });
-    }, (error) => error);
+      String testType, String difficulty, double accuracy) async {
+    try {
+      return await _tryMethod(() {
+        return http
+            .post("$_apiUrl/results.php",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $_accessToken"
+            },
+            body: json.encode({
+              "difficulty": difficulty,
+              "type": testType,
+              "accuracy": accuracy
+            }))
+            .then((response) {
+          switch (response.statusCode) {
+            case 500:
+              return UserAPIResult.serverError;
+            case 400:
+            case 404:
+              log(
+                  "[ERROR] User API Client failed to make a proper request to submit test results:");
+              log(response.body);
+              return UserAPIResult.clientError;
+            case 401:
+              var body = json.decode(response.body);
+              if (body["error_description"] ==
+                  "The access token provided has expired") {
+                return UserAPIResult.accessTokenExpired;
+              }
+              return UserAPIResult.clientError;
+            case 200:
+              return UserAPIResult.success;
+            default:
+              return UserAPIResult.unknown;
+          }
+        });
+      }, (error) => error);
+    } on SocketException catch(e) {
+      return _handleSocketException(e);
+    }
   }
 
   /// Gets multiple test results from the current user. Uses the internally
@@ -258,51 +291,58 @@ class UserAPIClient {
   /// - refreshTokenExpired
   /// - success
   /// - unknown
+  /// - noInternetConnection
   static Future<TestResultsResponse> getTestResults(
       String testType, String unit, int amount,
-      [String difficulty]) {
+      [String difficulty]) async {
     if (difficulty == null) {
       difficulty = "";
     }
-    return _tryMethod(() {
-      return http.get(
-        "$_apiUrl/results.php?type=$testType&unit=$unit&amount=$amount&difficulty=$difficulty",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $_accessToken"
-        },
-      ).then((response) {
-        switch (response.statusCode) {
-          case 400:
-          case 404:
-            log("[ERROR] User API Client failed to make a proper request to submit test results:");
-            log(response.body);
-            return TestResultsResponse(apiResult: UserAPIResult.clientError);
-          case 401:
-            var body = json.decode(response.body);
-            if (body["error_description"] ==
-                "The access token provided has expired") {
+    try {
+      return await _tryMethod(() {
+        return http.get(
+          "$_apiUrl/results.php?type=$testType&unit=$unit&amount=$amount&difficulty=$difficulty",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $_accessToken"
+          },
+        ).then((response) {
+          switch (response.statusCode) {
+            case 400:
+            case 404:
+              log(
+                  "[ERROR] User API Client failed to make a proper request to submit test results:");
+              log(response.body);
+              return TestResultsResponse(apiResult: UserAPIResult.clientError);
+            case 401:
+              var body = json.decode(response.body);
+              if (body["error_description"] ==
+                  "The access token provided has expired") {
+                return TestResultsResponse(
+                    apiResult: UserAPIResult.accessTokenExpired);
+              }
+              return TestResultsResponse(apiResult: UserAPIResult.clientError);
+            case 200:
+              var body = json.decode(response.body);
+              List<TestResult> testResults = [];
+              for (var testResult in body["data"]) {
+                testResults.add(TestResult(
+                    testType,
+                    difficulty == "" ? testResult["difficulty"] : difficulty,
+                    testResult["accuracy"],
+                    DateTime.parse(testResult["timestamp"])));
+              }
               return TestResultsResponse(
-                  apiResult: UserAPIResult.accessTokenExpired);
-            }
-            return TestResultsResponse(apiResult: UserAPIResult.clientError);
-          case 200:
-            var body = json.decode(response.body);
-            List<TestResult> testResults = [];
-            for (var testResult in body["data"]) {
-              testResults.add(TestResult(
-                  testType,
-                  difficulty == "" ? testResult["difficulty"] : difficulty,
-                  testResult["accuracy"],
-                  DateTime.parse(testResult["timestamp"])));
-            }
-            return TestResultsResponse(
-                apiResult: UserAPIResult.success, testResults: testResults);
-          default:
-            return TestResultsResponse(apiResult: UserAPIResult.unknown);
-        }
-      });
-    }, (error) => TestResultsResponse(apiResult: error));
+                  apiResult: UserAPIResult.success, testResults: testResults);
+            default:
+              return TestResultsResponse(apiResult: UserAPIResult.unknown);
+          }
+        });
+      }, (error) => TestResultsResponse(apiResult: error),
+              (value) => value.apiResult);
+    } on SocketException catch(e) {
+      return TestResultsResponse(apiResult: await _handleSocketException(e));
+    }
   }
 
   /// Tries to execute a user API method that requires the use of an access
@@ -318,9 +358,16 @@ class UserAPIClient {
   /// 4. The refresh succeeded, execute the API method again and return its
   /// result.
   static Future<T> _tryMethod<T>(
-      Future<T> Function() apiMethod, T Function(UserAPIResult) refreshFailed) {
+      Future<T> Function() apiMethod, T Function(UserAPIResult) refreshFailed,
+      [UserAPIResult Function(T) apiResult]) {
     return apiMethod().then((value) async {
-      if (value == UserAPIResult.accessTokenExpired) {
+      bool isExpired;
+      if (apiResult == null) {
+        isExpired = value == UserAPIResult.accessTokenExpired;
+      } else {
+        isExpired = apiResult(value) == UserAPIResult.accessTokenExpired;
+      }
+      if (isExpired) {
         var refreshResult = await refresh();
         if (refreshResult != UserAPIResult.success) {
           return refreshFailed(refreshResult);
@@ -329,5 +376,15 @@ class UserAPIClient {
       }
       return value;
     });
+  }
+
+  static Future<UserAPIResult> _handleSocketException(SocketException e) async {
+    switch(e.osError.errorCode) {
+      case 101:
+        return UserAPIResult.noInternetConnection;
+      default:
+        log(e.toString());
+        return UserAPIResult.unknown;
+    }
   }
 }

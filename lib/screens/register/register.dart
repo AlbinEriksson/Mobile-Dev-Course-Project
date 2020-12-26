@@ -36,7 +36,6 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-            Divider(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
@@ -156,26 +155,32 @@ class _RegisterState extends State<Register> {
                    */
 
                   // Remove trailing, leading and consecutive spaces from username.
-                  String username = userNameController.text.trim().replaceAllMapped(RegExp(r" {2,}"), (match) => " ");
+                  String username = userNameController.text
+                      .trim()
+                      .replaceAllMapped(RegExp(r" {2,}"), (match) => " ");
 
                   if (username.isEmpty ||
                       emailController.text.isEmpty ||
                       passwordController.text.isEmpty ||
                       confirmPasswordController.text.isEmpty ||
-                      role.length == 0) {
+                      role == null || role.length == 0) {
                     dialogue = "One or more fields are empty.";
                   } else if (username.length < 1 || username.length > 80) {
                     dialogue = "Username must be between 1 and 80 characters.";
                   } else if (!emailExp.hasMatch(emailController.text)) {
                     dialogue = "Invalid email.";
+                  } else if (passwordController.text.length < 6) {
+                    dialogue = "Password must be at least 6 characters.";
                   } else if (!strongPasswordRegex
                           .hasMatch(passwordController.text) &&
                       !mediumPasswordRegex.hasMatch(passwordController.text)) {
-                    dialogue = "Password is too weak!";
+                    dialogue = "Password must have 2 of the following:\n"
+                        "- Lowercase letters\n"
+                        "- Uppercase letters\n"
+                        "- Numeric digits";
                   } else if (!(passwordController.text ==
                       confirmPasswordController.text)) {
-                    dialogue =
-                        "Your password confirmation was not the same as the password.";
+                    dialogue = "The passwords don't match.";
                   } else {
                     register = true;
                   }
@@ -193,7 +198,7 @@ class _RegisterState extends State<Register> {
                     UserAPIClient.register(
                             emailController.text,
                             passwordController.text,
-                        username,
+                            username,
                             "",
                             role.toLowerCase())
                         .then((result) async {
@@ -209,7 +214,7 @@ class _RegisterState extends State<Register> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                content: Text("Error with specification."),
+                                content: Text("The app has failed to register you. Please report this issue to the developers."),
                               );
                             },
                           );
@@ -229,7 +234,7 @@ class _RegisterState extends State<Register> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                content: Text("Invalid role."),
+                                content: Text("Invalid role. Please report this issue to the developers."),
                               );
                             },
                           );
@@ -239,7 +244,17 @@ class _RegisterState extends State<Register> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                content: Text("Failed to register the user."),
+                                content: Text("There was a problem with the server. Try again in a moment."),
+                              );
+                            },
+                          );
+                          break;
+                        case UserAPIResult.noInternetConnection:
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text("You must have an internet connection to do that."),
                               );
                             },
                           );
