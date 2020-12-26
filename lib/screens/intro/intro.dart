@@ -8,6 +8,8 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
+  final Future<UserAPIResult> instantLoginFuture = UserAPIClient.refresh();
+
   Widget _content(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -48,13 +50,16 @@ class _IntroState extends State<Intro> {
 
   @override
   Widget build(BuildContext context) {
+    instantLoginFuture.then((result) {
+      if(result == UserAPIResult.success) {
+        Navigator.pushNamed(context, Routes.home);
+      }
+    });
+
     return FutureBuilder(
-        future: UserAPIClient.refresh(),
+        future: instantLoginFuture,
         builder: (context, data) {
           if (data.hasData) {
-            if (data.data == UserAPIResult.success) {
-              Navigator.pushNamed(context, Routes.login, arguments: null);
-            }
             return _content(context);
           } else {
             return Center(child: CircularProgressIndicator());
