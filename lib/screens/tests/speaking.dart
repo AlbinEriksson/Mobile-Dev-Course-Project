@@ -39,72 +39,75 @@ class _SpeakingTestState extends State<SpeakingTest> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: LanGuideNavBar(
-          onBackIconPressed: () => backIconPressed(context, true)),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.all(20.5),
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  "Speak this sentence",
-                  style: Theme.of(context).textTheme.headline4,
+    return WillPopScope(
+      onWillPop: () => backPressed(context, _clickCount > 0),
+      child: Scaffold(
+        appBar: LanGuideNavBar(
+            onBackIconPressed: () => backIconPressed(context, _clickCount > 0)),
+        body: Container(
+          alignment: Alignment.topCenter,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.all(20.5),
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    "Speak this sentence",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
                 ),
               ),
-            ),
-            BorderedContainer(
-              child: AutoSizeText(
-                'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
-                style: Theme.of(context).textTheme.bodyText2,
+              BorderedContainer(
+                child: AutoSizeText(
+                  'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _clickCount++;
-                    _tapToSpeakText = '';
-                    _affectTheIcon();
-                  });
-                },
-                child: BorderedContainer(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        _mic,
-                        AutoSizeText(
-                          '$_tapToSpeakText',
-                          style: Theme.of(context).textTheme.overline,
-                        ),
-                      ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _clickCount++;
+                      _tapToSpeakText = '';
+                      _affectTheIcon();
+                    });
+                  },
+                  child: BorderedContainer(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          _mic,
+                          AutoSizeText(
+                            '$_tapToSpeakText',
+                            style: Theme.of(context).textTheme.overline,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                child: Text(
-                  "Submit Answers",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 21.0,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  child: Text(
+                    "Submit Answers",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 21.0,
+                    ),
                   ),
+                  onPressed: () => Navigator.pushNamed(
+                      context, Routes.speakingResults,
+                      arguments: null),
                 ),
-                onPressed: () => Navigator.pushNamed(
-                    context, Routes.speakingResults,
-                    arguments: null),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
