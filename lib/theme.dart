@@ -45,6 +45,10 @@ class LanGuideTheme {
           indent: 20.0,
           endIndent: 20.0,
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.purple,
+          unselectedItemColor: Colors.black,
+        ),
       );
 
   static ShapeDecoration inputFieldBorder() => ShapeDecoration(
@@ -64,6 +68,5 @@ class LanGuideTheme {
       color: Colors.purple,
       fontWeight: FontWeight.bold,
       decoration: TextDecoration.underline,
-      decorationThickness: 2
-  );
+      decorationThickness: 2);
 }

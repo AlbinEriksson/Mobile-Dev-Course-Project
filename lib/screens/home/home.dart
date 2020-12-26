@@ -48,8 +48,6 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.settings), label: "Settings"),
         ],
         currentIndex: _bottomBarIndex,
-        selectedItemColor: Colors.purple,
-        unselectedItemColor: Colors.black,
         onTap: _bottomBarItemSelected,
       );
 
