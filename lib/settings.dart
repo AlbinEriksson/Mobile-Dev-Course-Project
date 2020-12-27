@@ -20,7 +20,7 @@ class Settings {
 
     String languageCode = get(SettingKey.uiLanguage);
     if(languageCode == null || languageCode == '') {
-      setLocale(window.locale);
+      await setLocale(window.locale);
     }
   }
 
@@ -53,7 +53,7 @@ class Settings {
     _languageCallbacks.add(callback);
   }
 
-  static void setLocale(Locale locale) async {
+  static Future<void> setLocale(Locale locale) async {
     await Settings.set(SettingKey.uiLanguage, locale.languageCode.toLowerCase());
     await Settings.set(SettingKey.uiCountry, locale.countryCode.toLowerCase());
   }
