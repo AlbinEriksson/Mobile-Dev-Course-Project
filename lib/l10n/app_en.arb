@@ -1,0 +1,16 @@
+{
+  "welcome": "Welcome!",
+  "@welcome": {
+    "description": "Greeting the user when they start the app."
+  },
+
+  "login": "Login",
+  "@login": {
+    "description": "Front page login button."
+  },
+
+  "register": "Register",
+  "@register": {
+    "description": "Front page register button."
+  }
+}

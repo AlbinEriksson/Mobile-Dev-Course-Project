@@ -1,6 +1,8 @@
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -9,9 +11,12 @@ class Intro extends StatefulWidget {
 
 class _IntroState extends State<Intro> {
   final Future<UserAPIResult> instantLoginFuture = UserAPIClient.refresh();
-
   Widget _content(BuildContext context) {
     return Scaffold(
+      appBar: LanGuideNavBar(
+        showBackIcon: false,
+        showFlag: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -26,20 +31,19 @@ class _IntroState extends State<Intro> {
                 ),
               ),
               Center(
-                //color: Colors.blue,
                 child: Text(
-                  'Welcome!',
+                  AppLocalizations.of(context).welcome,
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                child: Text('Login'),
+                child: Text(AppLocalizations.of(context).login),
                 onPressed: () => Navigator.pushNamed(context, Routes.login),
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                child: Text('Register'),
+                child: Text(AppLocalizations.of(context).register),
                 onPressed: () => Navigator.pushNamed(context, Routes.register,
                     arguments: null),
               ),

@@ -1,5 +1,6 @@
 import 'package:dva232_project/screens/home/home.dart';
 import 'package:dva232_project/screens/intro/intro.dart';
+import 'package:dva232_project/screens/language/language.dart';
 import 'package:dva232_project/screens/login/login.dart';
 import 'package:dva232_project/screens/register/register.dart';
 import 'package:dva232_project/screens/results/listening.dart';
@@ -33,6 +34,7 @@ class Routes {
   static const String writingTest = "/writing";
   static const String writingQuestions = "/writing_questions";
   static const String writingResults = listeningTestIntro + "/results";
+  static const String languageSelection = "/language";
 
   static RouteFactory factory() {
     return (settings) {
@@ -108,6 +110,10 @@ class Routes {
 
         case Routes.writingResults:
           screen = WritingResults();
+          break;
+
+        case Routes.languageSelection:
+          screen = LanguageSelection();
           break;
 
         default:

@@ -23,19 +23,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.16.1
   auto_size_text: ^2.1.0
   speech_to_text: ^3.1.0
   audioplayers: ^0.17.0
   path_provider: ^1.6.24
   font_awesome_flutter: ^8.11.0
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   country_icons: ^1.1.1
   popup_menu: ^1.0.4
   http: ^0.12.2
-  localstorage: ^3.0.5+8
+  localstorage: ^3.0.6+9
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +56,8 @@ flutter:
     - images/logo.png
     - lib/jsonFiles/listening.json
     - assets/sneeze.mp3
+
+  generate: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
