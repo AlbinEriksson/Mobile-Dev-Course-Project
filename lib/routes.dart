@@ -7,7 +7,6 @@ import 'package:dva232_project/screens/results/reading.dart';
 import 'package:dva232_project/screens/results/speaking.dart';
 import 'package:dva232_project/screens/results/vocabulary.dart';
 import 'package:dva232_project/screens/results/writing.dart';
-import 'package:dva232_project/screens/settings/settings.dart';
 import 'package:dva232_project/screens/tests/listening/listening_intro.dart';
 import 'package:dva232_project/screens/tests/listening/listening_questions.dart';
 import 'package:dva232_project/screens/tests/reading.dart';
@@ -22,7 +21,6 @@ class Routes {
   static const String register = "/register";
   static const String login = "/login";
   static const String home = "/home";
-  static const String settings = "/settings";
   static const String listeningTestIntro = "/listening";
   static const String listeningTestQuestions = "/listening_questions";
   static const String listeningResults = listeningTestIntro + "/results";
@@ -56,10 +54,6 @@ class Routes {
 
         case Routes.home:
           screen = Home();
-          break;
-
-        case Routes.settings:
-          screen = Settings();
           break;
 
         case Routes.listeningTestIntro:
