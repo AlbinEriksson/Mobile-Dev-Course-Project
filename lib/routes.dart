@@ -1,5 +1,6 @@
 import 'package:dva232_project/screens/home/home.dart';
 import 'package:dva232_project/screens/intro/intro.dart';
+import 'package:dva232_project/screens/language/language.dart';
 import 'package:dva232_project/screens/login/login.dart';
 import 'package:dva232_project/screens/register/register.dart';
 import 'package:dva232_project/screens/results/listening.dart';
@@ -7,7 +8,6 @@ import 'package:dva232_project/screens/results/reading.dart';
 import 'package:dva232_project/screens/results/speaking.dart';
 import 'package:dva232_project/screens/results/vocabulary.dart';
 import 'package:dva232_project/screens/results/writing.dart';
-import 'package:dva232_project/screens/settings/settings.dart';
 import 'package:dva232_project/screens/tests/listening/listening_intro.dart';
 import 'package:dva232_project/screens/tests/listening/listening_questions.dart';
 import 'package:dva232_project/screens/tests/reading.dart';
@@ -22,7 +22,6 @@ class Routes {
   static const String register = "/register";
   static const String login = "/login";
   static const String home = "/home";
-  static const String settings = "/settings";
   static const String listeningTestIntro = "/listening";
   static const String listeningTestQuestions = "/listening_questions";
   static const String listeningResults = listeningTestIntro + "/results";
@@ -35,6 +34,7 @@ class Routes {
   static const String writingTest = "/writing";
   static const String writingQuestions = "/writing_questions";
   static const String writingResults = listeningTestIntro + "/results";
+  static const String languageSelection = "/language";
 
   static RouteFactory factory() {
     return (settings) {
@@ -56,10 +56,6 @@ class Routes {
 
         case Routes.home:
           screen = Home();
-          break;
-
-        case Routes.settings:
-          screen = Settings();
           break;
 
         case Routes.listeningTestIntro:
@@ -114,6 +110,10 @@ class Routes {
 
         case Routes.writingResults:
           screen = WritingResults();
+          break;
+
+        case Routes.languageSelection:
+          screen = LanguageSelection();
           break;
 
         default:

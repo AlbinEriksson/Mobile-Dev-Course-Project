@@ -1,3 +1,5 @@
+import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/settings.dart';
 import 'package:flutter/material.dart';
 
 class LanGuideNavBar extends StatelessWidget with PreferredSizeWidget {
@@ -13,31 +15,31 @@ class LanGuideNavBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    var topWidgets = <Widget>[];
-
-    if (showBackIcon) {
-      topWidgets.add(IconButton(
-        icon: Icon(Icons.arrow_back),
-        iconSize: 40.0,
-        onPressed: () => _backIconPressed(context),
-      ));
-    }
-
-    if (showFlag) {
-      topWidgets.add(IconButton(
-        icon: Image.asset("icons/flags/png/gb.png", package: "country_icons"),
-        iconSize: 60.0,
-      ));
-    }
+    String countryCode = Settings.get(SettingKey.uiCountry).toLowerCase();
 
     return AppBar(
       automaticallyImplyLeading: false,
       actions: [
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: topWidgets,
+          child: Stack(
+            children: [
+              if(showBackIcon) Container(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  iconSize: 40.0,
+                  onPressed: () => _backIconPressed(context),
+                ),
+              ),
+              if(showFlag) Container(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: Image.asset("icons/flags/png/$countryCode.png", package: "country_icons"),
+                  iconSize: 60.0,
+                  onPressed: () => Navigator.pushNamed(context, Routes.languageSelection),
+                ),
+              )
+            ],
           ),
         ),
       ],
