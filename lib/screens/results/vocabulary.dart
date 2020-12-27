@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import '../../routes.dart';
 
 class VocabularyResults extends StatelessWidget {
+  final int score;
+
+  VocabularyResults({Key key, @required this.score}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
