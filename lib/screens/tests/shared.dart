@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void submitPressed(BuildContext context, String routeTo,
     Map<String, dynamic> arguments) async {
   if (await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Submit answers?"),
-          content: Text(
-              "Would you like to submit your answers and see the results?"),
+          title: Text(AppLocalizations.of(context).submitAnswersQuestion),
+          content: Text(AppLocalizations.of(context).confirmSubmitAnswers),
           actions: [
             new TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text("NO"),
+              child: Text(AppLocalizations.of(context).no.toUpperCase()),
             ),
             new TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text("YES"),
+              child: Text(AppLocalizations.of(context).yes.toUpperCase()),
             ),
           ],
         ),
@@ -30,16 +30,16 @@ Future<bool> backPressed(BuildContext context, bool hasProgress) {
     return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Are you sure?"),
-            content: Text("You will lose your progress if you go back!"),
+            title: Text(AppLocalizations.of(context).areYouSure),
+            content: Text(AppLocalizations.of(context).confirmLoseProgress),
             actions: [
               new TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: Text("NO"),
+                child: Text(AppLocalizations.of(context).no.toUpperCase()),
               ),
               new TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: Text("YES"),
+                child: Text(AppLocalizations.of(context).yes.toUpperCase()),
               ),
             ],
           ),

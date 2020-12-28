@@ -222,5 +222,25 @@
   "submitAnswers": "Submit answers",
   "@submitAnswers": {
     "description": "A button for when the user wants to turn in their answers on a test."
+  },
+
+  "submitAnswersQuestion": "Submit answers?",
+  "@submitAnswersQuestion": {
+    "description": "Title for confirmation dialog when the user is submitting their answers on a test."
+  },
+
+  "confirmSubmitAnswers": "Would you like to submit your answers and see the results?",
+  "@confirmSubmitAnswers": {
+    "description": "Asking the user whether they would like to submit their answers."
+  },
+
+  "areYouSure": "Are you sure?",
+  "@areYouSure": {
+    "description": "Title for confirmation dialog when the user quits a test without submitting results."
+  },
+
+  "confirmLoseProgress": "You will lose your progress if you go back!",
+  "@confirmLoseProgress": {
+    "description": "Telling the user that their progress will be forgotten if they quit a test."
   }
 }
