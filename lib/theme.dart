@@ -54,6 +54,8 @@ class LanGuideTheme {
         ),
       );
 
+  static ThemeData darkData() => ThemeData();
+
   static ShapeDecoration inputFieldBorder() => ShapeDecoration(
         shape: RoundedRectangleBorder(
           side: BorderSide(

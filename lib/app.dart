@@ -14,25 +14,35 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   Locale locale;
+  ThemeMode themeMode;
 
   _AppState() {
     String langCode = Settings.get(SettingKey.uiLanguage);
     String countryCode = Settings.get(SettingKey.uiCountry);
     locale = Locale(langCode, countryCode);
+
+    themeMode = Settings.getThemeMode();
   }
 
   @override
   Widget build(BuildContext context) {
-    Settings.notifyNextLanguageChange(SettingKey.uiLanguage,
-        (langCode, countryCode) {
+    Settings.notifyNextLanguageChange((langCode, countryCode) {
       setState(() {
         locale = Locale(langCode, countryCode);
+      });
+    });
+
+    Settings.notifyNextThemeChange((themeMode) {
+      setState(() {
+        this.themeMode = themeMode;
       });
     });
 
     return MaterialApp(
       title: 'LanGuide',
       theme: LanGuideTheme.data(),
+      darkTheme: LanGuideTheme.darkData(),
+      themeMode: themeMode,
       onGenerateRoute: Routes.factory(),
       localizationsDelegates: [
         AppLocalizations.delegate,
