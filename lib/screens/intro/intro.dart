@@ -11,6 +11,15 @@ class Intro extends StatefulWidget {
 
 class _IntroState extends State<Intro> {
   final Future<UserAPIResult> instantLoginFuture = UserAPIClient.refresh();
+
+  _IntroState() {
+    instantLoginFuture.then((result) {
+      if(result == UserAPIResult.success) {
+        Navigator.pushNamed(context, Routes.home);
+      }
+    });
+  }
+
   Widget _content(BuildContext context) {
     return Scaffold(
       appBar: LanGuideNavBar(
@@ -54,12 +63,6 @@ class _IntroState extends State<Intro> {
 
   @override
   Widget build(BuildContext context) {
-    instantLoginFuture.then((result) {
-      if(result == UserAPIResult.success) {
-        Navigator.pushNamed(context, Routes.home);
-      }
-    });
-
     return FutureBuilder(
         future: instantLoginFuture,
         builder: (context, data) {
