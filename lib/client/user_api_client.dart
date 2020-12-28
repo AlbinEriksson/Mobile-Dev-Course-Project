@@ -75,6 +75,23 @@ class UserAPIClient {
   static const String _storageRefreshTokenKey = "refresh_token";
   static const String _storageUserInfoKey = "user_info";
 
+  static Future<void> init() async {
+    await _storage.ready;
+
+    _refreshToken = _storage.getItem(_storageRefreshTokenKey);
+
+    var user = _storage.getItem(_storageUserInfoKey);
+    if(user != null) {
+      _userInfo = UserInfoResponse(
+        apiResult: UserAPIResult.success,
+        userId: user["userId"],
+        name: user["name"],
+        emailVerified: user["emailVerified"],
+        role: user["role"],
+      );
+    }
+  }
+
   static void _setTokenData(
       String accessToken, String refreshToken, String userScope) {
     _accessToken = accessToken;
