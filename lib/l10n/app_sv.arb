@@ -12,5 +12,16 @@
   "alertServerProblem": "Ett problem har uppstått med servern. Försök igen om en stund.",
   "alertLoginFailed": "Appen lyckades inte logga in dig. Vänligen rapportera detta fel till utvecklarna.",
   "alertInternetConnection": "Du saknar en internetanslutning.",
-  "alertInvalidCredentials": "Fel e-postadress eller lösenord."
+  "alertInvalidCredentials": "Fel e-postadress eller lösenord.",
+  "alertNameLength": "Namnet måste vara mellan 1 och 80 tecken.",
+  "alertPasswordLength": "Lösenord måste bestå av minst 6 tecken.",
+  "alertPasswordConfirmation": "Lösenorden matchar inte varandra.",
+  "alertRegisterFailed": "Appen lyckades inte registrera dig. Vänligen rapportera detta fel till utvecklarna.",
+  "alertEmailInUse": "E-postadressen är upptagen.",
+  "alertInvalidRole": "Ogiltig roll. Vänligen rapportera detta fel till utvecklarna.",
+  "student": "Elev",
+  "teacher": "Lärare",
+  "confirmPassword": "Bekräfta Lösenord",
+  "name": "Namn",
+  "selectRole": "Välj Roll"
 }

@@ -5,6 +5,7 @@ import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  'Account Info',
+                  AppLocalizations.of(context).register,
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
@@ -40,7 +41,7 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
                 icon: Icons.person,
-                hintText: 'Name (Last name is optional)',
+                hintText: AppLocalizations.of(context).name,
                 controller: userNameController,
               ),
             ),
@@ -48,7 +49,7 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
                 icon: Icons.email,
-                hintText: 'Email',
+                hintText: AppLocalizations.of(context).email,
                 controller: emailController,
               ),
             ),
@@ -56,7 +57,7 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
                 icon: Icons.lock,
-                hintText: 'Password',
+                hintText: AppLocalizations.of(context).password,
                 obscureText: true,
                 controller: passwordController,
               ),
@@ -65,7 +66,7 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
                 icon: Icons.lock,
-                hintText: 'Confirm Password',
+                hintText: AppLocalizations.of(context).confirmPassword,
                 obscureText: true,
                 controller: confirmPasswordController,
               ),
@@ -80,20 +81,14 @@ class _RegisterState extends State<Register> {
                   child: DropdownButton<String>(
                     isExpanded: true,
                     hint: Text(
-                      "Select Role",
+                      AppLocalizations.of(context).selectRole,
                       style: LanGuideTheme.inputFieldText(),
                     ),
                     value: role,
-                    items: <String>['Student', 'Teacher']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: LanGuideTheme.inputFieldText(),
-                        ),
-                      );
-                    }).toList(),
+                    items: [
+                      _roleDropdownItem("student", AppLocalizations.of(context).student),
+                      _roleDropdownItem("teacher", AppLocalizations.of(context).teacher),
+                    ],
                     onChanged: (String value) {
                       setState(() {
                         role = value;
@@ -106,7 +101,7 @@ class _RegisterState extends State<Register> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideButton(
-                text: 'Register',
+                text: AppLocalizations.of(context).register,
                 onPressed: () {
                   String dialogue = "";
                   bool register = false;
@@ -163,24 +158,25 @@ class _RegisterState extends State<Register> {
                       emailController.text.isEmpty ||
                       passwordController.text.isEmpty ||
                       confirmPasswordController.text.isEmpty ||
-                      role == null || role.length == 0) {
-                    dialogue = "One or more fields are empty.";
+                      role == null ||
+                      role.length == 0) {
+                    dialogue =
+                        AppLocalizations.of(context).alertEmptyInputFields;
                   } else if (username.length < 1 || username.length > 80) {
-                    dialogue = "Username must be between 1 and 80 characters.";
+                    dialogue = AppLocalizations.of(context).alertNameLength;
                   } else if (!emailExp.hasMatch(emailController.text)) {
-                    dialogue = "Invalid email.";
+                    dialogue = AppLocalizations.of(context).alertEmailInvalid;
                   } else if (passwordController.text.length < 6) {
-                    dialogue = "Password must be at least 6 characters.";
+                    dialogue = AppLocalizations.of(context).alertPasswordLength;
                   } else if (!strongPasswordRegex
                           .hasMatch(passwordController.text) &&
                       !mediumPasswordRegex.hasMatch(passwordController.text)) {
-                    dialogue = "Password must have 2 of the following:\n"
-                        "- Lowercase letters\n"
-                        "- Uppercase letters\n"
-                        "- Numeric digits";
+                    dialogue =
+                        AppLocalizations.of(context).alertPasswordInvalid;
                   } else if (!(passwordController.text ==
                       confirmPasswordController.text)) {
-                    dialogue = "The passwords don't match.";
+                    dialogue =
+                        AppLocalizations.of(context).alertPasswordConfirmation;
                   } else {
                     register = true;
                   }
@@ -203,19 +199,26 @@ class _RegisterState extends State<Register> {
                               arguments: null);
                           break;
                         case UserAPIResult.clientError:
-                          _validationDialog(context, "The app has failed to register you. Please report this issue to the developers.");
+                          _validationDialog(context,
+                              AppLocalizations.of(context).alertRegisterFailed);
                           break;
                         case UserAPIResult.emailInUse:
-                          _validationDialog(context, "That email is already in use.");
+                          _validationDialog(context,
+                              AppLocalizations.of(context).alertEmailInUse);
                           break;
                         case UserAPIResult.roleNotFound:
-                          _validationDialog(context, "Invalid role. Please report this issue to the developers.");
+                          _validationDialog(context,
+                              AppLocalizations.of(context).alertInvalidRole);
                           break;
                         case UserAPIResult.serverError:
-                          _validationDialog(context, "There was a problem with the server. Try again in a moment.");
+                          _validationDialog(context,
+                              AppLocalizations.of(context).alertServerProblem);
                           break;
                         case UserAPIResult.noInternetConnection:
-                          _validationDialog(context, "You must have an internet connection to do that.");
+                          _validationDialog(
+                              context,
+                              AppLocalizations.of(context)
+                                  .alertInternetConnection);
                           break;
                         default:
                           break;
@@ -236,6 +239,16 @@ class _RegisterState extends State<Register> {
       context: context,
       builder: (context) => AlertDialog(
         content: Text(text),
+      ),
+    );
+  }
+
+  DropdownMenuItem<String> _roleDropdownItem(String value, String text) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(
+        text,
+        style: LanGuideTheme.inputFieldText(),
       ),
     );
   }

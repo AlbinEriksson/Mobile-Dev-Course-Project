@@ -67,5 +67,60 @@
   "alertInvalidCredentials": "Invalid email and password combination.",
   "@alertInvalidCredentials": {
     "description": "Alerting the user that the email and password did not match any user account."
+  },
+
+  "alertNameLength": "Name must be between 1 and 80 characters.",
+  "@alertNameLength": {
+    "description": "Alerting the user that their name is either too long or too short."
+  },
+
+  "alertPasswordLength": "Password must be at least 6 characters.",
+  "@alertPasswordLength": {
+    "description": "Alerting the user that their password is too short when registering an account."
+  },
+
+  "alertPasswordConfirmation": "The passwords do not match.",
+  "@alertPasswordConfirmation": {
+    "description": "Alerting the user that the password and password confirmation fields do not match."
+  },
+
+  "alertRegisterFailed": "The app has failed to register you. Please report this issue to the developers.",
+  "@alertRegisterFailed": {
+    "description": "Alerting the user that the register procedure has failed. Also encourages to report the issue."
+  },
+
+  "alertEmailInUse": "That email is already in use.",
+  "@alertEmailInUse": {
+    "description": "Alerting the user that the email is in use when registering an account."
+  },
+
+  "alertInvalidRole": "Invalid role. Please report this issue to the developers.",
+  "@alertInvalidRole": {
+    "description": "Alerting the user that the specified role was invalid, which shouldn't happen. Also encourages to report the issue."
+  },
+
+  "student": "Student",
+  "@student": {
+    "description": "A user role, which is displayed when registering."
+  },
+
+  "teacher": "Teacher",
+  "@teacher": {
+    "description": "A user role, which is displayed when registering."
+  },
+
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Used for password confirmation fields."
+  },
+
+  "name": "Name",
+  "@name": {
+    "description": "Used for name field when registering an account."
+  },
+
+  "selectRole": "Select Role",
+  "@selectRole": {
+    "description": "Used for role selection field when registering an account."
   }
 }
