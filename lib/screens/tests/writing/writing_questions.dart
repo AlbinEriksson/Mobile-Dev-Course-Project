@@ -4,6 +4,7 @@ import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WritingQuestion extends StatefulWidget {
   @override
@@ -47,7 +48,7 @@ class _WritingQuestionState extends State<WritingQuestion> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Text',
+                        AppLocalizations.of(context).text,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline3,
                       ),
@@ -112,14 +113,14 @@ class _WritingQuestionState extends State<WritingQuestion> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Options',
+                        AppLocalizations.of(context).options,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
                     _questions(),
                     LanGuideButton(
-                      text: "Submit answers",
+                      text: AppLocalizations.of(context).submitAnswers,
                       onPressed: () => submitPressed(context, Routes.writingResults, {}),
                       enabled: anyOptionSelected,
                     )
@@ -134,11 +135,13 @@ class _WritingQuestionState extends State<WritingQuestion> {
   }
 
   Widget _questions() {
+    final String number = AppLocalizations.of(context).number;
+
     List<Widget> questionWidgets = [];
     for (int i = 0; i < 5; i++) {
       questionWidgets.add(
         Text(
-          "Number ${i + 1}",
+          "$number ${i + 1}",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline5,
         ),

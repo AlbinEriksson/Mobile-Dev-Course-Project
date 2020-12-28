@@ -51,5 +51,8 @@
   "tapToSpeak": "Tryck och tala",
   "sayThisSentence": "Säg denna mening",
   "writingTestInstructions": "Du kommer få en text med luckor. Välj det ord eller den fras som passar bäst för varje lucka. Du kan skrolla för att se alternativen.",
-  "start": "Börja"
+  "start": "Börja",
+  "text": "Text",
+  "options": "Alternativ",
+  "number": "Nummer"
 }

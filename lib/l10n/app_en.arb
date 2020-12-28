@@ -262,5 +262,20 @@
   "start": "Start",
   "@start": {
     "description": "Start button for starting certain tests."
+  },
+
+  "text": "Text",
+  "@text": {
+    "description": "Title for the text section of the writing test."
+  },
+
+  "options": "Options",
+  "@options": {
+    "description": "Title for the options section of the writing test."
+  },
+
+  "number": "Number",
+  "@number": {
+    "description": "Subtitle for the options for each numbered gap in the writing test. It's always followed by a number, e.g. Number 5."
   }
 }
