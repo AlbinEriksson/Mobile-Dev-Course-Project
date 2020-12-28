@@ -5,6 +5,7 @@ import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:flutter/material.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReadingTest extends StatefulWidget {
   @override
@@ -41,15 +42,15 @@ class _ReadingTestState extends State<ReadingTest> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                "What is the grammatical error?",
+                AppLocalizations.of(context).whatGrammaticalError,
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
             Column(
               children: [
-                _option(0, "Your should be you're"),
-                _option(1, "A should be an"),
-                _option(2, "Person should be people"),
+                _optionShouldBe(0, "Your", "You're"),
+                _optionShouldBe(1, "a", "an"),
+                _optionShouldBe(2, "person", "people"),
               ],
             ),
             SizedBox(height: 20),
@@ -61,7 +62,7 @@ class _ReadingTestState extends State<ReadingTest> {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: LanGuideButton(
                       onPressed: () {},
-                      text: "Previous",
+                      text: AppLocalizations.of(context).previous,
                       enabled: currentQuestionIndex > 0,
                     ),
                   ),
@@ -71,7 +72,7 @@ class _ReadingTestState extends State<ReadingTest> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: LanGuideButton(
                       onPressed: () {},
-                      text: "Next",
+                      text: AppLocalizations.of(context).next,
                     ),
                   ),
                 ),
@@ -84,13 +85,18 @@ class _ReadingTestState extends State<ReadingTest> {
                 submitPressed(
                     context, Routes.readingResults, {"score": scoreToSend});
               },
-              text: "Submit answers",
+              text: AppLocalizations.of(context).submitAnswers,
               enabled: anyAnswerSelected,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _optionShouldBe(int value, String original, String suggestion) {
+    final String shouldBe = AppLocalizations.of(context).shouldBe;
+    return _option(value, '"$original" $shouldBe "$suggestion"');
   }
 
   Widget _option(int value, String text) {

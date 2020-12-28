@@ -38,5 +38,10 @@
   "vocabulary": "Ordförråd",
   "easy": "Enkel",
   "medium": "Medel",
-  "hard": "Svår"
+  "hard": "Svår",
+  "whatGrammaticalError": "Vilket är det grammatiska felet?",
+  "shouldBe": "borde vara",
+  "previous": "Föregående",
+  "next": "Nästa",
+  "submitAnswers": "Lämna in svar"
 }

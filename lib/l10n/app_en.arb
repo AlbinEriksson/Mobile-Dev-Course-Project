@@ -197,5 +197,30 @@
   "hard": "Hard",
   "@hard": {
     "description": "The highest difficulty."
+  },
+
+  "whatGrammaticalError": "What is the grammatical error?",
+  "@whatGrammaticalError": {
+    "description": "Asking the user what is wrong with the grammar of a given phrase."
+  },
+
+  "shouldBe": "should be",
+  "@shouldBe": {
+    "description": "Used in reading test. In the middle of a sentence such as: Your should be you're."
+  },
+
+  "previous": "Previous",
+  "@previous": {
+    "description": "Used to navigate to the previous question in a test."
+  },
+
+  "next": "Next",
+  "@next": {
+    "description": "Used to navigate to the next question in a test."
+  },
+
+  "submitAnswers": "Submit answers",
+  "@submitAnswers": {
+    "description": "A button for when the user wants to turn in their answers on a test."
   }
 }
