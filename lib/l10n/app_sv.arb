@@ -23,5 +23,12 @@
   "teacher": "Lärare",
   "confirmPassword": "Bekräfta Lösenord",
   "name": "Namn",
-  "selectRole": "Välj Roll"
+  "selectRole": "Välj Roll",
+  "home": "Hem",
+  "stats": "Statistik",
+  "settings": "Inställningar",
+  "logOut": "Logga ut",
+  "confirmLogOut": "Vill du logga ut från ditt konto?",
+  "yes": "Ja",
+  "no": "Nej"
 }

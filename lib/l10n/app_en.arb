@@ -122,5 +122,40 @@
   "selectRole": "Select Role",
   "@selectRole": {
     "description": "Used for role selection field when registering an account."
+  },
+
+  "home": "Home",
+  "@home": {
+    "description": "The page which displays tests, stats and settings."
+  },
+
+  "stats": "Stats",
+  "@stats": {
+    "description": "A view in the home page which displays user statistics. Make this string short."
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "A view in the home page which settings. Make this string short."
+  },
+
+  "logOut": "Log out",
+  "@logOut": {
+    "description": "Title for confirmation dialog when the user is about to log out."
+  },
+
+  "confirmLogOut": "Do you want to log out from your account?",
+  "@confirmLogOut": {
+    "description": "Asking the user whether they would like to log out or not."
+  },
+
+  "yes": "Yes",
+  "@yes": {
+    "description": "Option for yes/no confirmation dialogs."
+  },
+
+  "no": "No",
+  "@no": {
+    "description": "Option for yes/no confirmation dialogs."
   }
 }

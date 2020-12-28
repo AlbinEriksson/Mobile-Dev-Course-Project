@@ -1,11 +1,11 @@
 import 'package:dva232_project/client/user_api_client.dart';
-import 'package:dva232_project/screens/home/account_view.dart';
 import 'package:dva232_project/screens/home/home_view.dart';
 import 'package:dva232_project/screens/home/settings_view.dart';
 import 'package:dva232_project/screens/home/stats_view.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -25,7 +25,6 @@ class _HomeState extends State<Home> {
           child: [
             HomeView(),
             StatsView(),
-            AccountView(),
             SettingsView(),
           ].elementAt(_bottomBarIndex),
         ),
@@ -42,11 +41,10 @@ class _HomeState extends State<Home> {
 
   BottomNavigationBar _bottomBar(BuildContext context) => BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: AppLocalizations.of(context).home),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: AppLocalizations.of(context).stats),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
+              icon: Icon(Icons.settings), label: AppLocalizations.of(context).settings),
         ],
         currentIndex: _bottomBarIndex,
         onTap: _bottomBarItemSelected,
@@ -62,19 +60,19 @@ class _HomeState extends State<Home> {
     return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Log out"),
-            content: Text("Do you want to log out from your account?"),
+            title: Text(AppLocalizations.of(context).logOut),
+            content: Text(AppLocalizations.of(context).confirmLogOut),
             actions: [
               new TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: Text("NO"),
+                child: Text(AppLocalizations.of(context).no.toUpperCase()),
               ),
               new TextButton(
                 onPressed: () {
                   UserAPIClient.logout();
                   Navigator.pop(context, true);
                 },
-                child: Text("YES"),
+                child: Text(AppLocalizations.of(context).yes.toUpperCase()),
               ),
             ],
           ),
