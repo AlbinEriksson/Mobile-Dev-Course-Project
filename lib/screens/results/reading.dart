@@ -68,7 +68,7 @@ class ReadingResults extends StatelessWidget {
             ),
             MaterialButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, Routes.home);
+                Navigator.popUntil(context, ModalRoute.withName(Routes.home));
               },
               minWidth: 160,
               color: Colors.purple,
