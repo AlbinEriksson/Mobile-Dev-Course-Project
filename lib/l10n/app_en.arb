@@ -157,5 +157,45 @@
   "no": "No",
   "@no": {
     "description": "Option for yes/no confirmation dialogs."
+  },
+
+  "reading": "Reading",
+  "@reading": {
+    "description": "Test where you practice reading."
+  },
+
+  "speaking": "Speaking",
+  "@speaking": {
+    "description": "Test where you practice speaking."
+  },
+
+  "listening": "Listening",
+  "@listening": {
+    "description": "Test where you practice listening."
+  },
+
+  "writing": "Writing",
+  "@writing": {
+    "description": "Test where you practice writing."
+  },
+
+  "vocabulary": "Vocabulary",
+  "@vocabulary": {
+    "description": "Test where you practice vocabulary."
+  },
+
+  "easy": "Easy",
+  "@easy": {
+    "description": "The lowest difficulty."
+  },
+
+  "medium": "Medium",
+  "@medium": {
+    "description": "The second lowest difficulty."
+  },
+
+  "hard": "Hard",
+  "@hard": {
+    "description": "The highest difficulty."
   }
 }

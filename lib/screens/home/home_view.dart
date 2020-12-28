@@ -2,6 +2,7 @@ import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/widgets/circular_button.dart';
 import 'package:flutter/material.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -24,16 +25,41 @@ class _HomeViewState extends State<HomeView> {
     PopupMenu.context = context;
 
     List<Widget> buttons = [
-      _takeTestButton(context, Routes.readingTest, Colors.purple[100],
-          Icons.remove_red_eye_outlined, "Reading", _readingBtnKey),
-      _takeTestButton(context, Routes.speakingTest, Colors.cyan[100],
-          Icons.mic_outlined, "Speaking", _speakingBtnKey),
-      _takeTestButton(context, Routes.listeningTestIntro, Colors.green[100],
-          Icons.hearing_outlined, "Listening", _listeningBtnKey),
-      _takeTestButton(context, Routes.writingTest, Colors.orange[100],
-          Icons.create_outlined, "Writing", _writingBtnKey),
-      _takeTestButton(context, Routes.vocabularyTest, Colors.red[100],
-          Icons.spellcheck_outlined, "Vocabulary", _vocabularyBtnKey),
+      _takeTestButton(
+          context,
+          Routes.readingTest,
+          Colors.purple[100],
+          Icons.remove_red_eye_outlined,
+          AppLocalizations.of(context).reading,
+          _readingBtnKey),
+      _takeTestButton(
+          context,
+          Routes.speakingTest,
+          Colors.cyan[100],
+          Icons.mic_outlined,
+          AppLocalizations.of(context).speaking,
+          _speakingBtnKey),
+      _takeTestButton(
+          context,
+          Routes.listeningTestIntro,
+          Colors.green[100],
+          Icons.hearing_outlined,
+          AppLocalizations.of(context).listening,
+          _listeningBtnKey),
+      _takeTestButton(
+          context,
+          Routes.writingTest,
+          Colors.orange[100],
+          Icons.create_outlined,
+          AppLocalizations.of(context).writing,
+          _writingBtnKey),
+      _takeTestButton(
+          context,
+          Routes.vocabularyTest,
+          Colors.red[100],
+          Icons.spellcheck_outlined,
+          AppLocalizations.of(context).vocabulary,
+          _vocabularyBtnKey),
     ];
 
     return ListView(
@@ -86,13 +112,26 @@ class _HomeViewState extends State<HomeView> {
       lineColor: Colors.white,
       maxColumn: 3,
       items: [
-        MenuItem(title: "Easy", textStyle: TextStyle(color: Colors.black)),
-        MenuItem(title: "Medium", textStyle: TextStyle(color: Colors.black)),
-        MenuItem(title: "Hard", textStyle: TextStyle(color: Colors.black)),
+        MenuItem(
+          title: AppLocalizations.of(context).easy,
+          textStyle: TextStyle(color: Colors.black),
+          userInfo: "easy",
+        ),
+        MenuItem(
+          title: AppLocalizations.of(context).medium,
+          textStyle: TextStyle(color: Colors.black),
+          userInfo: "medium",
+        ),
+        MenuItem(
+          title: AppLocalizations.of(context).hard,
+          textStyle: TextStyle(color: Colors.black),
+          userInfo: "hard",
+        ),
       ],
       onClickMenu: (item) {
+        MenuItem menuItem = item as MenuItem;
         Navigator.pushNamed(context, routeTo,
-            arguments: {"difficulty": item.menuTitle});
+            arguments: {"difficulty": menuItem.userInfo});
       },
     );
 

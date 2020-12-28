@@ -30,5 +30,13 @@
   "logOut": "Logga ut",
   "confirmLogOut": "Vill du logga ut från ditt konto?",
   "yes": "Ja",
-  "no": "Nej"
+  "no": "Nej",
+  "reading": "Läsa",
+  "speaking": "Tala",
+  "listening": "Lyssna",
+  "writing": "Skriva",
+  "vocabulary": "Ordförråd",
+  "easy": "Enkel",
+  "medium": "Medel",
+  "hard": "Svår"
 }
