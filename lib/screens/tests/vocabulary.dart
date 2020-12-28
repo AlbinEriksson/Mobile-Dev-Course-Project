@@ -150,7 +150,9 @@ class _VocabularyTestState extends State<VocabularyTest> {
               padding: EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Text(currentWord.isNotEmpty ? "Is '$currentWord' wrong? You can change it below:" : ""),
+                  Text(currentWord.isNotEmpty
+                      ? "Is '$currentWord' wrong? You can change it below:"
+                      : ""),
                   LanGuideTextField(
                     hintText: "Tap a highlighted word to change it!",
                     onChanged: (value) => currentEdit = value,
@@ -163,9 +165,11 @@ class _VocabularyTestState extends State<VocabularyTest> {
                   LanGuideButton(
                     text: "Submit answers",
                     enabled: currentWordIndex == -1 && anythingChanged,
-                    onPressed: () => submitPressed(context, Routes.vocabularyResults, {
-                      "checkedWords": editedWords
-                    }),
+                    onPressed: () {
+                      int scoreToSend = 50;
+                      submitPressed(context, Routes.vocabularyResults,
+                          {"checkedWords": editedWords, "score": scoreToSend});
+                    },
                   ),
                 ],
               ),
@@ -177,7 +181,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
   }
 
   Future<bool> _backPressed(BuildContext context) {
-    if(_inputFocusNode.hasFocus) {
+    if (_inputFocusNode.hasFocus) {
       setState(() {
         _inputFocusNode.unfocus();
         currentWordIndex = -1;
@@ -202,7 +206,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
     String editedWord = editedWords[index];
     String original = wordsToCheck[index];
 
-    if(original != editedWord) {
+    if (original != editedWord) {
       return TextSpan(
         children: [
           TextSpan(
