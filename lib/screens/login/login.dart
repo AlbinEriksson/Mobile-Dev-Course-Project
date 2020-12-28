@@ -4,6 +4,7 @@ import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //Login needs to be stateful to have the dispose method called so that the controllers
 //no longer are in the memory
@@ -29,7 +30,7 @@ class _Login extends State<Login> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Login",
+                AppLocalizations.of(context).login,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline3,
               ),
@@ -39,7 +40,7 @@ class _Login extends State<Login> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideTextField(
                 controller: emailController,
-                hintText: "Email",
+                hintText: AppLocalizations.of(context).email,
                 icon: Icons.email,
               ),
             ),
@@ -49,7 +50,7 @@ class _Login extends State<Login> {
               child: LanGuideTextField(
                 obscureText: true,
                 controller: passwordController,
-                hintText: "Password",
+                hintText: AppLocalizations.of(context).password,
                 icon: Icons.lock,
               ),
             ),
@@ -57,7 +58,7 @@ class _Login extends State<Login> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: LanGuideButton(
                 onPressed: () {
-                  String dialogue = "Something went wrong";
+                  String dialogue = "";
                   String emailString = emailController.text.toString();
                   String passwordString = passwordController.text.toString();
 
@@ -83,25 +84,25 @@ class _Login extends State<Login> {
                     * and if they don't respond, more than likely their email is either incorrect or the user who created the account is not the real owner.
                     * //Rikard
                     * */
-                  RegExp passExp = new RegExp(r'(?!.*["\s])');
-                  //Checks if the password has any character that can cause a sql injection
+                  RegExp mediumPasswordRegex = new RegExp(
+                      r"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
 
                   bool login = false;
                   if (emailString.isEmpty) {
-                    dialogue = "Email is empty, please put in an email";
+                    dialogue = AppLocalizations.of(context).alertEmptyInputFields;
                   }
                   //Cannot register emails or passwords longer than 500 characters long so there
                   //is no need to send info when we know that the input is invalid.
                   else if (emailString.length > 500) {
-                    dialogue = "Email is too long, nice try";
+                    dialogue = AppLocalizations.of(context).alertEmailTooLong;
                   } else if (passwordString.isEmpty) {
-                    dialogue = "Password is empty, please put in a password";
+                    dialogue = AppLocalizations.of(context).alertEmptyInputFields;
                   } else if (passwordString.length > 500) {
-                    dialogue = "Password is too long, nice try";
+                    dialogue = AppLocalizations.of(context).alertPasswordTooLong;
                   } else if (!emailExp.hasMatch(emailString)) {
-                    dialogue = "Invalid email";
-                  } else if (!passExp.hasMatch(passwordString)) {
-                    dialogue = "Invalid password";
+                    dialogue = AppLocalizations.of(context).alertEmailInvalid;
+                  } else if (!mediumPasswordRegex.hasMatch(passwordString)) {
+                    dialogue = AppLocalizations.of(context).alertPasswordInvalid;
                   } else {
                     sendLogin(context);
                     login = true;
@@ -110,7 +111,7 @@ class _Login extends State<Login> {
                     return _validationDialog(context, dialogue);
                   }
                 },
-                text: "Login",
+                text: AppLocalizations.of(context).login,
               ),
             ),
 
@@ -150,16 +151,16 @@ class _Login extends State<Login> {
           Navigator.popAndPushNamed(context, Routes.home);
           break;
         case UserAPIResult.serverError:
-          _validationDialog(context, "There was a problem with the server. Try again in a moment.");
+          _validationDialog(context, AppLocalizations.of(context).alertServerProblem);
           break;
         case UserAPIResult.clientError:
-          _validationDialog(context, "The app has failed to log you in. Please report this issue to the developers.");
+          _validationDialog(context, AppLocalizations.of(context).alertLoginFailed);
           break;
         case UserAPIResult.noInternetConnection:
-          _validationDialog(context, "You must have an internet connection to do that.");
+          _validationDialog(context, AppLocalizations.of(context).alertInternetConnection);
           break;
         case UserAPIResult.invalidCredentials:
-          _validationDialog(context, "Invalid email and password combination.");
+          _validationDialog(context, AppLocalizations.of(context).alertInvalidCredentials);
           break;
         default:
           break;

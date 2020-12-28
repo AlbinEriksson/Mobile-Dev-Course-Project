@@ -6,11 +6,66 @@
 
   "login": "Login",
   "@login": {
-    "description": "Front page login button."
+    "description": "Used for titles and buttons for the login page."
   },
 
   "register": "Register",
   "@register": {
-    "description": "Front page register button."
+    "description": "Used for titles and buttons for the register page."
+  },
+
+  "email": "Email",
+  "@email": {
+    "description": "For input fields when logging in and registering, etc."
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "For input fields when logging in and registering, etc."
+  },
+
+  "alertEmptyInputFields": "One or more fields are empty.",
+  "@alertEmptyInputFields": {
+    "description": "Alerting the user that an input field was empty, e.g. when logging in."
+  },
+
+  "alertEmailTooLong": "Email must be 500 characters or less.",
+  "@alertEmailTooLong": {
+    "description": "Alerting the user that an email field was too long."
+  },
+
+  "alertPasswordTooLong": "Password must be 500 characters or less.",
+  "@alertPasswordTooLong": {
+    "description": "Alerting the user that a password field was too long."
+  },
+
+  "alertEmailInvalid": "Please provide a valid email.",
+  "@alertEmailInvalid": {
+    "description": "Alerting the user that an email field was invalid."
+  },
+
+  "alertPasswordInvalid": "Password must have 2 of the following:\n- Lowercase letters\n- Uppercase letters\n- Numeric digits",
+  "@alertPasswordInvalid": {
+    "description": "Alerting the user that a password field was invalid."
+  },
+
+  "alertServerProblem": "There was a problem with the server. Try again in a moment.",
+  "@alertServerProblem": {
+    "description": "Alerting the user that the server is having issues."
+  },
+
+  "alertLoginFailed": "The app has failed to log you in. Please report this issue to the developers.",
+  "@alertLoginFailed": {
+    "description": "Alerting the user that the login procedure has failed. Also encourages to report the issue."
+  },
+
+  "alertInternetConnection": "You must have an internet connection to do that.",
+  "@alertInternetConnection": {
+    "description": "Alerting the user that their internet connection is not functional."
+  },
+
+  "alertInvalidCredentials": "Invalid email and password combination.",
+  "@alertInvalidCredentials": {
+    "description": "Alerting the user that the email and password did not match any user account."
   }
 }
