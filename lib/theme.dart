@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class LanGuideTheme {
   static ThemeData data() => ThemeData(
         primarySwatch: Colors.purple,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.purple,),
         // accentColor: Colors.purpleAccent,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -49,12 +51,66 @@ class LanGuideTheme {
           endIndent: 20.0,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
           selectedItemColor: Colors.purple,
           unselectedItemColor: Colors.black,
         ),
       );
 
-  static ThemeData darkData() => ThemeData();
+  static ThemeData darkData() => ThemeData(
+    primarySwatch: Colors.blue,
+    brightness: Brightness.dark,
+    iconTheme: IconThemeData(color: Colors.blue,),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        minimumSize: Size.fromHeight(50),
+        elevation: 5.0,
+      ),
+    ),
+    buttonTheme: ButtonThemeData(
+      alignedDropdown: true,
+    ),
+    textTheme: TextTheme(
+      headline3: TextStyle(
+        color: Colors.white,
+      ),
+      bodyText1: TextStyle(
+        fontSize: 16.0,
+      ),
+      bodyText2: TextStyle(
+        fontSize: 16.0,
+      ),
+      button: TextStyle(
+        color: Colors.white,
+        fontSize: 21,
+        fontWeight: FontWeight.normal,
+      ),
+      overline: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    appBarTheme: AppBarTheme(
+      color: Colors.black45,
+      iconTheme: IconThemeData(
+        color: Colors.blue,
+        size: 40.0,
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      thickness: 4.0,
+      indent: 20.0,
+      endIndent: 20.0,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.black45,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.white,
+    ),
+  );
 
   static ShapeDecoration inputFieldBorder() => ShapeDecoration(
         shape: RoundedRectangleBorder(

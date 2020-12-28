@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:dva232_project/settings.dart';
 
 class SettingsView extends StatefulWidget {
   @override
@@ -7,7 +8,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-
+  String dropDownValue = 'light';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,6 @@ class _SettingsViewState extends State<SettingsView> {
                 children: [
                   Icon(
                     Icons.person,
-                    color: Colors.purple,
                   ),
                   SizedBox(
                     width: 8,
@@ -87,7 +87,6 @@ class _SettingsViewState extends State<SettingsView> {
                 children: [
                   Icon(
                     Icons.lock,
-                    color: Colors.purple,
                   ),
                   SizedBox(
                     width: 8,
@@ -136,7 +135,6 @@ class _SettingsViewState extends State<SettingsView> {
                 children: [
                   Icon(
                     Icons.nightlight_round,
-                    color: Colors.purple,
                   ),
                   SizedBox(
                     width: 8,
@@ -156,19 +154,35 @@ class _SettingsViewState extends State<SettingsView> {
                   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Row(
                       children: [
-                        Text(
-                            "Name:",
-                            style: TextStyle(
-                              fontSize: 23,
-                            )
+                          DropdownButton<String>(
+                            value: dropDownValue,
+                            style: TextStyle(fontSize: 23, color: Colors.blue,),
+                            underline: Container(
+                              height: 2,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dropDownValue = newValue;
+                                if(dropDownValue == 'light'){
+                                  Settings.setThemeMode(ThemeMode.light);
+                                }
+                                else if(dropDownValue == 'dark'){
+                                  Settings.setThemeMode(ThemeMode.dark);
+                                }
+                                else if(dropDownValue == 'system'){
+                                  Settings.setThemeMode(ThemeMode.system);
+                                }
+                                Settings.updateTheme();
+                              });
+                            },
+                            items: <String>['light', 'dark', 'system']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                         ),
-                        Spacer(),
-                        Text(
-                          "Ben Dover",
-                          style: TextStyle(
-                            fontSize: 23,
-                          )
-                        )
                       ]
                   ),
                 )
