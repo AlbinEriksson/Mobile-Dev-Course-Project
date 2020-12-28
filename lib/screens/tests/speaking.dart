@@ -6,8 +6,7 @@ import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-
-//NavButton("Submit answers", Routes.speakingResults),
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SpeakingTest extends StatefulWidget {
   @override
@@ -16,7 +15,7 @@ class SpeakingTest extends StatefulWidget {
 
 class _SpeakingTestState extends State<SpeakingTest> {
   int _clickCount = 0;
-  String _tapToSpeakText = "TAP TO SPEAK";
+  String _tapToSpeakText = null;
 
   Icon _mic = Icon(
     Icons.mic_outlined,
@@ -40,6 +39,10 @@ class _SpeakingTestState extends State<SpeakingTest> {
 
   @override
   Widget build(BuildContext context) {
+    if(_tapToSpeakText == null) {
+      _tapToSpeakText = AppLocalizations.of(context).tapToSpeak.toUpperCase();
+    }
+
     return WillPopScope(
       onWillPop: () => backPressed(context, _clickCount > 0),
       child: Scaffold(
@@ -55,7 +58,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
-                    "Speak this sentence",
+                    AppLocalizations.of(context).sayThisSentence,
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
@@ -94,7 +97,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: LanGuideButton(
-                  text: "Submit Answers",
+                  text: AppLocalizations.of(context).submitAnswers,
                   onPressed: () => _sendDataToResults(context),
                   enabled: _clickCount > 0,
                 ),

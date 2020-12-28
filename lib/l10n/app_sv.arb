@@ -47,5 +47,7 @@
   "submitAnswersQuestion": "Lämna in svar?",
   "confirmSubmitAnswers": "Vill du lämna in dina svar och se resultatet?",
   "areYouSure": "Är du säker?",
-  "confirmLoseProgress": "Du kommer förlora de svar du har valt om du går tillbaka!"
+  "confirmLoseProgress": "Du kommer förlora de svar du har valt om du går tillbaka!",
+  "tapToSpeak": "Tryck och tala",
+  "sayThisSentence": "Säg denna mening"
 }

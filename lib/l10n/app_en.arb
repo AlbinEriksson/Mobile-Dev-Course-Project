@@ -242,5 +242,15 @@
   "confirmLoseProgress": "You will lose your progress if you go back!",
   "@confirmLoseProgress": {
     "description": "Telling the user that their progress will be forgotten if they quit a test."
+  },
+
+  "tapToSpeak": "Tap to speak",
+  "@tapToSpeak": {
+    "description": "A button in the speaking test which will start recording your voice."
+  },
+
+  "sayThisSentence": "Say this sentence",
+  "@sayThisSentence": {
+    "description": "Prompting the user to say a sentence out loud for the speaking test."
   }
 }
