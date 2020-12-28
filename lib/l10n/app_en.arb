@@ -277,5 +277,15 @@
   "number": "Number",
   "@number": {
     "description": "Subtitle for the options for each numbered gap in the writing test. It's always followed by a number, e.g. Number 5."
+  },
+
+  "isWordWrong": "Is \"$1\" wrong? You can change it below:",
+  "@isWordWrong": {
+    "description": "Instructive text for when the user has tapped a changeable word in the vocabulary test. $1 stands for the word in question."
+  },
+
+  "tapHighlightedToChange": "Tap a highlighted word to change it!",
+  "@tapHighlightedToChange": {
+    "description": "Instructive text to prompt the user to tap a highlighted word in the vocabulary test that needs to be changed."
   }
 }

@@ -54,5 +54,7 @@
   "start": "Börja",
   "text": "Text",
   "options": "Alternativ",
-  "number": "Nummer"
+  "number": "Nummer",
+  "isWordWrong": "Är \"$1\" fel? Du kan ändra det nedan:",
+  "tapHighlightedToChange": "Tryck på ett markerat ord för att ändra det!"
 }

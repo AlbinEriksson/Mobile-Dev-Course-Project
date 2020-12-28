@@ -5,6 +5,7 @@ import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VocabularyTest extends StatefulWidget {
   @override
@@ -147,23 +148,26 @@ class _VocabularyTestState extends State<VocabularyTest> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   Text(currentWord.isNotEmpty
-                      ? "Is '$currentWord' wrong? You can change it below:"
+                      ? AppLocalizations.of(context).isWordWrong.replaceAll("\$1", currentWord)
                       : ""),
-                  LanGuideTextField(
-                    hintText: "Tap a highlighted word to change it!",
-                    onChanged: (value) => currentEdit = value,
-                    onEditingComplete: _onEditComplete,
-                    focusNode: _inputFocusNode,
-                    controller: _textController,
-                    enabled: currentWordIndex != -1,
-                    enableSuggestions: false,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical:8.0),
+                    child: LanGuideTextField(
+                      hintText: AppLocalizations.of(context).tapHighlightedToChange,
+                      onChanged: (value) => currentEdit = value,
+                      onEditingComplete: _onEditComplete,
+                      focusNode: _inputFocusNode,
+                      controller: _textController,
+                      enabled: currentWordIndex != -1,
+                      enableSuggestions: false,
+                    ),
                   ),
                   LanGuideButton(
-                    text: "Submit answers",
+                    text: AppLocalizations.of(context).submitAnswers,
                     enabled: currentWordIndex == -1 && anythingChanged,
                     onPressed: () {
                       int scoreToSend = 50;
