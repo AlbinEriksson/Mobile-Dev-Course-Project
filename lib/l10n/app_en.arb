@@ -252,5 +252,15 @@
   "sayThisSentence": "Say this sentence",
   "@sayThisSentence": {
     "description": "Prompting the user to say a sentence out loud for the speaking test."
+  },
+
+  "writingTestInstructions": "You will receive a text with gaps. Choose the most suitable linking word/phrase for each gap. You can scroll to see the alternatives.",
+  "@writingTestInstructions": {
+    "description": "The instructions for the writing test, before the actual test starts."
+  },
+
+  "start": "Start",
+  "@start": {
+    "description": "Start button for starting certain tests."
   }
 }

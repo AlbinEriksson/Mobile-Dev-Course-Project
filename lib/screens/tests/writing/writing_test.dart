@@ -2,6 +2,7 @@ import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WritingTest extends StatefulWidget {
   @override
@@ -25,16 +26,14 @@ class _WritingTestState extends State<WritingTest> {
               ),
             ),
             BorderedContainer(
-              child: Text(
-                'You will now get a text and in the text, there will be gaps. Choose the most likely linking word/phrase to fill each gap. Scroll to see the alternatives.\nPress start to begin the test.',
-              ),
+              child: Text(AppLocalizations.of(context).writingTestInstructions),
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).popAndPushNamed(Routes.writingQuestions);
               },
-              child: Text('Start'),
+              child: Text(AppLocalizations.of(context).start),
             ),
           ],
         ),
