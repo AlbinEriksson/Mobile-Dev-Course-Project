@@ -185,14 +185,7 @@ class _RegisterState extends State<Register> {
                     register = true;
                   }
                   if (!register) {
-                    return showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(dialogue),
-                        );
-                      },
-                    );
+                    return _validationDialog(context, dialogue);
                   } //If any of the above conditions were unmet, the user does not get to create an account
                   else {
                     UserAPIClient.register(
@@ -210,54 +203,19 @@ class _RegisterState extends State<Register> {
                               arguments: null);
                           break;
                         case UserAPIResult.clientError:
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("The app has failed to register you. Please report this issue to the developers."),
-                              );
-                            },
-                          );
+                          _validationDialog(context, "The app has failed to register you. Please report this issue to the developers.");
                           break;
                         case UserAPIResult.emailInUse:
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("That email is already in use."),
-                              );
-                            },
-                          );
+                          _validationDialog(context, "That email is already in use.");
                           break;
                         case UserAPIResult.roleNotFound:
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("Invalid role. Please report this issue to the developers."),
-                              );
-                            },
-                          );
+                          _validationDialog(context, "Invalid role. Please report this issue to the developers.");
                           break;
                         case UserAPIResult.serverError:
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("There was a problem with the server. Try again in a moment."),
-                              );
-                            },
-                          );
+                          _validationDialog(context, "There was a problem with the server. Try again in a moment.");
                           break;
                         case UserAPIResult.noInternetConnection:
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("You must have an internet connection to do that."),
-                              );
-                            },
-                          );
+                          _validationDialog(context, "You must have an internet connection to do that.");
                           break;
                         default:
                           break;
@@ -269,6 +227,15 @@ class _RegisterState extends State<Register> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<T> _validationDialog<T>(BuildContext context, String text) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(text),
       ),
     );
   }
