@@ -37,6 +37,21 @@ class TestResultsResponse {
   TestResultsResponse({@required this.apiResult, this.testResults});
 }
 
+class UserInfoResponse {
+  final UserAPIResult apiResult;
+  final String userId;
+  final String name;
+  final bool emailVerified;
+  final String role;
+
+  UserInfoResponse(
+      {this.apiResult: UserAPIResult.success,
+      this.userId,
+      this.name,
+      this.emailVerified,
+      this.role});
+}
+
 class UserAPIClient {
   // This address (10.0.2.2) will connect to your PC's localhost, as opposed to
   // the localhost of the android emulator (since it is a virtual machine)
@@ -54,9 +69,11 @@ class UserAPIClient {
   static String _accessToken;
   static String _refreshToken;
   static String _userScope;
+  static UserInfoResponse _userInfo;
 
   static final LocalStorage _storage = LocalStorage("user_api_client.json");
   static const String _storageRefreshTokenKey = "refresh_token";
+  static const String _storageUserInfoKey = "user_info";
 
   static void _setTokenData(
       String accessToken, String refreshToken, String userScope) {
@@ -65,6 +82,24 @@ class UserAPIClient {
     _userScope = userScope;
 
     _storage.setItem(_storageRefreshTokenKey, _refreshToken);
+  }
+
+  static void _setUserData(
+      String userId, String userName, bool emailVerified, String role) {
+    _userInfo = UserInfoResponse(
+      apiResult: UserAPIResult.success,
+      userId: userId,
+      name: userName,
+      emailVerified: emailVerified,
+      role: role,
+    );
+
+    _storage.setItem(_storageUserInfoKey, {
+      "userId": userId,
+      "name": userName,
+      "emailVerified": emailVerified,
+      "role": role,
+    });
   }
 
   /// Logs in a user. The access token, refresh token and scope will be stored
@@ -79,18 +114,17 @@ class UserAPIClient {
     try {
       return await http
           .post("$_apiUrl/token.php",
-          headers: {"Content-Type": "application/json"},
-          body: json.encode({
-            "client_id": _clientLoginId,
-            "password": password,
-            "username": email,
-            "grant_type": "password",
-          }))
+              headers: {"Content-Type": "application/json"},
+              body: json.encode({
+                "client_id": _clientLoginId,
+                "password": password,
+                "username": email,
+                "grant_type": "password",
+              }))
           .then((response) {
         switch (response.statusCode) {
           case 400:
-            log(
-                "[ERROR] User API Client failed to make a proper request to login the user:");
+            log("[ERROR] User API Client failed to make a proper request to login the user:");
             log(response.body);
             return UserAPIResult.clientError;
           case 401:
@@ -101,15 +135,23 @@ class UserAPIClient {
                 body["access_token"], body["refresh_token"], body["scope"]);
             return UserAPIResult.success;
           default:
-            log(
-                "[WARNING] User API Client, unknown status code for login: ${response
-                    .statusCode}");
+            log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
             return UserAPIResult.unknown;
         }
       });
-    } on SocketException catch(e) {
+    } on SocketException catch (e) {
       return _handleSocketException(e);
     }
+  }
+
+  /// Deletes cached data such as access and refresh token, which means the user
+  /// must login again to be able to use the API on their account.
+  static void logout() {
+    _storage.clear();
+    _accessToken = null;
+    _refreshToken = null;
+    _userScope = null;
+    _userInfo = null;
   }
 
   /// Registers a user. Note that this procedure does not login the user
@@ -131,19 +173,18 @@ class UserAPIClient {
     try {
       return await http
           .post("$_apiUrl/register.php",
-          headers: {"Content-Type": "application/json"},
-          body: json.encode({
-            "role": role,
-            "lastName": lastName,
-            "firstName": firstName,
-            "password": password,
-            "email": email,
-          }))
+              headers: {"Content-Type": "application/json"},
+              body: json.encode({
+                "role": role,
+                "lastName": lastName,
+                "firstName": firstName,
+                "password": password,
+                "email": email,
+              }))
           .then((response) {
         switch (response.statusCode) {
           case 400:
-            log(
-                "[ERROR] User API Client failed to make a proper request to register the user:");
+            log("[ERROR] User API Client failed to make a proper request to register the user:");
             log(response.body);
             return UserAPIResult.clientError;
           case 404:
@@ -155,13 +196,11 @@ class UserAPIClient {
           case 201:
             return UserAPIResult.success;
           default:
-            log(
-                "[WARNING] User API Client, unknown status code for registration: ${response
-                    .statusCode}");
+            log("[WARNING] User API Client, unknown status code for registration: ${response.statusCode}");
             return UserAPIResult.unknown;
         }
       });
-    } on SocketException catch(e) {
+    } on SocketException catch (e) {
       return _handleSocketException(e);
     }
   }
@@ -184,12 +223,12 @@ class UserAPIClient {
     try {
       return await http
           .post("$_apiUrl/token.php",
-          headers: {"Content-Type": "application/json"},
-          body: json.encode({
-            "client_id": _clientLoginId,
-            "refresh_token": _refreshToken,
-            "grant_type": "refresh_token",
-          }))
+              headers: {"Content-Type": "application/json"},
+              body: json.encode({
+                "client_id": _clientLoginId,
+                "refresh_token": _refreshToken,
+                "grant_type": "refresh_token",
+              }))
           .then((response) {
         switch (response.statusCode) {
           case 400:
@@ -197,8 +236,7 @@ class UserAPIClient {
             if (body["error"] == "invalid_grant") {
               return UserAPIResult.refreshTokenExpired;
             }
-            log(
-                "[ERROR] User API Client failed to make a proper request to refresh the access token:");
+            log("[ERROR] User API Client failed to make a proper request to refresh the access token:");
             log(response.body);
             return UserAPIResult.clientError;
           case 200:
@@ -207,13 +245,11 @@ class UserAPIClient {
                 body["access_token"], body["refresh_token"], body["scope"]);
             return UserAPIResult.success;
           default:
-            log(
-                "[WARNING] User API Client, unknown status code for login: ${response
-                    .statusCode}");
+            log("[WARNING] User API Client, unknown status code for login: ${response.statusCode}");
             return UserAPIResult.unknown;
         }
       });
-    } on SocketException catch(e) {
+    } on SocketException catch (e) {
       return _handleSocketException(e);
     }
   }
@@ -236,23 +272,22 @@ class UserAPIClient {
       return await _tryMethod(() {
         return http
             .post("$_apiUrl/results.php",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer $_accessToken"
-            },
-            body: json.encode({
-              "difficulty": difficulty,
-              "type": testType,
-              "accuracy": accuracy
-            }))
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer $_accessToken"
+                },
+                body: json.encode({
+                  "difficulty": difficulty,
+                  "type": testType,
+                  "accuracy": accuracy
+                }))
             .then((response) {
           switch (response.statusCode) {
             case 500:
               return UserAPIResult.serverError;
             case 400:
             case 404:
-              log(
-                  "[ERROR] User API Client failed to make a proper request to submit test results:");
+              log("[ERROR] User API Client failed to make a proper request to submit test results:");
               log(response.body);
               return UserAPIResult.clientError;
             case 401:
@@ -269,7 +304,7 @@ class UserAPIClient {
           }
         });
       }, (error) => error);
-    } on SocketException catch(e) {
+    } on SocketException catch (e) {
       return _handleSocketException(e);
     }
   }
@@ -310,8 +345,7 @@ class UserAPIClient {
           switch (response.statusCode) {
             case 400:
             case 404:
-              log(
-                  "[ERROR] User API Client failed to make a proper request to submit test results:");
+              log("[ERROR] User API Client failed to make a proper request to submit test results:");
               log(response.body);
               return TestResultsResponse(apiResult: UserAPIResult.clientError);
             case 401:
@@ -339,8 +373,8 @@ class UserAPIClient {
           }
         });
       }, (error) => TestResultsResponse(apiResult: error),
-              (value) => value.apiResult);
-    } on SocketException catch(e) {
+          (value) => value.apiResult);
+    } on SocketException catch (e) {
       return TestResultsResponse(apiResult: await _handleSocketException(e));
     }
   }
@@ -379,12 +413,79 @@ class UserAPIClient {
   }
 
   static Future<UserAPIResult> _handleSocketException(SocketException e) async {
-    switch(e.osError.errorCode) {
+    switch (e.osError.errorCode) {
       case 101:
         return UserAPIResult.noInternetConnection;
       default:
         log(e.toString());
         return UserAPIResult.unknown;
+    }
+  }
+
+  /// Gets user info. Uses the internally stored access token, so there's
+  /// no need to provide it as an argument for this method.
+  /// Possible result types (see enum UserAPIResult):
+  /// - clientError
+  /// - accessTokenExpired (it will try to refresh it <b>once</b> before
+  /// returning this result).
+  /// - noRefreshToken
+  /// - refreshTokenExpired
+  /// - success
+  /// - unknown
+  /// - noInternetConnection
+  static Future<UserInfoResponse> getUserInfo() async {
+    if(_userInfo != null) {
+      return Future.value(_userInfo);
+    }
+
+    try {
+      return await _tryMethod(() {
+        return http.get("$_apiUrl/whoami.php", headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $_accessToken"
+        }).then((response) {
+          switch (response.statusCode) {
+            case 500:
+              return UserInfoResponse(apiResult: UserAPIResult.serverError);
+            case 400:
+            case 404:
+              log("[ERROR] User API Client failed to make a proper request to submit test results:");
+              log(response.body);
+              return UserInfoResponse(apiResult: UserAPIResult.clientError);
+            case 401:
+              var body = json.decode(response.body);
+              if (body["error_description"] ==
+                  "The access token provided has expired") {
+                return UserInfoResponse(
+                    apiResult: UserAPIResult.accessTokenExpired);
+              }
+              return UserInfoResponse(apiResult: UserAPIResult.clientError);
+            case 200:
+              var body = json.decode(response.body);
+              var user = body["data"];
+              String userName = user["first_name"];
+
+              if (user["last_name"] != null) {
+                userName += " ${user["last_name"]}";
+              }
+
+              _setUserData(user["user_id"], userName, user["email_verified"], user["scope"]);
+
+              return UserInfoResponse(
+                apiResult: UserAPIResult.success,
+                userId: user["user_id"],
+                name: userName,
+                emailVerified: user["email_verified"],
+                role: user["scope"],
+              );
+            default:
+              return UserInfoResponse(apiResult: UserAPIResult.unknown);
+          }
+        });
+      }, (error) => UserInfoResponse(apiResult: error),
+              (value) => value.apiResult);
+    } on SocketException catch (e) {
+      return UserInfoResponse(apiResult: await _handleSocketException(e));
     }
   }
 }

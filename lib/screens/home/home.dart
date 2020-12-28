@@ -1,3 +1,4 @@
+import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/screens/home/account_view.dart';
 import 'package:dva232_project/screens/home/home_view.dart';
 import 'package:dva232_project/screens/home/settings_view.dart';
@@ -69,7 +70,10 @@ class _HomeState extends State<Home> {
                 child: Text("NO"),
               ),
               new TextButton(
-                onPressed: () => Navigator.pop(context, true),
+                onPressed: () {
+                  UserAPIClient.logout();
+                  Navigator.pop(context, true);
+                },
                 child: Text("YES"),
               ),
             ],
