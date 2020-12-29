@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
@@ -19,6 +21,8 @@ class _RegisterState extends State<Register> {
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
+
+  Future<UserAPIResult> _registerFuture = Future.value(UserAPIResult.unknown);
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +90,10 @@ class _RegisterState extends State<Register> {
                     ),
                     value: role,
                     items: [
-                      _roleDropdownItem("student", AppLocalizations.of(context).student),
-                      _roleDropdownItem("teacher", AppLocalizations.of(context).teacher),
+                      _roleDropdownItem(
+                          "student", AppLocalizations.of(context).student),
+                      _roleDropdownItem(
+                          "teacher", AppLocalizations.of(context).teacher),
                     ],
                     onChanged: (String value) {
                       setState(() {
@@ -100,8 +106,17 @@ class _RegisterState extends State<Register> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: LanGuideButton(
-                text: AppLocalizations.of(context).register,
+              child: ElevatedButton(
+                child: FutureBuilder(
+                  future: _registerFuture,
+                  builder: (context, data) {
+                    if (data.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Text(AppLocalizations.of(context).register);
+                    }
+                  },
+                ),
                 onPressed: () {
                   String dialogue = "";
                   bool register = false;
@@ -184,45 +199,15 @@ class _RegisterState extends State<Register> {
                     return _validationDialog(context, dialogue);
                   } //If any of the above conditions were unmet, the user does not get to create an account
                   else {
-                    UserAPIClient.register(
-                            emailController.text,
-                            passwordController.text,
-                            username,
-                            "",
-                            role.toLowerCase())
-                        .then((result) async {
-                      switch (result) {
-                        case UserAPIResult.success:
-                          await UserAPIClient.login(
-                              emailController.text, passwordController.text);
-                          Navigator.popAndPushNamed(context, Routes.home,
-                              arguments: null);
-                          break;
-                        case UserAPIResult.clientError:
-                          _validationDialog(context,
-                              AppLocalizations.of(context).alertRegisterFailed);
-                          break;
-                        case UserAPIResult.emailInUse:
-                          _validationDialog(context,
-                              AppLocalizations.of(context).alertEmailInUse);
-                          break;
-                        case UserAPIResult.roleNotFound:
-                          _validationDialog(context,
-                              AppLocalizations.of(context).alertInvalidRole);
-                          break;
-                        case UserAPIResult.serverError:
-                          _validationDialog(context,
-                              AppLocalizations.of(context).alertServerProblem);
-                          break;
-                        case UserAPIResult.noInternetConnection:
-                          _validationDialog(
-                              context,
-                              AppLocalizations.of(context)
-                                  .alertInternetConnection);
-                          break;
-                        default:
-                          break;
-                      }
+                    setState(() {
+                      _registerFuture = UserAPIClient.register(
+                          emailController.text,
+                          passwordController.text,
+                          username,
+                          "",
+                          role.toLowerCase());
+                      _registerFuture
+                          .then((result) => _handleRegisterResult(result));
                     });
                   }
                 },
@@ -251,5 +236,41 @@ class _RegisterState extends State<Register> {
         style: LanGuideTheme.inputFieldText(),
       ),
     );
+  }
+
+  void _handleRegisterResult(UserAPIResult result) async {
+    switch (result) {
+      case UserAPIResult.success:
+        await UserAPIClient.login(
+            emailController.text, passwordController.text);
+        Navigator.popAndPushNamed(context, Routes.home, arguments: null);
+        break;
+      case UserAPIResult.clientError:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertRegisterFailed);
+        break;
+      case UserAPIResult.emailInUse:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertEmailInUse);
+        break;
+      case UserAPIResult.roleNotFound:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertInvalidRole);
+        break;
+      case UserAPIResult.serverError:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertServerProblem);
+        break;
+      case UserAPIResult.noInternetConnection:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertInternetConnection);
+        break;
+      case UserAPIResult.serverUnavailable:
+        _validationDialog(
+            context, AppLocalizations.of(context).alertServerMaintenance);
+        break;
+      default:
+        break;
+    }
   }
 }

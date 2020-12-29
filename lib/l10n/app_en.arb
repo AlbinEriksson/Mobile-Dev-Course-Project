@@ -287,5 +287,10 @@
   "tapHighlightedToChange": "Tap a highlighted word to change it!",
   "@tapHighlightedToChange": {
     "description": "Instructive text to prompt the user to tap a highlighted word in the vocabulary test that needs to be changed."
+  },
+
+  "alertServerMaintenance": "The server is under maintenance at the moment. Please try again later.",
+  "@alertServerMaintenance": {
+    "description": "Alerting the user that the server is inactive at the moment and will be started again later."
   }
 }

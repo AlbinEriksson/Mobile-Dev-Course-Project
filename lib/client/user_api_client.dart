@@ -127,6 +127,7 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<UserAPIResult> login(String email, String password) async {
     try {
       return await http
@@ -182,6 +183,7 @@ class UserAPIClient {
   /// - unknown
   /// - serverError
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<UserAPIResult> register(String email, String password,
       String firstName, String lastName, String role) async {
     if (lastName != null && lastName.trim().isEmpty) {
@@ -232,6 +234,7 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<UserAPIResult> refresh() async {
     _refreshToken = _storage.getItem(_storageRefreshTokenKey);
     if (_refreshToken == null || _refreshToken.isEmpty) {
@@ -283,6 +286,7 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<UserAPIResult> submitTestResults(
       String testType, String difficulty, double accuracy) async {
     try {
@@ -344,6 +348,7 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<TestResultsResponse> getTestResults(
       String testType, String unit, int amount,
       [String difficulty]) async {
@@ -433,6 +438,8 @@ class UserAPIClient {
     switch (e.osError.errorCode) {
       case 101:
         return UserAPIResult.noInternetConnection;
+      case 110:
+        return UserAPIResult.serverUnavailable;
       default:
         log(e.toString());
         return UserAPIResult.unknown;
@@ -450,6 +457,7 @@ class UserAPIClient {
   /// - success
   /// - unknown
   /// - noInternetConnection
+  /// - serverUnavailable
   static Future<UserInfoResponse> getUserInfo() async {
     if(_userInfo != null) {
       return Future.value(_userInfo);

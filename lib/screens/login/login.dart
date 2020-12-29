@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
@@ -17,6 +19,8 @@ class _Login extends State<Login> {
   //Text input checkers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  Future<UserAPIResult> _loginFuture = Future.value(UserAPIResult.unknown);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class _Login extends State<Login> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: LanGuideButton(
+              child: ElevatedButton(
                 onPressed: () {
                   String dialogue = "";
                   String emailString = emailController.text.toString();
@@ -89,20 +93,24 @@ class _Login extends State<Login> {
 
                   bool login = false;
                   if (emailString.isEmpty) {
-                    dialogue = AppLocalizations.of(context).alertEmptyInputFields;
+                    dialogue =
+                        AppLocalizations.of(context).alertEmptyInputFields;
                   }
                   //Cannot register emails or passwords longer than 500 characters long so there
                   //is no need to send info when we know that the input is invalid.
                   else if (emailString.length > 500) {
                     dialogue = AppLocalizations.of(context).alertEmailTooLong;
                   } else if (passwordString.isEmpty) {
-                    dialogue = AppLocalizations.of(context).alertEmptyInputFields;
+                    dialogue =
+                        AppLocalizations.of(context).alertEmptyInputFields;
                   } else if (passwordString.length > 500) {
-                    dialogue = AppLocalizations.of(context).alertPasswordTooLong;
+                    dialogue =
+                        AppLocalizations.of(context).alertPasswordTooLong;
                   } else if (!emailExp.hasMatch(emailString)) {
                     dialogue = AppLocalizations.of(context).alertEmailInvalid;
                   } else if (!mediumPasswordRegex.hasMatch(passwordString)) {
-                    dialogue = AppLocalizations.of(context).alertPasswordInvalid;
+                    dialogue =
+                        AppLocalizations.of(context).alertPasswordInvalid;
                   } else {
                     sendLogin(context);
                     login = true;
@@ -111,7 +119,16 @@ class _Login extends State<Login> {
                     return _validationDialog(context, dialogue);
                   }
                 },
-                text: AppLocalizations.of(context).login,
+                child: FutureBuilder(
+                  future: _loginFuture,
+                  builder: (context, data) {
+                    if (data.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Text(AppLocalizations.of(context).login);
+                    }
+                  },
+                ),
               ),
             ),
 
@@ -140,31 +157,50 @@ class _Login extends State<Login> {
     );
   }
 
-  //Returns an empty string on successful login otherwise it returns an error message
   void sendLogin(BuildContext context) {
-    UserAPIClient.login(
-            emailController.text.toString(), passwordController.text.toString())
-        .then((result) async {
-      switch (result) {
-        case UserAPIResult.success:
-          dispose();
-          Navigator.popAndPushNamed(context, Routes.home);
-          break;
-        case UserAPIResult.serverError:
-          _validationDialog(context, AppLocalizations.of(context).alertServerProblem);
-          break;
-        case UserAPIResult.clientError:
-          _validationDialog(context, AppLocalizations.of(context).alertLoginFailed);
-          break;
-        case UserAPIResult.noInternetConnection:
-          _validationDialog(context, AppLocalizations.of(context).alertInternetConnection);
-          break;
-        case UserAPIResult.invalidCredentials:
-          _validationDialog(context, AppLocalizations.of(context).alertInvalidCredentials);
-          break;
-        default:
-          break;
-      }
+    setState(() {
+      _loginFuture = UserAPIClient.login(
+          emailController.text.toString(), passwordController.text.toString());
+      _loginFuture.then((result) async {
+        switch (result) {
+          case UserAPIResult.success:
+            dispose();
+            Navigator.popAndPushNamed(context, Routes.home);
+            break;
+          case UserAPIResult.serverError:
+            _validationDialog(
+                context, AppLocalizations
+                .of(context)
+                .alertServerProblem);
+            break;
+          case UserAPIResult.clientError:
+            _validationDialog(
+                context, AppLocalizations
+                .of(context)
+                .alertLoginFailed);
+            break;
+          case UserAPIResult.noInternetConnection:
+            _validationDialog(
+                context, AppLocalizations
+                .of(context)
+                .alertInternetConnection);
+            break;
+          case UserAPIResult.invalidCredentials:
+            _validationDialog(
+                context, AppLocalizations
+                .of(context)
+                .alertInvalidCredentials);
+            break;
+          case UserAPIResult.serverUnavailable:
+            _validationDialog(
+                context, AppLocalizations
+                .of(context)
+                .alertServerMaintenance);
+            break;
+          default:
+            break;
+        }
+      });
     });
   }
 
