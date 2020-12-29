@@ -207,6 +207,11 @@ class LanGuideTheme {
     return useDarkTheme ? Colors.blue : Colors.purple;
   }
 
+  static Color testIconColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.white : Colors.black;
+  }
+
   static Color vocabularyHighlightColor(BuildContext context) {
     bool useDarkTheme = _useDarkTheme(context);
     return useDarkTheme ? Colors.green[600] : Colors.green[200];

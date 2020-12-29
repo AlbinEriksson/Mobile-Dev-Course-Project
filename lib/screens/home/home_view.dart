@@ -100,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
       CircularButton(
         onPressed: () => _chooseDifficulty(context, color, routeTo, key),
         color: color,
-        icon: Icon(icon, size: 60.0, color: Colors.white),
+        icon: Icon(icon, size: 60.0, color: LanGuideTheme.testIconColor(context)),
         text: text,
         size: _buttonSize,
         key: key,

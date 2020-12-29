@@ -292,5 +292,70 @@
   "alertServerMaintenance": "The server is under maintenance at the moment. Please try again later.",
   "@alertServerMaintenance": {
     "description": "Alerting the user that the server is inactive at the moment and will be started again later."
+  },
+
+  "account": "Account",
+  "@account": {
+    "description": "Title for settings view, where the user can see their account settings."
+  },
+
+  "role": "Role",
+  "@role": {
+    "description": "Used as title for the role which is displayed in the settings view."
+  },
+
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Used as default string for when a value is unknown."
+  },
+
+  "privacyAndSecurity": "Privacy and Security",
+  "@privacyAndSecurity": {
+    "description": "Title for settings view, where the user can manage account info regarding privacy and security."
+  },
+
+  "resetPassword": "Reset password",
+  "@resetPassword": {
+    "description": "Button for resetting the user's password in the settings view."
+  },
+
+  "display": "Display",
+  "@display": {
+    "description": "Title for settings view, where the user can change how the app is displayed."
+  },
+
+  "theme": "Theme",
+  "@theme": {
+    "description": "Dropdown where the user can change the theme of the app."
+  },
+
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Name of the bright theme."
+  },
+
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Name of the dark theme."
+  },
+
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "Name of the system theme, as specified in the system settings of the device."
+  },
+
+  "toastResetEmailSent": "A confirmation email has been sent to your email address.",
+  "@toastResetEmailSent": {
+    "description": "A toast message for when the user has requested a password reset."
+  },
+
+  "toastCannotChangeName": "You cannot change your name or email.",
+  "@toastCannotChangeName": {
+    "description": "A toast message for when the user taps the name or email, which cannot be changed at the moment."
+  },
+
+  "toastCannotChangeRole": "You cannot change role.",
+  "@toastCannotChangeRole": {
+    "description": "A toast message for when the user taps their role, which cannot change ever."
   }
 }

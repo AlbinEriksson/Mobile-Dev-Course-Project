@@ -164,7 +164,6 @@ class _Login extends State<Login> {
       _loginFuture.then((result) async {
         switch (result) {
           case UserAPIResult.success:
-            dispose();
             Navigator.popAndPushNamed(context, Routes.home);
             break;
           case UserAPIResult.serverError:

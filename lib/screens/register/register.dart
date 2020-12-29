@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
+import 'package:dva232_project/widgets/languide_dropdown.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
@@ -75,34 +76,15 @@ class _RegisterState extends State<Register> {
                 controller: confirmPasswordController,
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              height: 60,
-              decoration: LanGuideTheme.inputFieldBorder(context),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    hint: Text(
-                      AppLocalizations.of(context).selectRole,
-                      style: LanGuideTheme.inputFieldText(),
-                    ),
-                    value: role,
-                    items: [
-                      _roleDropdownItem(
-                          "student", AppLocalizations.of(context).student),
-                      _roleDropdownItem(
-                          "teacher", AppLocalizations.of(context).teacher),
-                    ],
-                    onChanged: (String value) {
-                      setState(() {
-                        role = value;
-                      });
-                    },
-                  ),
-                ),
-              ),
+            LanGuideDropdown(
+              hintText: AppLocalizations.of(context).selectRole,
+              onChanged: (String value) {
+                role = value;
+              },
+              items: {
+                "student": AppLocalizations.of(context).student,
+                "teacher": AppLocalizations.of(context).teacher,
+              },
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -224,16 +206,6 @@ class _RegisterState extends State<Register> {
       context: context,
       builder: (context) => AlertDialog(
         content: Text(text),
-      ),
-    );
-  }
-
-  DropdownMenuItem<String> _roleDropdownItem(String value, String text) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(
-        text,
-        style: LanGuideTheme.inputFieldText(),
       ),
     );
   }

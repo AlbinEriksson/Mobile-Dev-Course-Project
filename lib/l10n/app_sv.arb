@@ -57,5 +57,18 @@
   "number": "Nummer",
   "isWordWrong": "Är \"$1\" fel? Du kan ändra det nedan:",
   "tapHighlightedToChange": "Tryck på ett markerat ord för att ändra det!",
-  "alertServerMaintenance": "Servern kan inte nås för tillfället. Försök igen om en stund."
+  "alertServerMaintenance": "Servern kan inte nås för tillfället. Försök igen om en stund.",
+  "account": "Konto",
+  "role": "Roll",
+  "unknown": "Okänd",
+  "privacyAndSecurity": "Integritet och Säkerhet",
+  "resetPassword": "Återställ lösenord",
+  "display": "Utseende",
+  "theme": "Tema",
+  "themeLight": "Ljus",
+  "themeDark": "Mörk",
+  "themeSystem": "System",
+  "toastResetEmailSent": "En bekräftelse har skickats till din e-postadress.",
+  "toastCannotChangeName": "Du kan inte ändra namn eller e-post.",
+  "toastCannotChangeRole": "Du kan inte ändra roll."
 }
