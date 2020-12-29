@@ -78,7 +78,7 @@ class _RegisterState extends State<Register> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
               height: 60,
-              decoration: LanGuideTheme.inputFieldBorder(),
+              decoration: LanGuideTheme.inputFieldBorder(context),
               child: DropdownButtonHideUnderline(
                 child: ButtonTheme(
                   alignedDropdown: true,

@@ -255,7 +255,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   TextSpan _spellCheckField(int index) {
     return TextSpan(
       text: filledWords[index],
-      style: LanGuideTheme.writingTestOption(),
+      style: LanGuideTheme.writingTestOption(context),
     );
   }
 

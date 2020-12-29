@@ -40,21 +40,6 @@ class LanGuideTextField extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         hintText: hintText,
-        hintStyle: TextStyle(
-            //color: Colors.purple,
-            ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100.0),
-          borderSide: BorderSide(
-            color: Colors.purple,
-          ),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100.0),
-          borderSide: BorderSide(
-            color: Colors.purple,
-          ),
-        ),
       ),
       onChanged: onChanged,
       onEditingComplete: onEditingComplete,
