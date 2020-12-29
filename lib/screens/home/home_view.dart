@@ -1,4 +1,5 @@
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/circular_button.dart';
 import 'package:flutter/material.dart';
 import 'package:popup_menu/popup_menu.dart';
@@ -28,35 +29,35 @@ class _HomeViewState extends State<HomeView> {
       _takeTestButton(
           context,
           Routes.readingTest,
-          Colors.purple[100],
+          LanGuideTheme.readingTestColor(context),
           Icons.remove_red_eye_outlined,
           AppLocalizations.of(context).reading,
           _readingBtnKey),
       _takeTestButton(
           context,
           Routes.speakingTest,
-          Colors.cyan[100],
+          LanGuideTheme.speakingTestColor(context),
           Icons.mic_outlined,
           AppLocalizations.of(context).speaking,
           _speakingBtnKey),
       _takeTestButton(
           context,
           Routes.listeningTestIntro,
-          Colors.green[100],
+          LanGuideTheme.listeningTestColor(context),
           Icons.hearing_outlined,
           AppLocalizations.of(context).listening,
           _listeningBtnKey),
       _takeTestButton(
           context,
           Routes.writingTest,
-          Colors.orange[100],
+          LanGuideTheme.writingTestColor(context),
           Icons.create_outlined,
           AppLocalizations.of(context).writing,
           _writingBtnKey),
       _takeTestButton(
           context,
           Routes.vocabularyTest,
-          Colors.red[100],
+          LanGuideTheme.vocabularyTestColor(context),
           Icons.spellcheck_outlined,
           AppLocalizations.of(context).vocabulary,
           _vocabularyBtnKey),
@@ -99,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
       CircularButton(
         onPressed: () => _chooseDifficulty(context, color, routeTo, key),
         color: color,
-        icon: Icon(icon, size: 60.0),
+        icon: Icon(icon, size: 60.0, color: Colors.white),
         text: text,
         size: _buttonSize,
         key: key,

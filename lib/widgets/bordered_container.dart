@@ -1,3 +1,4 @@
+import 'package:dva232_project/theme.dart';
 import 'package:flutter/material.dart';
 
 class BorderedContainer extends StatelessWidget {
@@ -10,8 +11,10 @@ class BorderedContainer extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.purple.shade400, width: 3.0),
-        color: Colors.grey.shade100,
+        border: Border.all(
+          color: LanGuideTheme.primaryColor(context).shade400,
+          width: 3.0,
+        ),
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: child,

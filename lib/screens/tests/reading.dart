@@ -34,7 +34,7 @@ class _ReadingTestState extends State<ReadingTest> {
             BorderedContainer(
               child: Center(
                 child: AutoSizeText(
-                  'Your a good person',
+                  'Your a good person.',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),

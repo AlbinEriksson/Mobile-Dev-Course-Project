@@ -1,5 +1,6 @@
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
+import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
@@ -81,7 +82,6 @@ class _VocabularyTestState extends State<VocabularyTest> {
                         text: TextSpan(
                           style: TextStyle(
                             fontSize: 16.0,
-                            color: Colors.black,
                           ),
                           children: [
                             TextSpan(
@@ -229,9 +229,9 @@ class _VocabularyTestState extends State<VocabularyTest> {
   }
 
   TextSpan _spellCheckField(int index) {
-    Color backgroundColor = Colors.green[200];
+    Color backgroundColor = LanGuideTheme.vocabularyHighlightColor(context);
     if (index == currentWordIndex) {
-      backgroundColor = Colors.blue[200];
+      backgroundColor = LanGuideTheme.vocabularySelectColor(context);
     }
 
     return TextSpan(

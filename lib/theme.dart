@@ -153,11 +153,10 @@ class LanGuideTheme {
   }
 
   static ShapeDecoration inputFieldBorder(BuildContext context) {
-    bool useDarkTheme = _useDarkTheme(context);
     return ShapeDecoration(
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: useDarkTheme ? Colors.blue : Colors.purple,
+          color: primaryColor(context),
           width: 1.0,
           style: BorderStyle.solid,
         ),
@@ -169,13 +168,52 @@ class LanGuideTheme {
   static TextStyle inputFieldText() => TextStyle(fontSize: 17.0);
 
   static TextStyle writingTestOption(BuildContext context) {
-    bool useDarkTheme = _useDarkTheme(context);
     return TextStyle(
-        color: useDarkTheme ? Colors.blue : Colors.purple,
+        color: primaryColor(context),
         fontWeight: FontWeight.bold,
         decoration: TextDecoration.underline,
         decorationThickness: 2,
         fontSize: 20.0,
       );
+  }
+
+  static Color readingTestColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.purple[300] : Colors.purple[100];
+  }
+
+  static Color speakingTestColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.cyan[300] : Colors.cyan[100];
+  }
+
+  static Color listeningTestColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.green[300] : Colors.green[100];
+  }
+
+  static Color writingTestColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.orange[300] : Colors.orange[100];
+  }
+
+  static Color vocabularyTestColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.red[300] : Colors.red[100];
+  }
+
+  static MaterialColor primaryColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.blue : Colors.purple;
+  }
+
+  static Color vocabularyHighlightColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.green[600] : Colors.green[200];
+  }
+
+  static Color vocabularySelectColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.blue[600] : Colors.blue[200];
   }
 }

@@ -56,7 +56,6 @@ class _WritingQuestionState extends State<WritingQuestion> {
                     RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          color: Colors.black,
                           fontSize: 16,
                         ),
                         children: [

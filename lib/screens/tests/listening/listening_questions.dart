@@ -156,7 +156,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   onPressed: () {
                     _playSound();
                   },
-                  color: Colors.purple,
+                  color: LanGuideTheme.primaryColor(context),
                   icon: _playIcon,
                   size: 70.0,
                 ),
