@@ -1,4 +1,5 @@
 import 'package:dva232_project/settings.dart';
+import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class _LanguageSelectionState extends State<LanguageSelection> {
         await Settings.set(SettingKey.uiCountry, countryCode);
         setState(() {});
       },
-      selectedTileColor: Colors.purple[100],
+      selectedTileColor: LanGuideTheme.selectedLanguageColor(context),
     );
   }
 

@@ -169,12 +169,12 @@ class LanGuideTheme {
 
   static TextStyle writingTestOption(BuildContext context) {
     return TextStyle(
-        color: primaryColor(context),
-        fontWeight: FontWeight.bold,
-        decoration: TextDecoration.underline,
-        decorationThickness: 2,
-        fontSize: 20.0,
-      );
+      color: primaryColor(context),
+      fontWeight: FontWeight.bold,
+      decoration: TextDecoration.underline,
+      decorationThickness: 2,
+      fontSize: 20.0,
+    );
   }
 
   static Color readingTestColor(BuildContext context) {
@@ -220,5 +220,10 @@ class LanGuideTheme {
   static Color vocabularySelectColor(BuildContext context) {
     bool useDarkTheme = _useDarkTheme(context);
     return useDarkTheme ? Colors.blue[600] : Colors.blue[200];
+  }
+
+  static Color selectedLanguageColor(BuildContext context) {
+    bool useDarkTheme = _useDarkTheme(context);
+    return useDarkTheme ? Colors.blue[900] : Colors.purple[100];
   }
 }
