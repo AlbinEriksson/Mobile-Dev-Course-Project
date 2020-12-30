@@ -110,22 +110,22 @@ class _HomeViewState extends State<HomeView> {
       BuildContext context, Color color, String routeTo, GlobalKey key) {
     PopupMenu menu = PopupMenu(
       backgroundColor: color,
-      lineColor: Colors.white,
+      lineColor: LanGuideTheme.testIconColor(context),
       maxColumn: 3,
       items: [
         MenuItem(
           title: AppLocalizations.of(context).easy,
-          textStyle: TextStyle(color: Colors.black),
+          textStyle: TextStyle(color: LanGuideTheme.testIconColor(context)),
           userInfo: "easy",
         ),
         MenuItem(
           title: AppLocalizations.of(context).medium,
-          textStyle: TextStyle(color: Colors.black),
+          textStyle: TextStyle(color: LanGuideTheme.testIconColor(context)),
           userInfo: "medium",
         ),
         MenuItem(
           title: AppLocalizations.of(context).hard,
-          textStyle: TextStyle(color: Colors.black),
+          textStyle: TextStyle(color: LanGuideTheme.testIconColor(context)),
           userInfo: "hard",
         ),
       ],
