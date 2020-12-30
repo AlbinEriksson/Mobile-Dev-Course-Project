@@ -226,4 +226,17 @@ class LanGuideTheme {
     bool useDarkTheme = _useDarkTheme(context);
     return useDarkTheme ? Colors.blue[900] : Colors.purple[100];
   }
+
+  static TextStyle correctAnswerText(BuildContext context) {
+    return TextStyle(
+      color: Colors.green,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
+  static TextStyle incorrectAnswerText(BuildContext context) {
+    return TextStyle(
+      color: Colors.red,
+    );
+  }
 }

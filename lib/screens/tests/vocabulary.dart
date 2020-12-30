@@ -9,8 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VocabularyTest extends StatefulWidget {
+  final String difficulty;
+
+  VocabularyTest(this.difficulty);
+
   @override
-  _VocabularyTestState createState() => _VocabularyTestState();
+  _VocabularyTestState createState() => _VocabularyTestState(difficulty);
 }
 
 class _VocabularyTestState extends State<VocabularyTest> {
@@ -25,8 +29,24 @@ class _VocabularyTestState extends State<VocabularyTest> {
     "transperrency",
     "Agrement",
     "maintained",
-    "foresen"
+    "foresen",
   ];
+
+  final List<String> correctAnswers = [
+    "budget",
+    "reduction",
+    "economic",
+    "allocated",
+    "recurrent",
+    "resources",
+    "awarded",
+    "transparency",
+    "Agreement",
+    "maintained",
+    "foreseen",
+  ];
+
+  final String difficulty;
 
   List<String> editedWords;
   String currentEdit = "";
@@ -39,7 +59,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
   final ScrollController _scrollController = ScrollController();
   TextEditingController _textController = TextEditingController();
 
-  _VocabularyTestState() {
+  _VocabularyTestState(this.difficulty) {
     editedWords = List.from(wordsToCheck);
   }
 
@@ -138,7 +158,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
                             _changedWord(10),
                             _spellCheckField(10),
                             TextSpan(text: " under the MIP 2014-2020. "),
-                            TextSpan(text: " (European Comission, 2014)"),
+                            TextSpan(text: " (European Commission, 2014)"),
                           ],
                         ),
                       ),
@@ -152,12 +172,15 @@ class _VocabularyTestState extends State<VocabularyTest> {
               child: Column(
                 children: [
                   Text(currentWord.isNotEmpty
-                      ? AppLocalizations.of(context).isWordWrong.replaceAll("\$1", currentWord)
+                      ? AppLocalizations.of(context)
+                          .isWordWrong
+                          .replaceAll("\$1", currentWord)
                       : ""),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical:8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: LanGuideTextField(
-                      hintText: AppLocalizations.of(context).tapHighlightedToChange,
+                      hintText:
+                          AppLocalizations.of(context).tapHighlightedToChange,
                       onChanged: (value) => currentEdit = value,
                       onEditingComplete: _onEditComplete,
                       focusNode: _inputFocusNode,
@@ -170,9 +193,13 @@ class _VocabularyTestState extends State<VocabularyTest> {
                     text: AppLocalizations.of(context).submitAnswers,
                     enabled: currentWordIndex == -1 && anythingChanged,
                     onPressed: () {
-                      int scoreToSend = 50;
-                      submitPressed(context, Routes.vocabularyResults,
-                          {"checkedWords": editedWords, "score": scoreToSend});
+                      int scoreToSend = _countCorrectAnswers();
+                      submitPressed(context, Routes.vocabularyResults, {
+                        "editedWords": editedWords,
+                        "correctWords": correctAnswers,
+                        "score": scoreToSend,
+                        "difficulty": difficulty,
+                      });
                     },
                   ),
                 ],
@@ -243,5 +270,18 @@ class _VocabularyTestState extends State<VocabularyTest> {
               currentEdit = editedWords[index];
             }),
     );
+  }
+
+  int _countCorrectAnswers() {
+    int score = 0;
+    for (int i = 0; i < editedWords.length; i++) {
+      String editedWord = editedWords[i];
+      String correctAnswer = correctAnswers[i];
+      if (editedWord.toLowerCase() == correctAnswer.toLowerCase()) {
+        score++;
+      }
+    }
+
+    return score;
   }
 }

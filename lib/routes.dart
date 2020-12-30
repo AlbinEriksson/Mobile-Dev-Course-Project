@@ -92,11 +92,16 @@ class Routes {
 
         case Routes.vocabularyTest:
           String difficulty = arguments["difficulty"];
-          screen = VocabularyTest();
+          screen = VocabularyTest(difficulty);
           break;
 
         case Routes.vocabularyResults:
-          screen = VocabularyResults(score: arguments["score"]);
+          screen = VocabularyResults(
+            score: arguments["score"],
+            editedWords: arguments["editedWords"],
+            correctWords: arguments["correctWords"],
+            difficulty: arguments["difficulty"],
+          );
           break;
 
         case Routes.writingTest:
@@ -120,7 +125,8 @@ class Routes {
           return null;
       }
 
-      return MaterialPageRoute(builder: (BuildContext context) => screen, settings: settings);
+      return MaterialPageRoute(
+          builder: (BuildContext context) => screen, settings: settings);
     };
   }
 }
