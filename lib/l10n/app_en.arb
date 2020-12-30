@@ -357,5 +357,40 @@
   "toastCannotChangeRole": "You cannot change role.",
   "@toastCannotChangeRole": {
     "description": "A toast message for when the user taps their role, which cannot change ever."
+  },
+
+  "yourScoreIs": "Your score is",
+  "@yourScoreIs": {
+    "description": "Displayed at the top of all results pages, above your final score."
+  },
+
+  "correctAnswers": "$1 correct answers out of $2",
+  "@correctAnswers": {
+    "description": "The number of correct answers on the results page. $1 stands for the score the user got and $2 stands for the maximum score possible."
+  },
+
+  "backHome": "Back home",
+  "@backHome": {
+    "description": "Button that takes the user back to the home page."
+  },
+
+  "correctAnswer": "Correct answer",
+  "@correctAnswer": {
+    "description": "Used as header to display the correct answer in the results page."
+  },
+
+  "yourAnswer": "Your answer",
+  "@yourAnswer": {
+    "description": "Used as header to display the answer provided by the user in the results page."
+  },
+
+  "alertSubmitFailed": "The app has failed to submit your result. Please report this issue to the developers.",
+  "@alertSubmitFailed": {
+    "description": "Alerting the user that the app was unsuccessful in submitting their test result, and encouraging them to report the issue."
+  },
+
+  "alertSessionError": "Something went wrong with your session. Please login again.",
+  "@alertSessionError": {
+    "description": "Alerting the user that their current session is invalid and they must login again to fix it."
   }
 }

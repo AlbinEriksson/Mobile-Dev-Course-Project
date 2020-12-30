@@ -70,5 +70,10 @@
   "themeSystem": "System",
   "toastResetEmailSent": "En bekräftelse har skickats till din e-postadress.",
   "toastCannotChangeName": "Du kan inte ändra namn eller e-post.",
-  "toastCannotChangeRole": "Du kan inte ändra roll."
+  "toastCannotChangeRole": "Du kan inte ändra roll.",
+  "yourScoreIs": "Ditt resultat är",
+  "correctAnswers": "$1 poäng av $2 möjliga",
+  "backHome": "Tillbaka",
+  "correctAnswer": "Rätt svar",
+  "yourAnswer": "Ditt svar"
 }
