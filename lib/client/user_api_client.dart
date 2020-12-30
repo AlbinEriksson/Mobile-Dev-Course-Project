@@ -435,15 +435,19 @@ class UserAPIClient {
   }
 
   static Future<UserAPIResult> _handleSocketException(SocketException e) async {
-    switch (e.osError.errorCode) {
+    switch (e.osError?.errorCode) {
       case 101:
         return UserAPIResult.noInternetConnection;
       case 110:
         return UserAPIResult.serverUnavailable;
-      default:
-        log(e.toString());
-        return UserAPIResult.unknown;
     }
+
+    if(e.message.startsWith("HTTP connection timed out")) {
+      return UserAPIResult.serverUnavailable;
+    }
+
+    log(e.toString());
+    return UserAPIResult.unknown;
   }
 
   /// Gets user info. Uses the internally stored access token, so there's
