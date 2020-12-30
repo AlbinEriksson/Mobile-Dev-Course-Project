@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/listening/question_data.dart';
+import 'package:dva232_project/screens/tests/shared.dart';
 import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../shared.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListeningTestIntro extends StatefulWidget {
   final String difficulty;
@@ -78,7 +79,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
               padding: const EdgeInsets.only(top: 8.0),
               child: ElevatedButton(
                 child: Text(
-                  "Start Test",
+                  AppLocalizations.of(context).start,
                 ),
                 onPressed: () => Navigator.popAndPushNamed(
                   context,
