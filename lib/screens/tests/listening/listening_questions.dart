@@ -13,11 +13,18 @@ import '../../../routes.dart';
 import '../shared.dart';
 
 class ListeningTestQuestions extends StatefulWidget {
+  final String difficulty;
+
+  ListeningTestQuestions(this.difficulty);
+
   @override
-  _ListeningTestQuestionsState createState() => _ListeningTestQuestionsState();
+  _ListeningTestQuestionsState createState() =>
+      _ListeningTestQuestionsState(difficulty);
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
+  final String difficulty;
+
   List<String> wordsToCheck = ["______"];
 
   int _click = 0;
@@ -35,9 +42,9 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   ListeningAudio player2 = ListeningAudio();
   final FocusNode _inputFocusNode = FocusNode();
   TextEditingController _textController = TextEditingController();
-  ScrollController _scrollController = null;
+  ScrollController _scrollController;
 
-  _ListeningTestQuestionsState() {
+  _ListeningTestQuestionsState(this.difficulty) {
     filledWords = List.from(wordsToCheck);
   }
 
@@ -174,8 +181,14 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 height: 50.0,
                 child: LanGuideButton(
                   text: "Submit Answers",
-                  onPressed: () =>
-                      submitPressed(context, Routes.listeningResults, {}),
+                  onPressed: () => submitPressed(
+                    context,
+                    Routes.listeningResults,
+                    {
+                      "score": 1,
+                      "difficulty": difficulty,
+                    },
+                  ),
                   enabled: anythingChanged,
                 ),
               ),

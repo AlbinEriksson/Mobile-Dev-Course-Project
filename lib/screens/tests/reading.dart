@@ -8,16 +8,24 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReadingTest extends StatefulWidget {
+  final String difficulty;
+
+  ReadingTest(this.difficulty);
+
   @override
   _ReadingTestState createState() {
-    return _ReadingTestState();
+    return _ReadingTestState(difficulty);
   }
 }
 
 class _ReadingTestState extends State<ReadingTest> {
+  final String difficulty;
+
   int currentQuestionIndex = 0;
   List<int> answers = [-1];
   bool anyAnswerSelected = false;
+
+  _ReadingTestState(this.difficulty);
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +89,7 @@ class _ReadingTestState extends State<ReadingTest> {
             SizedBox(height: 20),
             LanGuideButton(
               onPressed: () {
-                int scoreToSend = 60;
-                submitPressed(
-                    context, Routes.readingResults, {"score": scoreToSend});
+                submitPressed(context, Routes.readingResults, {"score": 1});
               },
               text: AppLocalizations.of(context).submitAnswers,
               enabled: anyAnswerSelected,

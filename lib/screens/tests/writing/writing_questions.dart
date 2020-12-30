@@ -7,11 +7,17 @@ import 'package:dva232_project/screens/tests/shared.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WritingQuestion extends StatefulWidget {
+  final String difficulty;
+
+  WritingQuestion(this.difficulty);
+
   @override
-  _WritingQuestionState createState() => _WritingQuestionState();
+  _WritingQuestionState createState() => _WritingQuestionState(difficulty);
 }
 
 class _WritingQuestionState extends State<WritingQuestion> {
+  final String difficulty;
+
   List<String> optionFields = [
     '          1          ',
     '          2          ',
@@ -30,13 +36,16 @@ class _WritingQuestionState extends State<WritingQuestion> {
 
   bool anyOptionSelected = false;
 
+  _WritingQuestionState(this.difficulty);
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => backPressed(context, anyOptionSelected),
       child: Scaffold(
         appBar: LanGuideNavBar(
-            onBackIconPressed: () => backIconPressed(context, anyOptionSelected)),
+            onBackIconPressed: () =>
+                backIconPressed(context, anyOptionSelected)),
         body: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -120,7 +129,14 @@ class _WritingQuestionState extends State<WritingQuestion> {
                     _questions(),
                     LanGuideButton(
                       text: AppLocalizations.of(context).submitAnswers,
-                      onPressed: () => submitPressed(context, Routes.writingResults, {}),
+                      onPressed: () => submitPressed(
+                        context,
+                        Routes.writingResults,
+                        {
+                          "score": 1,
+                          "difficulty": difficulty,
+                        },
+                      ),
                       enabled: anyOptionSelected,
                     )
                   ],

@@ -59,35 +59,44 @@ class Routes {
           break;
 
         case Routes.listeningTestIntro:
-          // "Easy", "Medium" or "Hard"
           String difficulty = arguments["difficulty"];
-          screen = ListeningTestIntro();
+          screen = ListeningTestIntro(difficulty);
           break;
 
         case Routes.listeningTestQuestions:
-          screen = ListeningTestQuestions();
+          String difficulty = arguments["difficulty"];
+          screen = ListeningTestQuestions(difficulty);
           break;
 
         case Routes.listeningResults:
-          screen = ListeningResults();
+          screen = ListeningResults(
+            score: arguments["score"],
+            difficulty: arguments["difficulty"],
+          );
           break;
 
         case Routes.readingTest:
           String difficulty = arguments["difficulty"];
-          screen = ReadingTest();
+          screen = ReadingTest(difficulty);
           break;
 
         case Routes.readingResults:
-          screen = ReadingResults(score: arguments["score"]);
+          screen = ReadingResults(
+            score: arguments["score"],
+            difficulty: arguments["difficulty"],
+          );
           break;
 
         case Routes.speakingTest:
           String difficulty = arguments["difficulty"];
-          screen = SpeakingTest();
+          screen = SpeakingTest(difficulty);
           break;
 
         case Routes.speakingResults:
-          screen = SpeakingResults(score: arguments["score"]);
+          screen = SpeakingResults(
+            score: arguments["score"],
+            difficulty: arguments["difficulty"],
+          );
           break;
 
         case Routes.vocabularyTest:
@@ -106,15 +115,19 @@ class Routes {
 
         case Routes.writingTest:
           String difficulty = arguments["difficulty"];
-          screen = WritingTest();
+          screen = WritingTest(difficulty);
           break;
 
         case Routes.writingQuestions:
-          screen = WritingQuestion();
+          String difficulty = arguments["difficulty"];
+          screen = WritingQuestion(difficulty);
           break;
 
         case Routes.writingResults:
-          screen = WritingResults();
+          screen = WritingResults(
+            score: arguments["score"],
+            difficulty: arguments["difficulty"],
+          );
           break;
 
         case Routes.languageSelection:

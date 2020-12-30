@@ -74,3 +74,8 @@ Future<T> _validationDialog<T>(BuildContext context, String text) {
     ),
   );
 }
+
+Future<bool> backPressed(BuildContext context) async {
+  Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+  return false;
+}

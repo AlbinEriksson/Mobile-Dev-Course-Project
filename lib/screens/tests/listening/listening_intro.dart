@@ -8,11 +8,19 @@ import 'package:flutter/services.dart';
 import '../shared.dart';
 
 class ListeningTestIntro extends StatefulWidget {
+  final String difficulty;
+
+  ListeningTestIntro(this.difficulty);
+
   @override
-  _ListeningTestIntroState createState() => _ListeningTestIntroState();
+  _ListeningTestIntroState createState() =>
+      _ListeningTestIntroState(difficulty);
 }
 
 class _ListeningTestIntroState extends State<ListeningTestIntro> {
+  final String difficulty;
+
+  _ListeningTestIntroState(this.difficulty);
 
   Future<String> getJson() {
     return rootBundle.loadString('lib/jsonFiles/listening.json');
@@ -52,12 +60,12 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
                         return Text(
-                              '${snapshot.data.instructions}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            );
+                          '${snapshot.data.instructions}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        );
                       } else {
                         return CircularProgressIndicator();
                       }
@@ -73,8 +81,12 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
                   "Start Test",
                 ),
                 onPressed: () => Navigator.popAndPushNamed(
-                    context, Routes.listeningTestQuestions,
-                    arguments: null),
+                  context,
+                  Routes.listeningTestQuestions,
+                  arguments: {
+                    "difficulty": difficulty,
+                  },
+                ),
               ),
             ),
           ],

@@ -1,5 +1,4 @@
 import 'package:dva232_project/client/user_api_client.dart';
-import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/results/shared.dart';
 import 'package:dva232_project/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class VocabularyResults extends StatelessWidget {
   final double accuracy;
   final String difficulty;
 
-  Future<UserAPIResult> submitFuture;
+  final Future<UserAPIResult> submitFuture;
 
   VocabularyResults({
     Key key,
@@ -21,33 +20,30 @@ class VocabularyResults extends StatelessWidget {
     @required this.correctWords,
     @required this.difficulty,
   })  : accuracy = score / editedWords.length,
-        super(key: key) {
-    submitFuture =
-        UserAPIClient.submitTestResults("vocabulary", difficulty, accuracy);
-  }
+        submitFuture = UserAPIClient.submitTestResults(
+            "vocabulary", difficulty, score / editedWords.length),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     alertSubmitErrors(context, submitFuture);
 
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.popUntil(context, ModalRoute.withName(Routes.home));
-        return false;
-      },
+      onWillPop: () => backPressed(context),
       child: Scaffold(
         appBar: LanGuideNavBar(
           showBackIcon: false,
         ),
         body: FutureBuilder(
-            future: submitFuture,
-            builder: (context, data) {
-              if (data.hasData) {
-                return _results(context);
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
+          future: submitFuture,
+          builder: (context, data) {
+            if (data.hasData) {
+              return _results(context);
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }

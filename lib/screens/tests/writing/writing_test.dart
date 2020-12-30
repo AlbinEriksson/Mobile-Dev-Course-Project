@@ -5,11 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WritingTest extends StatefulWidget {
+  final String difficulty;
+
+  WritingTest(this.difficulty);
+
   @override
-  _WritingTestState createState() => _WritingTestState();
+  _WritingTestState createState() => _WritingTestState(difficulty);
 }
 
 class _WritingTestState extends State<WritingTest> {
+  final String difficulty;
+
+  _WritingTestState(this.difficulty);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +39,10 @@ class _WritingTestState extends State<WritingTest> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).popAndPushNamed(Routes.writingQuestions);
+                Navigator.of(context)
+                    .popAndPushNamed(Routes.writingQuestions, arguments: {
+                  "difficulty": difficulty,
+                });
               },
               child: Text(AppLocalizations.of(context).start),
             ),

@@ -9,11 +9,17 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SpeakingTest extends StatefulWidget {
+  final String difficulty;
+
+  SpeakingTest(this.difficulty);
+
   @override
-  _SpeakingTestState createState() => _SpeakingTestState();
+  _SpeakingTestState createState() => _SpeakingTestState(difficulty);
 }
 
 class _SpeakingTestState extends State<SpeakingTest> {
+  final String difficulty;
+
   int _clickCount = 0;
   String _tapToSpeakText = null;
 
@@ -21,6 +27,8 @@ class _SpeakingTestState extends State<SpeakingTest> {
     Icons.mic_outlined,
     size: 30.0,
   );
+
+  _SpeakingTestState(this.difficulty);
 
   _affectTheIcon() {
     if (_clickCount == 0) {
@@ -39,7 +47,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
 
   @override
   Widget build(BuildContext context) {
-    if(_tapToSpeakText == null) {
+    if (_tapToSpeakText == null) {
       _tapToSpeakText = AppLocalizations.of(context).tapToSpeak.toUpperCase();
     }
 
@@ -110,9 +118,9 @@ class _SpeakingTestState extends State<SpeakingTest> {
   }
 
   void _sendDataToResults(BuildContext context) {
-    int scoreToSend = 30;
     submitPressed(context, Routes.speakingResults, {
-      "score": scoreToSend,
+      "score": 1,
+      "difficulty": difficulty,
     });
   }
 }
