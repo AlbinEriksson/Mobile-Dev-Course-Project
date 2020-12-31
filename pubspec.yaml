@@ -56,6 +56,7 @@ flutter:
   assets:
     - images/logo.png
     - lib/jsonFiles/listening.json
+    - lib/jsonFiles/reading.json
     - assets/sneeze.mp3
 
   generate: true

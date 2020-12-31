@@ -1,0 +1,35 @@
+{
+  "title": "Legal fight hits music pirates",
+  "instructions": "Click on the gaps, then choose the best word to fill the spaces.",
+  "random": false,
+  "randomiseChoices": false,
+  "showQuestionNumbers": true,
+  "sectionsOnSamePage": false,
+  "items": [
+    {
+        "text": "<h2>Legal fight hits music pirates</h2> The global recording industry has launched its largest wave of legal __1__",
+        "choices": [
+          {
+            "text": "action",
+            "correct": true,
+            "feedback": "Correct"
+          },
+          {
+            "text": "activity",
+            "correct": false,
+            "feedback": "Incorrect"
+          },
+          {
+            "text": "acting",
+            "correct": false,
+            "feedback": "Incorrect"
+          },
+          {
+            "text": "acts",
+            "correct": false,
+            "feedback": "Incorrect"
+          }
+        ]
+    }
+  ]
+}

@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
     List<Widget> buttons = [
       _takeTestButton(
           context,
-          Routes.readingTest,
+          Routes.readingTestIntro,
           LanGuideTheme.readingTestColor(context),
           Icons.remove_red_eye_outlined,
           AppLocalizations.of(context).reading,
