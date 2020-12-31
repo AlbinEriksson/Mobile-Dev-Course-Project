@@ -92,6 +92,7 @@ class Routes {
           screen = ReadingResults(
             score: arguments["score"],
             difficulty: arguments["difficulty"],
+            maxScore: arguments["maxScore"],
           );
           break;
 

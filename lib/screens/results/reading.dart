@@ -7,6 +7,7 @@ class ReadingResults extends StatelessWidget {
   final int score;
   final String difficulty;
   final double accuracy;
+  final int maxScore;
 
   final Future<UserAPIResult> submitFuture;
 
@@ -14,9 +15,10 @@ class ReadingResults extends StatelessWidget {
     Key key,
     @required this.score,
     @required this.difficulty,
-  })  : accuracy = 1.0,
+    @required this.maxScore
+  })  : accuracy = score/maxScore,
         submitFuture =
-            UserAPIClient.submitTestResults("reading", difficulty, 1.0),
+            UserAPIClient.submitTestResults("reading", difficulty, score/maxScore),
         super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class ReadingResults extends StatelessWidget {
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.all(8.0),
       children: [
-        resultsDisplay(context, accuracy, score, 1),
+        resultsDisplay(context, accuracy, score, maxScore),
         backHomeButton(context),
       ],
     );

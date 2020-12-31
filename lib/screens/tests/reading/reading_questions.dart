@@ -32,6 +32,7 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
   List<int> answers = [-1];
   bool anyAnswerSelected = false;
   int points = 0;
+  int maxPoints = 0;
 
   _ReadingTestQuestionsState(this.difficulty);
 
@@ -92,6 +93,7 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
                     {
                       "score": points,
                       "difficulty": difficulty,
+                      "maxScore": maxPoints,
                     },
                   ),
                   enabled: anyAnswerSelected,
@@ -114,6 +116,7 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
   }
 
   Widget createListView(data, BuildContext context) {
+    maxPoints = data.items.length;
     return ListView.builder(
       controller: _scrollController,
       itemCount: data.items == null ? 0 : data.items.length,
