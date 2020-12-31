@@ -89,7 +89,7 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
                   text: "Submit Answers",
                   onPressed: () => submitPressed(
                     context,
-                    Routes.listeningResults,
+                    Routes.readingResults,
                     {
                       "score": points,
                       "difficulty": difficulty,
