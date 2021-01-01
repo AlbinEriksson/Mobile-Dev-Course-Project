@@ -24,8 +24,6 @@ class ListeningTestQuestions extends StatefulWidget {
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
-
-
   bool isPlaying = false;
   final String difficulty;
   List<String> wordsToCheck = ["______"];
@@ -115,11 +113,22 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Play Sound",
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ],
+                ),
+              ),
               Column(
                 children: [
                   InkWell(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0, top:8.0),
+                      padding: const EdgeInsets.only(bottom: 1.0),
                       child: CircularButton(
                         onPressed: () {
                           _getAudio();
@@ -161,7 +170,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   }
 
   void _getAudio() async {
-    if(currentWordIndex == -1) {
+    if (currentWordIndex == -1) {
       String _url = "https://luan.xyz/files/audio/ambient_c_motion.mp3";
       if (isPlaying == true) {
         var res = await player.pause();
@@ -192,10 +201,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       setState(() {
         _changePlayIcon();
       });
-    }
-    else{
-
-    }
+    } else {}
   }
 
   onTapBack(var context, bool anythingChanged) {
@@ -220,10 +226,11 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       },
     );
   }
+
   _changePlayIcon() {
     if (isPlaying == true && currentWordIndex == -1)
       _playIcon = Icon(Icons.pause, size: 70.0, color: Colors.white);
-    else if(!isPlaying)
+    else if (!isPlaying)
       _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
   }
 
@@ -277,7 +284,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
         correctedWordsList[index] != filledWords[index]) {
       correctedWordsList[index] = filledWords[index];
       score++;
-    }else if(filledWords[index]!=correctAnswer.toString()){
+    } else if (filledWords[index] != correctAnswer.toString()) {
       correctedWordsList[index] = filledWords[index];
     }
     return TextSpan(
@@ -302,14 +309,14 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
           children: [
             GestureDetector(
               onTap: () => setState(() {
-                if(isPlaying==true) {
+                if (isPlaying == true) {
                   _getAudio();
                 }
                 currentWordIndex = index;
                 currentEdit = filledWords[index];
-                Future.delayed(Duration(milliseconds: 500)).whenComplete(() =>
+                Future.delayed(Duration(milliseconds: 1000)).whenComplete(() =>
                     _scrollController.scrollTo(
-                        index: index, duration: Duration(milliseconds: 1000)));
+                        index: index, duration: Duration(milliseconds: 600)));
               }),
               child: RichText(
                 text: TextSpan(
