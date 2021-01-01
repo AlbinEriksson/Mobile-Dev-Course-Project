@@ -129,7 +129,7 @@ class _WritingQuestionState extends State<WritingQuestion> {
                         context,
                         Routes.writingResults,
                         {
-                          "score": 1,
+                          "score": _countCorrectAnswers(),
                           "difficulty": difficulty,
                           "editedWords": optionFields.map((e) => e ?? "").toList(),
                           "correctWords": _correctWords(),
@@ -200,5 +200,16 @@ class _WritingQuestionState extends State<WritingQuestion> {
       List<String> options = entry.value;
       return options[correctAnswerIndices[questionIndex]];
     }).toList();
+  }
+
+  int _countCorrectAnswers() {
+    int points = 0;
+    for(int i = 0; i < optionFields.length; i++) {
+      String correctAnswer = questionOptions[i][correctAnswerIndices[i]];
+      if(optionFields[i] != null && optionFields[i] == correctAnswer) {
+        points++;
+      }
+    }
+    return points;
   }
 }
