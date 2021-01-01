@@ -392,5 +392,45 @@
   "alertSessionError": "Something went wrong with your session. Please login again.",
   "@alertSessionError": {
     "description": "Alerting the user that their current session is invalid and they must login again to fix it."
+  },
+
+  "showResultsFrom": "Show results from:",
+  "@showResultsFrom": {
+    "description": "Comes before a dropdown menu where the user selects the time in which they receive past test results from in the statistics view."
+  },
+
+  "selectTime": "Select time",
+  "@selectTime": {
+    "description": "Hint text for the dropdown list in the statistics view."
+  },
+
+  "past24Hours": "Past 24 hours",
+  "@past24Hours": {
+    "description": "Option for the dropdown list in the statistics view."
+  },
+
+  "pastWeek": "Past week",
+  "@pastWeek": {
+    "description": "Option for the dropdown list in the statistics view."
+  },
+
+  "pastMonth": "Past month",
+  "@pastMonth": {
+    "description": "Option for the dropdown list in the statistics view."
+  },
+
+  "pastYear": "Past year",
+  "@pastYear": {
+    "description": "Option for the dropdown list in the statistics view."
+  },
+
+  "alertRetrieveTestResults": "The app has failed to retrieve test results. Please report this issue to the developers.",
+  "@alertRetrieveTestResults": {
+    "description": "Alerting the user that the app failed to get test results, and encourages to report the issue."
+  },
+
+  "alertUnknownError": "An unknown error has occurred.",
+  "@alertUnknownError": {
+    "description": "Alerting the user that an unknown error has occurred."
   }
 }
