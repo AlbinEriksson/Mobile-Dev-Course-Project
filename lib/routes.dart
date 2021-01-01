@@ -35,7 +35,7 @@ class Routes {
   static const String vocabularyResults = vocabularyTest + "/results";
   static const String writingTest = "/writing";
   static const String writingQuestions = "/writing_questions";
-  static const String writingResults = listeningTestIntro + "/results";
+  static const String writingResults = writingTest + "/results";
   static const String languageSelection = "/language";
 
   static RouteFactory factory() {
@@ -135,6 +135,8 @@ class Routes {
         case Routes.writingResults:
           screen = WritingResults(
             score: arguments["score"],
+            editedWords: arguments["editedWords"],
+            correctWords: arguments["correctWords"],
             difficulty: arguments["difficulty"],
           );
           break;
