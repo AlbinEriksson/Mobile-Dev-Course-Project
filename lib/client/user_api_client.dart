@@ -159,6 +159,8 @@ class UserAPIClient {
       });
     } on SocketException catch (e) {
       return _handleSocketException(e);
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -221,6 +223,8 @@ class UserAPIClient {
       });
     } on SocketException catch (e) {
       return _handleSocketException(e);
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -271,6 +275,8 @@ class UserAPIClient {
       });
     } on SocketException catch (e) {
       return _handleSocketException(e);
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -327,6 +333,8 @@ class UserAPIClient {
       }, (error) => error);
     } on SocketException catch (e) {
       return _handleSocketException(e);
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -385,7 +393,7 @@ class UserAPIClient {
                 testResults.add(TestResult(
                     testType,
                     difficulty == "" ? testResult["difficulty"] : difficulty,
-                    testResult["accuracy"],
+                    testResult["accuracy"].toDouble(),
                     DateTime.parse(testResult["timestamp"])));
               }
               return TestResultsResponse(
@@ -398,6 +406,8 @@ class UserAPIClient {
           (value) => value.apiResult);
     } on SocketException catch (e) {
       return TestResultsResponse(apiResult: await _handleSocketException(e));
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -515,6 +525,8 @@ class UserAPIClient {
               (value) => value.apiResult);
     } on SocketException catch (e) {
       return UserInfoResponse(apiResult: await _handleSocketException(e));
+    } catch (e) {
+      log(e.toString());
     }
   }
 }
