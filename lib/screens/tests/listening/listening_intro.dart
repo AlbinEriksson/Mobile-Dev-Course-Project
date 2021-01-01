@@ -27,7 +27,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
     return rootBundle.loadString('lib/jsonFiles/listening.json');
   }
 
-  Future _showData() async {
+  Future<QuestionData> _showData() async {
     String jsonString = await getJson();
     final jsonResponse = json.decode(jsonString);
     QuestionData question = QuestionData.fromJson(jsonResponse);
@@ -48,49 +48,51 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
           onBackIconPressed: () => backIconPressed(context, false)),
       body: Container(
         alignment: Alignment.topCenter,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.all(20.5),
-          children: [
-            BorderedContainer(
-              child: Column(
+        child: FutureBuilder(
+          future: _showData(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuestionData> snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                padding: EdgeInsets.all(8.0),
                 children: [
-                  FutureBuilder(
-                    future: _showData(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(
-                          '${snapshot.data.instructions}',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      snapshot.data.title,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                  BorderedContainer(
+                    child: Text(
+                      '${snapshot.data.instructions}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ElevatedButton(
+                      child: Text(
+                        AppLocalizations.of(context).start,
+                      ),
+                      onPressed: () => Navigator.popAndPushNamed(
+                        context,
+                        Routes.listeningTestQuestions,
+                        arguments: {
+                          "difficulty": difficulty,
+                        },
+                      ),
+                    ),
                   ),
                 ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: ElevatedButton(
-                child: Text(
-                  AppLocalizations.of(context).start,
-                ),
-                onPressed: () => Navigator.popAndPushNamed(
-                  context,
-                  Routes.listeningTestQuestions,
-                  arguments: {
-                    "difficulty": difficulty,
-                  },
-                ),
-              ),
-            ),
-          ],
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

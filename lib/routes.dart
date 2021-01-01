@@ -10,7 +10,8 @@ import 'package:dva232_project/screens/results/vocabulary.dart';
 import 'package:dva232_project/screens/results/writing.dart';
 import 'package:dva232_project/screens/tests/listening/listening_intro.dart';
 import 'package:dva232_project/screens/tests/listening/listening_questions.dart';
-import 'package:dva232_project/screens/tests/reading.dart';
+import 'package:dva232_project/screens/tests/reading/reading_intro.dart';
+import 'package:dva232_project/screens/tests/reading/reading_questions.dart';
 import 'package:dva232_project/screens/tests/speaking.dart';
 import 'package:dva232_project/screens/tests/vocabulary.dart';
 import 'package:dva232_project/screens/tests/writing/writing_questions.dart';
@@ -25,15 +26,16 @@ class Routes {
   static const String listeningTestIntro = "/listening";
   static const String listeningTestQuestions = "/listening_questions";
   static const String listeningResults = listeningTestIntro + "/results";
-  static const String readingTest = "/reading";
-  static const String readingResults = readingTest + "/results";
+  static const String readingTestIntro = "/reading";
+  static const String readingTestQuestions = "/reading_questions";
+  static const String readingResults = readingTestIntro + "/results";
   static const String speakingTest = "/speaking";
   static const String speakingResults = speakingTest + "/results";
   static const String vocabularyTest = "/vocabulary";
   static const String vocabularyResults = vocabularyTest + "/results";
   static const String writingTest = "/writing";
   static const String writingQuestions = "/writing_questions";
-  static const String writingResults = listeningTestIntro + "/results";
+  static const String writingResults = writingTest + "/results";
   static const String languageSelection = "/language";
 
   static RouteFactory factory() {
@@ -77,14 +79,21 @@ class Routes {
           );
           break;
 
-        case Routes.readingTest:
+        case Routes.readingTestIntro:
           String difficulty = arguments["difficulty"];
-          screen = ReadingTest(difficulty);
+          screen = ReadingTestIntro(difficulty);
+          break;
+
+        case Routes.readingTestQuestions:
+          String difficulty = arguments["difficulty"];
+          screen = ReadingTestQuestions(difficulty);
           break;
 
         case Routes.readingResults:
           screen = ReadingResults(
             score: arguments["score"],
+            editedWords: arguments["editedWords"],
+            correctWords: arguments["correctWords"],
             difficulty: arguments["difficulty"],
           );
           break;
@@ -128,6 +137,8 @@ class Routes {
         case Routes.writingResults:
           screen = WritingResults(
             score: arguments["score"],
+            editedWords: arguments["editedWords"],
+            correctWords: arguments["correctWords"],
             difficulty: arguments["difficulty"],
           );
           break;

@@ -75,5 +75,16 @@
   "correctAnswers": "$1 poäng av $2 möjliga",
   "backHome": "Tillbaka",
   "correctAnswer": "Rätt svar",
-  "yourAnswer": "Ditt svar"
+  "yourAnswer": "Ditt svar",
+  "alertSubmitFailed": "Appen lyckades inte lämna in svaren. Vänligen rapportera detta fel till utvecklarna.",
+  "alertSessionError": "Något gick fel med din inloggning. Försök logga in igen.",
+  "showResultsFrom": "Visa resultat från:",
+  "selectTime": "Välj tid",
+  "past24Hours": "Senaste dygnet",
+  "pastWeek": "Senaste veckan",
+  "pastMonth": "Senaste månaden",
+  "pastYear": "Senaste året",
+  "alertRetrieveTestResults": "Appen lyckades inte hämta testresultat. Vänligen rapportera detta fel till utvecklarna.",
+  "alertUnknownError": "Ett okänt fel har skett.",
+  "questionNum": "Fråga $1:\n"
 }

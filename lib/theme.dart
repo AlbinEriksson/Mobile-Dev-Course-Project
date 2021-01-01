@@ -239,4 +239,22 @@ class LanGuideTheme {
       color: Colors.red,
     );
   }
+
+  static TextStyle easyStatsLegend(BuildContext context) {
+    return Theme.of(context).textTheme.bodyText1.copyWith(
+        color: Colors.green
+    );
+  }
+
+  static TextStyle mediumStatsLegend(BuildContext context) {
+    return Theme.of(context).textTheme.bodyText1.copyWith(
+        color: Colors.yellow[800]
+    );
+  }
+
+  static TextStyle hardStatsLegend(BuildContext context) {
+    return Theme.of(context).textTheme.bodyText1.copyWith(
+        color: Colors.red
+    );
+  }
 }

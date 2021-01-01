@@ -1,5 +1,6 @@
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/routes.dart';
+import 'package:dva232_project/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -78,4 +79,41 @@ Future<T> _validationDialog<T>(BuildContext context, String text) {
 Future<bool> backPressed(BuildContext context) async {
   Navigator.popUntil(context, ModalRoute.withName(Routes.home));
   return false;
+}
+
+Widget answers(
+    BuildContext context, List<String> editedWords, List<String> correctWords) {
+  List<Widget> widgets = [
+    ListTile(
+      leading: Text(
+        AppLocalizations.of(context).correctAnswer,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+      trailing: Text(
+        AppLocalizations.of(context).yourAnswer,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+    ),
+  ];
+
+  for (int i = 0; i < editedWords.length; i++) {
+    widgets.add(_answerTile(context, editedWords[i], correctWords[i]));
+  }
+
+  return Column(children: widgets);
+}
+
+Widget _answerTile(
+    BuildContext context, String editedWord, String correctWord) {
+  bool correct = editedWord.toLowerCase() == correctWord.toLowerCase();
+
+  return ListTile(
+    leading: Text(correctWord),
+    trailing: Text(
+      editedWord,
+      style: correct
+          ? LanGuideTheme.correctAnswerText(context)
+          : LanGuideTheme.incorrectAnswerText(context),
+    ),
+  );
 }
