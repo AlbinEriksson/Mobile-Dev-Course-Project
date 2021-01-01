@@ -66,10 +66,7 @@ class _ListeningTestIntroState extends State<ListeningTestIntro> {
                   BorderedContainer(
                     child: Text(
                       '${snapshot.data.instructions}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                   Padding(
