@@ -82,7 +82,8 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
                   {
                     "score": _countCorrectAnswers(),
                     "difficulty": difficulty,
-                    "maxScore": maxPoints,
+                    "editedWords": _editedWords(),
+                    "correctWords": _correctWords(),
                   },
                 ),
                 enabled: anyAnswerSelected,
@@ -211,5 +212,19 @@ class _ReadingTestQuestionsState extends State<ReadingTestQuestions> {
       }
     }
     return points;
+  }
+
+  List<String> _editedWords() {
+    return answers.asMap().entries.map((entry) {
+      int questionIndex = entry.key;
+      int answerIndex = entry.value;
+      return questions.items[questionIndex].answers[answerIndex].text;
+    }).toList();
+  }
+
+  List<String> _correctWords() {
+    return questions.items.map((question) {
+      return question.answers.firstWhere((answer) => answer.correct).text;
+    }).toList();
   }
 }

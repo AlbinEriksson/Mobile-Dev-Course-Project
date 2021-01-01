@@ -10,7 +10,6 @@ import 'package:dva232_project/screens/results/vocabulary.dart';
 import 'package:dva232_project/screens/results/writing.dart';
 import 'package:dva232_project/screens/tests/listening/listening_intro.dart';
 import 'package:dva232_project/screens/tests/listening/listening_questions.dart';
-import 'package:dva232_project/screens/tests/reading.dart';
 import 'package:dva232_project/screens/tests/reading/reading_intro.dart';
 import 'package:dva232_project/screens/tests/reading/reading_questions.dart';
 import 'package:dva232_project/screens/tests/speaking.dart';
@@ -91,8 +90,9 @@ class Routes {
         case Routes.readingResults:
           screen = ReadingResults(
             score: arguments["score"],
+            editedWords: arguments["editedWords"],
+            correctWords: arguments["correctWords"],
             difficulty: arguments["difficulty"],
-            maxScore: arguments["maxScore"],
           );
           break;
 

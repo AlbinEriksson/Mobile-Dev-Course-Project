@@ -1,9 +1,7 @@
 import 'package:dva232_project/client/user_api_client.dart';
 import 'package:dva232_project/screens/results/shared.dart';
-import 'package:dva232_project/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VocabularyResults extends StatelessWidget {
   final int score;
@@ -54,45 +52,9 @@ class VocabularyResults extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       children: [
         resultsDisplay(context, accuracy, score, this.editedWords.length),
-        _answers(context),
+        answers(context, editedWords, correctWords),
         backHomeButton(context),
       ],
-    );
-  }
-
-  Widget _answers(BuildContext context) {
-    List<Widget> widgets = [
-      ListTile(
-        leading: Text(
-          AppLocalizations.of(context).correctAnswer,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-        trailing: Text(
-          AppLocalizations.of(context).yourAnswer,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-      ),
-    ];
-
-    for (int i = 0; i < editedWords.length; i++) {
-      widgets.add(_answerTile(i, context));
-    }
-
-    return Column(children: widgets);
-  }
-
-  Widget _answerTile(int index, BuildContext context) {
-    bool correct =
-        editedWords[index].toLowerCase() == correctWords[index].toLowerCase();
-
-    return ListTile(
-      leading: Text(correctWords[index]),
-      trailing: Text(
-        editedWords[index],
-        style: correct
-            ? LanGuideTheme.correctAnswerText(context)
-            : LanGuideTheme.incorrectAnswerText(context),
-      ),
     );
   }
 }

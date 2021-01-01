@@ -5,20 +5,21 @@ import 'package:dva232_project/widgets/languide_navbar.dart';
 
 class ReadingResults extends StatelessWidget {
   final int score;
+  final List<String> editedWords, correctWords;
   final String difficulty;
   final double accuracy;
-  final int maxScore;
 
   final Future<UserAPIResult> submitFuture;
 
   ReadingResults({
     Key key,
     @required this.score,
+    @required this.editedWords,
+    @required this.correctWords,
     @required this.difficulty,
-    @required this.maxScore
-  })  : accuracy = score/maxScore,
+  })  : accuracy = score / editedWords.length,
         submitFuture =
-            UserAPIClient.submitTestResults("reading", difficulty, score/maxScore),
+            UserAPIClient.submitTestResults("reading", difficulty, score / editedWords.length),
         super(key: key);
 
   @override
@@ -50,7 +51,8 @@ class ReadingResults extends StatelessWidget {
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.all(8.0),
       children: [
-        resultsDisplay(context, accuracy, score, maxScore),
+        resultsDisplay(context, accuracy, score, editedWords.length),
+        answers(context, editedWords, correctWords),
         backHomeButton(context),
       ],
     );
