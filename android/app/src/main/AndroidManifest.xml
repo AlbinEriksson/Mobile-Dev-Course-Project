@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="dva232_project"
+        android:label="LanGuide"
         android:icon="@mipmap/languide_icon">
         <activity
             android:name=".MainActivity"
