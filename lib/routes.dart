@@ -70,6 +70,8 @@ class Routes {
 
         case Routes.listeningResults:
           screen = ListeningResults(
+            rightAnswers:arguments["rightAnswers"],
+            correctedWordsList:arguments["correctedWordsList"],
             score: arguments["score"],
             difficulty: arguments["difficulty"],
           );

@@ -37,6 +37,7 @@ dependencies:
   http: ^0.12.2
   localstorage: ^3.0.6+9
   fluttertoast: ^7.1.6
+  scrollable_positioned_list: ^0.1.8
 
 dev_dependencies:
   flutter_test:

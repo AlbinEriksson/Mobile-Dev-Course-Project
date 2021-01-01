@@ -1,9 +1,10 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dva232_project/theme.dart';
 import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/circular_button.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'listening_audio.dart';
 import 'question_data.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
@@ -23,26 +24,27 @@ class ListeningTestQuestions extends StatefulWidget {
 }
 
 class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
+
+
+  bool isPlaying = false;
   final String difficulty;
-
   List<String> wordsToCheck = ["______"];
-
-  int _click = 0;
-  List<String> filledWords;
+  List<String> filledWords, correctedWordsList = [""];
+  List<String> rightAnswers = [""];
   String currentEdit = "";
   int currentWordIndex = -1;
   bool anythingChanged = false;
   String questionText;
+  int score = 0;
 
   Icon _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
-
-  Duration _duration = Duration();
-  Duration _position = Duration();
   QuestionData listeningData = QuestionData();
-  ListeningAudio player2 = ListeningAudio();
+  AudioPlayer player = AudioPlayer();
+  Duration duration = new Duration();
+  Duration position = new Duration();
   final FocusNode _inputFocusNode = FocusNode();
   TextEditingController _textController = TextEditingController();
-  ScrollController _scrollController;
+  ItemScrollController _scrollController = ItemScrollController();
 
   _ListeningTestQuestionsState(this.difficulty) {
     filledWords = List.from(wordsToCheck);
@@ -52,34 +54,6 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   void initState() {
     super.initState();
     listeningData.showData();
-    player2.initPlayer();
-    setState(() {
-      getDuration();
-      getPosition();
-    });
-
-    //initPlayer();
-  }
-
-  Future getDuration() async {
-    player2.onDurationChanged.listen((Duration dur) async {
-      //print('Max duration: $d');
-      //setState(() => _duration = d);
-      setState(() {
-        return _duration = dur;
-      });
-    });
-  }
-
-  Future getPosition() async {
-    player2.onAudioPositionChanged.listen((Duration pos) async {
-      //print('Current position: $p');
-      // setState(() => _position = pos);
-      // });
-      setState(() {
-        return _position = pos;
-      });
-    });
   }
 
   @override
@@ -95,7 +69,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       onWillPop: () => backPressed(context, anythingChanged),
       child: Scaffold(
         appBar: LanGuideNavBar(
-            onBackIconPressed: () => backIconPressed(context, anythingChanged)),
+            onBackIconPressed: () => onTapBack(context, anythingChanged)),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -105,22 +79,17 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: Scrollbar(
-                          isAlwaysShown: _scrollController != null,
-                          controller: _scrollController,
-                          child: Center(
-                            child: FutureBuilder(
-                              future: listeningData.showData(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.hasData) {
-                                  _scrollController = new ScrollController();
-                                  return createListView(snapshot.data, context);
-                                } else {
-                                  return CircularProgressIndicator();
-                                }
-                              },
-                            ),
+                        child: Center(
+                          child: FutureBuilder(
+                            future: listeningData.showData(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                return createListView(snapshot.data, context);
+                              } else {
+                                return CircularProgressIndicator();
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -146,49 +115,29 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Play Sound",
-                      style: Theme.of(context).textTheme.headline4,
+              Column(
+                children: [
+                  InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top:8.0),
+                      child: CircularButton(
+                        onPressed: () {
+                          _getAudio();
+                        },
+                        color: LanGuideTheme.primaryColor(context),
+                        icon: _playIcon,
+                        size: 70.0,
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: CircularButton(
-                  onPressed: () {
-                    _playSound();
-                  },
-                  color: LanGuideTheme.primaryColor(context),
-                  icon: _playIcon,
-                  size: 70.0,
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "${_reformat(_position)} / ${_reformat(_duration)}",
-                    style: Theme.of(context).textTheme.headline5,
                   ),
-                ),
+                  slider(),
+                ],
               ),
               Container(
                 height: 50.0,
                 child: LanGuideButton(
                   text: "Submit Answers",
-                  onPressed: () => submitPressed(
-                    context,
-                    Routes.listeningResults,
-                    {
-                      "score": 1,
-                      "difficulty": difficulty,
-                    },
-                  ),
+                  onPressed: () => submitAnswer(),
                   enabled: anythingChanged,
                 ),
               ),
@@ -199,30 +148,82 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     );
   }
 
-  _playSound() {
-    if (_click == 0) {
-      player2.play(player2.mp3Uri);
-      _click++;
-    } else if (_click == 1) {
-      player2.pause();
-      _click = 0;
+  Widget slider() {
+    return Slider.adaptive(
+      value: position.inSeconds.toDouble(),
+      max: duration.inSeconds.toDouble(),
+      onChanged: (double value) {
+        setState(() {
+          player.seek(new Duration(seconds: value.toInt()));
+        });
+      },
+    );
+  }
+
+  void _getAudio() async {
+    if(currentWordIndex == -1) {
+      String _url = "https://luan.xyz/files/audio/ambient_c_motion.mp3";
+      if (isPlaying == true) {
+        var res = await player.pause();
+        if (res == 1) {
+          setState(() {
+            isPlaying = false;
+          });
+        }
+      } else {
+        var res = await player.play(_url, isLocal: true);
+        if (res == 1) {
+          setState(() {
+            isPlaying = true;
+          });
+        }
+      }
+
+      player.onDurationChanged.listen((Duration dur) {
+        setState(() {
+          duration = dur;
+        });
+      });
+      player.onAudioPositionChanged.listen((Duration pos) {
+        setState(() {
+          position = pos;
+        });
+      });
+      setState(() {
+        _changePlayIcon();
+      });
     }
-    setState(() {
-      _changePlayIcon();
-    });
+    else{
+
+    }
   }
 
-  String _reformat(Duration _duration) {
-    String twoNum(int n) => n.toString().padLeft(2, "0");
-    String twoNumInMinutes = twoNum(_duration.inMinutes.remainder(60));
-    String twoNumInSeconds = twoNum(_duration.inSeconds.remainder(60));
-    return "$twoNumInMinutes:$twoNumInSeconds";
+  onTapBack(var context, bool anythingChanged) {
+    if (isPlaying == true) {
+      _getAudio();
+    }
+    return backIconPressed(context, anythingChanged);
   }
 
+  submitAnswer() {
+    if (isPlaying == true) {
+      _getAudio();
+    }
+    return submitPressed(
+      context,
+      Routes.listeningResults,
+      {
+        "rightAnswers": rightAnswers,
+        "correctedWordsList": correctedWordsList,
+        "score": score,
+        "difficulty": difficulty,
+      },
+    );
+  }
   _changePlayIcon() {
-    if (_click == 1)
+    if (isPlaying == true && currentWordIndex == -1)
       _playIcon = Icon(Icons.pause, size: 70.0, color: Colors.white);
-    else
+    else if(!isPlaying)
       _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
   }
 
@@ -244,11 +245,18 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
     });
   }
 
-  TextSpan _changedWord(int index) {
+  TextSpan _changedWord(int index, var correctAnswer) {
+    if (rightAnswers[0] == "") {
+      rightAnswers[0] = correctAnswer.toString();
+    }
     if (index > 0) {
-      wordsToCheck.add("______");
+      if (wordsToCheck.length <= index) {
+        wordsToCheck.add("______");
+      }
       if (filledWords.length <= index) {
         filledWords.add(wordsToCheck[index]);
+        correctedWordsList.add("");
+        rightAnswers.add(correctAnswer.toString());
       }
     }
     String editedWord = filledWords[index];
@@ -261,28 +269,47 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
         ],
       );
     }
-
     return TextSpan();
   }
 
-  TextSpan _spellCheckField(int index) {
+  TextSpan _editedTextField(int index, var correctAnswer) {
+    if (filledWords[index] == correctAnswer.toString() &&
+        correctedWordsList[index] != filledWords[index]) {
+      correctedWordsList[index] = filledWords[index];
+      score++;
+    }else if(filledWords[index]!=correctAnswer.toString()){
+      correctedWordsList[index] = filledWords[index];
+    }
     return TextSpan(
       text: filledWords[index],
       style: LanGuideTheme.writingTestOption(context),
     );
   }
 
+  Future adjustScrollPosition(int index) async {
+    await _scrollController.scrollTo(
+        index: 0, duration: Duration(milliseconds: 200));
+    await _scrollController.scrollTo(
+        index: index, duration: Duration(seconds: 1));
+  }
+
   Widget createListView(data, BuildContext context) {
-    return ListView.builder(
-      controller: _scrollController,
+    return ScrollablePositionedList.builder(
       itemCount: data.items == null ? 0 : data.items.length,
+      itemScrollController: _scrollController,
       itemBuilder: (context, int index) {
         return Wrap(
           children: [
             GestureDetector(
               onTap: () => setState(() {
+                if(isPlaying==true) {
+                  _getAudio();
+                }
                 currentWordIndex = index;
                 currentEdit = filledWords[index];
+                Future.delayed(Duration(milliseconds: 500)).whenComplete(() =>
+                    _scrollController.scrollTo(
+                        index: index, duration: Duration(milliseconds: 1000)));
               }),
               child: RichText(
                 text: TextSpan(
@@ -298,8 +325,8 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                       text: "${_editString(data.items[index].text)} ",
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
-                    _changedWord(index),
-                    _spellCheckField(index),
+                    _changedWord(index, data.items[index].gap),
+                    _editedTextField(index, data.items[index].gap),
                   ],
                 ),
               ),
