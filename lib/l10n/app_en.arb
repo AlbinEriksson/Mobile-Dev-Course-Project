@@ -432,5 +432,10 @@
   "alertUnknownError": "An unknown error has occurred.",
   "@alertUnknownError": {
     "description": "Alerting the user that an unknown error has occurred."
+  },
+
+  "questionNum": "Question $1:\n",
+  "@questionNum": {
+    "description": "Header for questions in various tests. $1 stands for the question number."
   }
 }

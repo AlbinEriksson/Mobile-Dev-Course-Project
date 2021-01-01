@@ -85,5 +85,6 @@
   "pastMonth": "Senaste månaden",
   "pastYear": "Senaste året",
   "alertRetrieveTestResults": "Appen lyckades inte hämta testresultat. Vänligen rapportera detta fel till utvecklarna.",
-  "alertUnknownError": "Ett okänt fel har skett."
+  "alertUnknownError": "Ett okänt fel har skett.",
+  "questionNum": "Fråga $1:\n"
 }
