@@ -50,7 +50,7 @@ class _ReadingTestIntroState extends State<ReadingTestIntro> {
         alignment: Alignment.topCenter,
         child: ListView(
           scrollDirection: Axis.vertical,
-          padding: EdgeInsets.all(20.5),
+          padding: EdgeInsets.all(8.0),
           children: [
             BorderedContainer(
               child: Column(
@@ -62,10 +62,7 @@ class _ReadingTestIntroState extends State<ReadingTestIntro> {
                       if (snapshot.hasData) {
                         return Text(
                           '${snapshot.data.instructions}',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.bodyText2,
                         );
                       } else {
                         return CircularProgressIndicator();
