@@ -437,5 +437,10 @@
   "questionNum": "Question $1:\n",
   "@questionNum": {
     "description": "Header for questions in various tests. $1 stands for the question number."
+  },
+
+  "playSound": "Play sound",
+  "@playSound": {
+    "description": "Text above the play button for playing audio in the listening test."
   }
 }

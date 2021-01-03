@@ -4,6 +4,7 @@ import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/circular_button.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'question_data.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
@@ -118,7 +119,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                 child: Column(
                   children: [
                     Text(
-                      "Play Sound",
+                      AppLocalizations.of(context).playSound,
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ],
@@ -145,7 +146,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
               Container(
                 height: 50.0,
                 child: LanGuideButton(
-                  text: "Submit Answers",
+                  text: AppLocalizations.of(context).submitAnswers,
                   onPressed: () => submitAnswer(),
                   enabled: anythingChanged,
                 ),
@@ -325,7 +326,12 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                   ),
                   children: [
                     TextSpan(
-                      text: "\nQuestion ${index + 1}: ",
+                      text: "\n",
+                    ),
+                    TextSpan(
+                      text: AppLocalizations.of(context)
+                          .questionNum
+                          .replaceAll("\$1", (index + 1).toString()),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     TextSpan(

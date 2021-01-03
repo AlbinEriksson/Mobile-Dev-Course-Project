@@ -86,5 +86,6 @@
   "pastYear": "Senaste året",
   "alertRetrieveTestResults": "Appen lyckades inte hämta testresultat. Vänligen rapportera detta fel till utvecklarna.",
   "alertUnknownError": "Ett okänt fel har skett.",
-  "questionNum": "Fråga $1:\n"
+  "questionNum": "Fråga $1:\n",
+  "playSound": "Spela ljud"
 }
