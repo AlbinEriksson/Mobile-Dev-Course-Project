@@ -2,15 +2,10 @@
 
 Project for MDH course DVA232
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Build
+ 1. Configure the URL for user API in `lib/client/user_api_client.dart` (around line 64). See the `user_api_server` folder for instructions to run the user API server.
+ 2. Do the instructions under section "Signing the app" at https://flutter.dev/docs/deployment/android.
+ 3. Run the following command in the root of the project to build the APK.
+```
+flutter build apk --obfuscate --split-debug-info=/dva232_project/debuginfo --split-per-abi
+```
