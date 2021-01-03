@@ -100,6 +100,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
                     padding: EdgeInsets.all(16.0),
                     children: [
                       RichText(
+                        textAlign: TextAlign.justify,
                         text: TextSpan(
                           style: Theme.of(context).textTheme.bodyText2,
                           children: [

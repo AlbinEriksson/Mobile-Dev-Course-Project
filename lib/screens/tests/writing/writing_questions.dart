@@ -59,6 +59,7 @@ class _WritingQuestionState extends State<WritingQuestion> {
                       ),
                     ),
                     RichText(
+                      textAlign: TextAlign.justify,
                       text: TextSpan(
                         style: Theme.of(context).textTheme.bodyText2,
                         children: [
