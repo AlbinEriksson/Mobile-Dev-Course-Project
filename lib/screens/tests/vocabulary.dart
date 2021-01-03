@@ -1,6 +1,7 @@
 import 'package:dva232_project/routes.dart';
 import 'package:dva232_project/screens/tests/shared.dart';
 import 'package:dva232_project/theme.dart';
+import 'package:dva232_project/widgets/bordered_container.dart';
 import 'package:dva232_project/widgets/languide_button.dart';
 import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:dva232_project/widgets/languide_textfield.dart';
@@ -169,11 +170,14 @@ class _VocabularyTestState extends State<VocabularyTest> {
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text(currentWord.isNotEmpty
-                      ? AppLocalizations.of(context)
-                          .isWordWrong
-                          .replaceAll("\$1", currentWord)
-                      : ""),
+                  if (currentWord.isNotEmpty)
+                    BorderedContainer(
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .isWordWrong
+                            .replaceAll("\$1", currentWord),
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: LanGuideTextField(
