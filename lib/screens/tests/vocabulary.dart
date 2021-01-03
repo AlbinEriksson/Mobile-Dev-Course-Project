@@ -100,9 +100,7 @@ class _VocabularyTestState extends State<VocabularyTest> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
+                          style: Theme.of(context).textTheme.bodyText2,
                           children: [
                             TextSpan(
                                 text:
