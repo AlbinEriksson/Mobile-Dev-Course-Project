@@ -22,9 +22,8 @@ class SpeakingTest extends StatefulWidget {
 class _SpeakingTestState extends State<SpeakingTest> {
   stt.SpeechToText _speech;
   bool _isListening = false;
-  String _text = 'Press the button and start speaking';
-  double _confidence = 1.0;
-  bool finished=false;
+  String _text = ' ';
+  bool finished = false;
 
   final String difficulty;
   String sentence = "I can walk";
@@ -112,9 +111,11 @@ class _SpeakingTestState extends State<SpeakingTest> {
                 ),
               ),
               BorderedContainer(
-                child: AutoSizeText(
-                  '$sentence',
-                  style: Theme.of(context).textTheme.bodyText2,
+                child: Center(
+                  child: AutoSizeText(
+                    '$sentence',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
                 ),
               ),
               Padding(
@@ -126,8 +127,8 @@ class _SpeakingTestState extends State<SpeakingTest> {
                       _tapToSpeakText = ' ';
                       _affectTheIcon();
                       _listen();
-                      if(finished==true){
-                        _clickCount=0;
+                      if (finished == true) {
+                        _clickCount = 0;
                         _affectTheIcon();
                       }
                     });
@@ -152,34 +153,39 @@ class _SpeakingTestState extends State<SpeakingTest> {
                 child: LanGuideButton(
                   text: AppLocalizations.of(context).submitAnswers,
                   onPressed: () => _sendDataToResults(context),
-                  enabled: _text != 'Press the button and start speaking',
+                  enabled: _text != ' ',
                 ),
               ),
-              Text('Confidence: ${(_confidence * 100).toStringAsFixed(1)}%'),
               SingleChildScrollView(
                 reverse: true,
                 child: Column(
                   children: [
-                    Text(' ',style: TextStyle(
-                      fontSize: 32.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),),
-                    TextHighlight(
-                      text: _text,
-                      words: _highlights,
-                      textStyle: const TextStyle(
-                        fontSize: 32.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    Text(
+                      'Result: ',
+                      style: Theme.of(context).textTheme.overline,
                     ),
+                    getHighlight(),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget getHighlight() {
+    if (_text == null) {
+      return Text("processing..");
+    }
+    return TextHighlight(
+      text: _text,
+      words: _highlights,
+      textStyle: const TextStyle(
+        fontSize: 32.0,
+        color: Colors.black,
+        fontWeight: FontWeight.w400,
       ),
     );
   }
@@ -195,16 +201,13 @@ class _SpeakingTestState extends State<SpeakingTest> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
           }),
         );
       }
     } else {
       setState(() => _isListening = false);
       _speech.stop();
-      finished=true;
+      finished = true;
     }
   }
 

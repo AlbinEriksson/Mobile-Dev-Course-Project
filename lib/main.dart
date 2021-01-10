@@ -10,6 +10,12 @@ void main() async {
   // Disable bad certificates if the user API has a valid certificate
   // (Currently, the user API is running on a local machine, without a valid
   // SSL certificate).
+  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+    return EmptyWidget(
+      errorDetails: errorDetails,
+      isDev: false,
+    );
+  };
   HttpOverrides.global = LanGuideHttpOverrides(allowBadCertificates: true);
 
   // Needed to wait for local cache storage to load before UI is built.
@@ -24,4 +30,18 @@ void main() async {
   await UserAPIClient.init();
 
   runApp(App());
+}
+
+class EmptyWidget extends StatelessWidget {
+  final FlutterErrorDetails errorDetails;
+  final bool isDev;
+  const EmptyWidget({
+    Key key,
+    @required this.errorDetails,
+    this.isDev = false,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
