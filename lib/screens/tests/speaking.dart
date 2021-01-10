@@ -7,6 +7,8 @@ import 'package:dva232_project/widgets/languide_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:highlight_text/highlight_text.dart';
+//import 'package:avatar_glow/avatar_glow.dart';
 
 class SpeakingTest extends StatefulWidget {
   final String difficulty;
@@ -18,7 +20,38 @@ class SpeakingTest extends StatefulWidget {
 }
 
 class _SpeakingTestState extends State<SpeakingTest> {
+  stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _text = 'Press the button and start speaking';
+  double _confidence = 1.0;
+  bool finished=false;
+
   final String difficulty;
+  String sentence = "I can walk";
+
+  final Map<String, HighlightedWord> _highlights = {
+    'I': HighlightedWord(
+        onTap: () => print('I'),
+        textStyle: const TextStyle(
+          fontSize: 32.0,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        )),
+    'can': HighlightedWord(
+        onTap: () => print('can'),
+        textStyle: const TextStyle(
+          fontSize: 32.0,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        )),
+    'walk': HighlightedWord(
+        onTap: () => print('walk'),
+        textStyle: const TextStyle(
+          fontSize: 32.0,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        )),
+  };
 
   int _clickCount = 0;
   String _tapToSpeakText = null;
@@ -43,6 +76,13 @@ class _SpeakingTestState extends State<SpeakingTest> {
       );
     }
     if (_clickCount > 1) _clickCount = 0;
+  }
+
+  @override
+  void initState() {
+    _speech = stt.SpeechToText();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -73,7 +113,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
               ),
               BorderedContainer(
                 child: AutoSizeText(
-                  'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
+                  '$sentence',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
@@ -83,8 +123,13 @@ class _SpeakingTestState extends State<SpeakingTest> {
                   onTap: () {
                     setState(() {
                       _clickCount++;
-                      _tapToSpeakText = '';
+                      _tapToSpeakText = ' ';
                       _affectTheIcon();
+                      _listen();
+                      if(finished==true){
+                        _clickCount=0;
+                        _affectTheIcon();
+                      }
                     });
                   },
                   child: BorderedContainer(
@@ -107,7 +152,29 @@ class _SpeakingTestState extends State<SpeakingTest> {
                 child: LanGuideButton(
                   text: AppLocalizations.of(context).submitAnswers,
                   onPressed: () => _sendDataToResults(context),
-                  enabled: _clickCount > 0,
+                  enabled: _text != 'Press the button and start speaking',
+                ),
+              ),
+              Text('Confidence: ${(_confidence * 100).toStringAsFixed(1)}%'),
+              SingleChildScrollView(
+                reverse: true,
+                child: Column(
+                  children: [
+                    Text(' ',style: TextStyle(
+                      fontSize: 32.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),),
+                    TextHighlight(
+                      text: _text,
+                      words: _highlights,
+                      textStyle: const TextStyle(
+                        fontSize: 32.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -117,34 +184,34 @@ class _SpeakingTestState extends State<SpeakingTest> {
     );
   }
 
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('OnStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _text = val.recognizedWords;
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+      finished=true;
+    }
+  }
+
   void _sendDataToResults(BuildContext context) {
     submitPressed(context, Routes.speakingResults, {
       "score": 1,
       "difficulty": difficulty,
     });
-  }
-}
-
-class SpeechScreen extends StatefulWidget {
-  @override
-  _SpeechScreenState createState() => _SpeechScreenState();
-}
-
-class _SpeechScreenState extends State<SpeechScreen> {
-  stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _text = 'press the button and start speaking';
-  double confidence = 1.0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _speech = stt.SpeechToText();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

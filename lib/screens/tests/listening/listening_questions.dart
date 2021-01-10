@@ -36,7 +36,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
   String questionText;
   int score = 0;
 
-  Icon _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white);
+  Icon _playIcon = Icon(Icons.play_arrow, size: 70.0, color: Colors.white); //70
   QuestionData listeningData = QuestionData();
   AudioPlayer player = AudioPlayer();
   Duration duration = new Duration();
@@ -99,7 +99,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                           children: [
                             LanGuideTextField(
                               hintText:
-                                  "Tap a question to fill the missing word",
+                              "Tap a question to fill the missing word",
                               onChanged: (value) => currentEdit = value,
                               onEditingComplete: _onEditComplete,
                               focusNode: _inputFocusNode,
@@ -113,7 +113,7 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
                     ],
                   ),
                 ),
-              ),
+              ), //--------------------------------------------------------------------------------------------------------
               Padding(
                 padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
                 child: Column(
