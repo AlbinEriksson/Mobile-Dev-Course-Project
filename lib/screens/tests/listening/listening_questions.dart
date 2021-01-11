@@ -69,90 +69,82 @@ class _ListeningTestQuestionsState extends State<ListeningTestQuestions> {
       child: Scaffold(
         appBar: LanGuideNavBar(
             onBackIconPressed: () => onTapBack(context, anythingChanged)),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: BorderedContainer(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Center(
-                          child: FutureBuilder(
-                            future: listeningData.showData(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.hasData) {
-                                return createListView(snapshot.data, context);
-                              } else {
-                                return CircularProgressIndicator();
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            LanGuideTextField(
-                              hintText:
-                              "Tap a question to fill the missing word",
-                              onChanged: (value) => currentEdit = value,
-                              onEditingComplete: _onEditComplete,
-                              focusNode: _inputFocusNode,
-                              controller: _textController,
-                              enabled: currentWordIndex != -1,
-                              enableSuggestions: false,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ), //--------------------------------------------------------------------------------------------------------
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
+        body: ListView(
+          padding: EdgeInsets.all(8.0),
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: BorderedContainer(
+                padding: 8.0,
                 child: Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).playSound,
-                      style: Theme.of(context).textTheme.headline4,
+                    Expanded(
+                      child: Center(
+                        child: FutureBuilder(
+                          future: listeningData.showData(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.hasData) {
+                              return createListView(snapshot.data, context);
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    LanGuideTextField(
+                      hintText:
+                      "Tap a question to fill the missing word",
+                      onChanged: (value) => currentEdit = value,
+                      onEditingComplete: _onEditComplete,
+                      focusNode: _inputFocusNode,
+                      controller: _textController,
+                      enabled: currentWordIndex != -1,
+                      enableSuggestions: false,
                     ),
                   ],
                 ),
               ),
-              Column(
+            ), //--------------------------------------------------------------------------------------------------------
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
+              child: Column(
                 children: [
-                  InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 1.0),
-                      child: CircularButton(
-                        onPressed: () {
-                          _getAudio();
-                        },
-                        color: LanGuideTheme.primaryColor(context),
-                        icon: _playIcon,
-                        size: 70.0,
-                      ),
-                    ),
+                  Text(
+                    AppLocalizations.of(context).playSound,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                  slider(),
                 ],
               ),
-              Container(
-                height: 50.0,
-                child: LanGuideButton(
-                  text: AppLocalizations.of(context).submitAnswers,
-                  onPressed: () => submitAnswer(),
-                  enabled: anythingChanged,
+            ),
+            Column(
+              children: [
+                InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 1.0),
+                    child: CircularButton(
+                      onPressed: () {
+                        _getAudio();
+                      },
+                      color: LanGuideTheme.primaryColor(context),
+                      icon: _playIcon,
+                      size: 70.0,
+                    ),
+                  ),
                 ),
+                slider(),
+              ],
+            ),
+            Container(
+              height: 50.0,
+              child: LanGuideButton(
+                text: AppLocalizations.of(context).submitAnswers,
+                onPressed: () => submitAnswer(),
+                enabled: anythingChanged,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
