@@ -163,7 +163,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
                   children: [
                     Text(
                       'Result: ',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                     getHighlight(),
                   ],
@@ -185,7 +185,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
       words: _highlights,
       textStyle: const TextStyle(
         fontSize: 32.0,
-        color: Colors.black,
+        color: Colors.red,
         fontWeight: FontWeight.w400,
       ),
     );
