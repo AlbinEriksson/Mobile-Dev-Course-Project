@@ -105,6 +105,7 @@ class Routes {
 
         case Routes.speakingResults:
           screen = SpeakingResults(
+            confidence: arguments["confidence"],
             score: arguments["score"],
             difficulty: arguments["difficulty"],
           );

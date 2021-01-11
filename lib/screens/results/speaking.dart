@@ -7,6 +7,7 @@ class SpeakingResults extends StatelessWidget {
   final int score;
   final String difficulty;
   final double accuracy;
+  final double confidence;
 
   final Future<UserAPIResult> submitFuture;
 
@@ -14,9 +15,10 @@ class SpeakingResults extends StatelessWidget {
     Key key,
     @required this.score,
     @required this.difficulty,
-  })  : accuracy = 1.0,
+    @required this.confidence,
+  })  : accuracy = confidence/100,
         submitFuture =
-        UserAPIClient.submitTestResults("speaking", difficulty, 1.0),
+        UserAPIClient.submitTestResults("speaking", difficulty, confidence),
         super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class SpeakingResults extends StatelessWidget {
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.all(8.0),
       children: [
-        resultsDisplay(context, accuracy, score, 1),
+        resultsDisplay(context, accuracy, score, score),
         backHomeButton(context),
       ],
     );

@@ -23,6 +23,7 @@ class _SpeakingTestState extends State<SpeakingTest> {
   stt.SpeechToText _speech;
   bool _isListening = false;
   String _text = ' ';
+  double _confidence = 1;
   bool finished = false;
 
   final String difficulty;
@@ -201,6 +202,9 @@ class _SpeakingTestState extends State<SpeakingTest> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
           }),
         );
       }
@@ -212,8 +216,10 @@ class _SpeakingTestState extends State<SpeakingTest> {
   }
 
   void _sendDataToResults(BuildContext context) {
+    return
     submitPressed(context, Routes.speakingResults, {
-      "score": 1,
+      "confidence":(_confidence * 100),
+      "score": 3,
       "difficulty": difficulty,
     });
   }
